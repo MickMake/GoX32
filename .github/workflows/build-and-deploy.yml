@@ -1,0 +1,34 @@
+name: Build & Deploy
+on:
+  push:
+    branches:
+    - master
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build container
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        load: true
+        tags: insektionen/x32-mqtt:latest
+    - name: Export container
+      run: docker save insektionen/x32-mqtt:latest | gzip > x32-mqtt_latest.tar.gz
+    - name: Copy to Server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: 22
+        source: "x32-mqtt_latest.tar.gz"
+        target: "~/"
+    - name: Import and start on Server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: 22
+        script: docker load < x32-mqtt_latest.tar.gz && cd x32-mqtt && docker-compose up -d

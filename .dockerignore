@@ -1,0 +1,9 @@
+go.work
+.gitignore
+.git
+.idea
+.dockerignore
+Dockerfile
+x32-mqtt
+x32-mqtt.yaml
+x32-mqtt.yml
