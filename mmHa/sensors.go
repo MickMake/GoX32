@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/MickMake/GoX32/Only"
-	"log"
 )
 
 
@@ -75,16 +74,21 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 			{ JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
 		}
 		device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
-		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
-		// st := JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
+		if config.StateTopic != "" {
+			config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.StateTopic)
+		} else {
+			config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+			// config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
+		}
+		uid := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
 
 		payload := Sensor {
 			Device:                 device,
-			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.FullId),
-			StateTopic:             JoinStringsForTopic(m.sensorPrefix, st, "state"),
+			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.Name),
+			StateTopic:             JoinStringsForTopic(m.sensorPrefix, config.StateTopic, "state"),
 			// StateTopic:             m.GetSensorStateTopic(name, config.SubName),m.EntityPrefix, m.Device.FullName, config.SubName
 			StateClass:             config.StateClass,
-			UniqueId:               st,
+			UniqueId:               uid,
 			UnitOfMeasurement:      config.Units,
 			DeviceClass:            config.DeviceClass,
 			Qos:                    0,
@@ -114,7 +118,7 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 			// PayloadNotAvailable:    "",
 		}
 
-		ct := JoinStringsForTopic(m.sensorPrefix, st, "config")
+		ct := JoinStringsForTopic(m.sensorPrefix, uid, "config")
 		t := m.client.Publish(ct, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -127,13 +131,13 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 
 	for range Only.Once {
-		if config.Units == LabelBinarySensor {
+		if !config.IsSensor() {
 			break
 		}
 
 		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
 		payload := MqttState {
-			LastReset: m.GetLastReset(config.FullId),
+			LastReset: m.GetLastReset(JoinStringsForId(config.ParentId, config.Name)),
 			Value:     config.Value,
 		}
 		st = JoinStringsForTopic(m.sensorPrefix, st, "state")
@@ -143,6 +147,51 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 		}
 	}
 
+	return m.err
+}
+
+func (m *Mqtt) SensorPublishValues(configs []EntityConfig) error {
+	for range Only.Once {
+		if len(configs) == 0 {
+			break
+		}
+
+		cs := make(map[string]Fields)
+		topic := ""
+		for i, config := range configs {
+			if config.StateTopic != "" {
+				config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.StateTopic)
+			} else {
+				config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+				// config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
+			}
+
+			if topic == "" {
+				topic = JoinStringsForTopic(m.sensorPrefix, config.StateTopic, "state")
+			}
+
+			if config.ValueName == "" {
+				config.ValueName = fmt.Sprintf("value%d", i)
+			}
+			if _, ok := cs[config.StateTopic]; !ok {
+				cs[config.StateTopic] = make(Fields)
+			}
+			cs[config.StateTopic][config.ValueName] = config.Value
+		}
+
+		for n, c := range cs {
+			j, _ := json.Marshal(c)
+			fmt.Printf("%s (%s) -> %s\n", topic, n, string(j))
+
+			// log.Fatalln("NEED TO FIX THIS")
+			// m.err = m.PublishValue(n, topic, string(j))
+			t := m.client.Publish(topic, 0, true, string(j))
+			if !t.WaitTimeout(m.Timeout) {
+				m.err = t.Error()
+			}
+
+		}
+	}
 	return m.err
 }
 
@@ -183,38 +232,4 @@ type Sensor struct {
 func (c *Sensor) Json() string {
 	j, _ := json.Marshal(*c)
 	return string(j)
-}
-
-
-type Fields map[string]string
-
-func (m *Mqtt) PublishSensorValues(configs []EntityConfig) error {
-	for range Only.Once {
-		cs := make(map[string]Fields)
-		topic := ""
-		for _, oid := range configs {
-			if topic == "" {
-				topic = JoinStringsForId(m.Device.Name, oid.ParentName, oid.Name)
-			}
-			if _, ok := cs[oid.StateClass]; !ok {
-				cs[oid.StateClass] = make(Fields)
-			}
-			cs[oid.StateClass][oid.ValueName] = oid.Value
-		}
-
-		for n, c := range cs {
-			j, _ := json.Marshal(c)
-			fmt.Printf("%s (%s) -> %s\n", topic, n, string(j))
-
-			log.Fatalln("NEED TO FIX THIS")
-			// m.err = m.PublishValue(n, topic, string(j))
-		}
-	}
-	return m.err
-}
-
-func (m *Mqtt) GetSensorStateTopic(config EntityConfig) string {
-	st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
-	st = JoinStringsForTopic(m.sensorPrefix, st, "state")		// m.GetSensorStateTopic(name, config.SubName),m.EntityPrefix, m.Device.FullName, config.SubName
-	return st
 }

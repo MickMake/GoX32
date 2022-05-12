@@ -4,10 +4,7 @@ import (
 	"fmt"
 	"github.com/MickMake/GoX32/Only"
 	"github.com/MickMake/GoX32/cmd"
-	"log"
 	"os"
-	"os/signal"
-	"syscall"
 )
 
 
@@ -53,15 +50,15 @@ func main() {
 		_, _ = fmt.Fprintf(os.Stderr, "ERROR: %s\n", err)
 	}
 
-	// configure()
-	log.Println("Starting x32-mqtt")
-
-	// setupMQTTClient()
-	// setupOSCClient()
-
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
-
-	<-sigChan
-	log.Println("Exiting...")
+	// // configure()
+	// log.Println("Starting x32-mqtt")
+	//
+	// // setupMQTTClient()
+	// // setupOSCClient()
+	//
+	// sigChan := make(chan os.Signal, 1)
+	// signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	//
+	// <-sigChan
+	// log.Println("Exiting...")
 }

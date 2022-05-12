@@ -1,0 +1,53 @@
+body {
+background: url('/assets/Background.jpg');
+background-attachment: fixed;
+background-size: auto 100%;
+background-repeat: no-repeat;
+background-position: center;
+display: flex;
+align-items: center;
+height:auto;
+min-height: 100vh;
+/*min-height: 2000px;*/
+padding-top: 70px;
+}
+
+.separator {
+    border-right: 2px solid #007bff;
+}
+
+/*     <meta http-equiv="refresh" content="2; URL=#"> */
+/* http://localhost:8080/assets/Background.jpg */
+.row-bottom-margin { margin-bottom:0; !important; }
+.marginRow{ margin-bottom:0; !important; }
+
+.Icon {object-fit: cover; opacity: 0.7;}
+
+.OFF {background-color: #000000 !important;}
+.RD {background-color: #e72d2e !important;}
+.GN {background-color: #35e72d !important;}
+.YE {background-color: #fcf300 !important;}
+.BL {background-color: #0560ff !important;}
+.MG {background-color: #ed27ac !important;}
+.CY {background-color: #2ee0e7 !important;}
+.WH {background-color: #ffffff !important;}
+
+.OFF {background-color: #000000 !important;}
+.RDi {background-color: #e72d2e !important;}
+.GNi {background-color: #35e72d !important;}
+.YEi {background-color: #fcf300 !important;}
+.BLi {background-color: #0560ff !important;}
+.MGi {background-color: #ed27ac !important;}
+.CYi {background-color: #2ee0e7 !important;}
+.WHi {background-color: #ffffff !important;}
+
+/*
+.OFF {border: 2px solid #35e72d; border-left: none; !important;}
+.RDi {border: 2px solid #35e72d; border-left: none; !important;}
+.GNi {border: 2px solid #35e72d; border-left: none; !important;}
+.YEi {border: 2px solid #fcf300; border-left: none; !important;}
+.BLi {border: 2px solid #0560ff; border-left: none; !important;}
+.MGi {border: 2px solid #35e72d; border-left: none; !important;}
+.CYi {border: 2px solid #35e72d; border-left: none; !important;}
+.WHi {border: 2px solid #ffffff; border-left: none; !important;}
+ */

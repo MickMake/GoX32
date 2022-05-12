@@ -27,14 +27,17 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 			{ JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
 		}
 		device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
-		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+		if config.StateTopic == "" {
+			config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+			// config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
+		}
 
 		payload := BinarySensor {
 			Device:                 device,
-			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.FullId),
-			StateTopic:             JoinStringsForTopic(m.binarySensorPrefix, st, "state"),
+			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.Name),
+			StateTopic:             JoinStringsForTopic(m.binarySensorPrefix, config.StateTopic, "state"),
 			StateClass:             config.StateClass,
-			UniqueId:               st,
+			UniqueId:               config.StateTopic,
 			UnitOfMeasurement:      config.Units,
 			DeviceClass:            config.DeviceClass,
 			Qos:                    0,
@@ -66,7 +69,7 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 			// OffDelay:               0,
 		}
 
-		ct := JoinStringsForTopic(m.binarySensorPrefix, st, "config")
+		ct := JoinStringsForTopic(m.binarySensorPrefix, config.StateTopic, "config")
 		t := m.client.Publish(ct, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -79,7 +82,7 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 
 	for range Only.Once {
-		if config.Units != LabelBinarySensor {
+		if !config.IsBinarySensor() {
 			break
 		}
 

@@ -1,0 +1,10 @@
+.banner {
+background-image: url('/assets/Background.jpg');
+background-size: cover;
+background-repeat: no-repeat;
+
+height: 100vh;
+
+display: flex;
+align-items: center;
+}

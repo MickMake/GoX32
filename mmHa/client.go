@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoX32/Only"
+	"github.com/MickMake/GoX32/defaults"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"log"
 	"time"
@@ -45,7 +46,7 @@ func (m *Mqtt) Connect() error {
 			break
 		}
 		if m.ClientId == "" {
-			m.ClientId = "GoSunGrow"
+			m.ClientId = defaults.BinaryName
 		}
 
 		device := Config {
@@ -54,11 +55,11 @@ func (m *Mqtt) Connect() error {
 			UniqueId:   m.ClientId, 	// + "_Service",
 			StateTopic:   "~/state",
 			DeviceConfig: DeviceConfig {
-				Identifiers:  []string{"GoSunGrow"},
-				SwVersion:    fmt.Sprintf("GoSunGrow https://%s", ),
+				Identifiers:  []string{defaults.BinaryName},
+				SwVersion:    fmt.Sprintf("%s https://%s", defaults.BinaryName, defaults.Repo),
 				Name:         m.ClientId + " Service",
 				Manufacturer: "MickMake",
-				Model:        "SunGrow",
+				Model:        defaults.BinaryName,
 			},
 		}
 

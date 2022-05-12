@@ -1,10 +1,8 @@
 package api
 
 import (
-	"errors"
 	"fmt"
 	"github.com/MickMake/GoX32/Only"
-	"strings"
 )
 
 
@@ -63,20 +61,4 @@ func (req RequestCommon) String() string {
 	ret += fmt.Sprintf("SysCode:\t%s\n", req.SysCode)
 	ret += fmt.Sprintf("ValidFlag:\t%s\n", req.ValidFlag)
 	return ret
-}
-
-// CheckString RequestCommon checks
-func CheckString(name string, rc string) error {
-	var err error
-	for range Only.Once {
-		if rc == "" {
-			err = errors.New(name + ": empty string")
-			break
-		}
-		if strings.TrimSpace(rc) == "" {
-			err = errors.New(name + ": empty string with spaces")
-			break
-		}
-	}
-	return err
 }

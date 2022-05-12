@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap-slider.css">
+    <link rel="stylesheet" href="/assets/index.css">
+    <link rel="stylesheet" href="/assets/select.css">
+    <title>Auto-record channels [{{.Name}}]</title>
+</head>
+
+<body>
+    <script type="text/javascript" src="/assets/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap-slider.js"></script>
+    <script type="text/javascript" src="/assets/select.js"></script>
+
+    <form class="form-inline" method="POST" id="select">
+        <input name="updated" type="hidden" value="YES">
+
+        <div class="container-fluid">
+            <nav class="fixed-top bg-dark">
+                <ul class="nav nav-tabs pt-2">
+                    <li class="nav-item pl-2 pr-5 pb-2">
+                        <h4 class="shadow px-2 py-1 bg-white rounded row-bottom-margin">Auto-record [{{.Name}}]</h4>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a class="nav-link disabled" href="/config">Config</a>
+                    </li>
+
+                    <li class="nav-item px-0 separator"></li>
+
+                    <li class="nav-item px-2">
+                        <a class="nav-link" href="/trigger/{{.Name}}">Trigger</a>
+                    </li>
+
+                    <li class="nav-item px-0 separator"></li>
+
+                    <li class="nav-item px-2">
+                        <a class="nav-link active disabled" href="/select/{{.Name}}">Channels</a>
+                    </li>
+
+                    <li class="nav-item px-0 separator"></li>
+
+                    <li class="nav-item px-2 pt-1">
+                        <button class="btn btn-sm btn-outline-success align-middle text-sm-center" type="submit" formaction="/select/{{.Name}}">Save</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col-12 mx-auto">
+                    <div class="shadow mb-2 bg-white rounded row-bottom-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Select channels to record</h5>
+                                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                                <table class="table table-hover table-bordered table-striped table-dark table-sm">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" class="align-middle text-sm-center">Select<label for="select-all"></label><input type="checkbox" name="select-all" id="select-all" onclick="toggle(this);" /></th>
+                                            <th scope="col" class="align-middle text-sm-center">Name</th>
+                                            <th scope="col" class="align-middle text-sm-center">Source</th>
+                                            <th scope="col" class="align-middle text-sm-center">Gain</th>
+                                            <th scope="col" class="align-middle text-sm-center">Mute</th>
+                                            <th scope="col" class="align-middle text-sm-center">Solo</th>
+                                            <th scope="col" class="align-middle text-sm-center">Phantom</th>
+                                        </tr>
+                                    </thead>
+
+                                    {{range .Config.Channels}}
+                                        <tr class="">
+                                            <th class="align-middle text-sm-center" scope="row">
+                                                {{if .Selected}}
+                                                    <input class="form-check-input" type="checkbox" value="{{.Name}}" data-toggle="toggle" name="selected[]" id="checkboxes" checked>
+                                                {{else}}
+                                                    <input class="form-check-input" type="checkbox" value="{{.Name}}" data-toggle="toggle" name="selected[]" id="checkboxes">
+                                                {{end}}
+                                                <label class="form-check-label" for="checkboxes"></label>
+                                            </th>
+
+                                            <td class="align-middle {{.Colour}}"><img class="Icon" src="/assets/images/Icon{{.Icon}}.png" alt="Icon{{.Icon}}.png"/> {{.Name}}</td>
+
+                                            <td class="align-middle text-sm-center">{{.Source}}</td>
+
+                                            <td class="align-middle text-sm-center px-4">
+                                                {{.Gain}} dB
+                                                <label for="Gain{{.Source}}"></label>
+                                                <input id="Gain{{.Source}}" type="text" data-slider-min="-12" data-slider-max="60" data-slider-step=".1" data-slider-value="{{.Gain}}" data-slider-enabled="false" data-slider-ticks-labels='["", "", ""]' data-slider-ticks='["-12", "0", "60"]'/>
+                                                <script>var Gain = new Slider("#Gain{{.Source}}", { tooltip: 'always', precision: 3 });</script>
+                                            </td>
+
+                                            <td class="align-middle text-sm-center">
+                                                <fieldset disabled>
+                                                    {{if .Mute}}
+                                                        <input class="form-check-input" type="checkbox" value="true" data-toggle="toggle" name="Mute{{.Source}}" id="Mute{{.Source}}" checked>
+                                                    {{else}}
+                                                        <input class="form-check-input" type="checkbox" value="true" data-toggle="toggle" name="Mute{{.Source}}" id="Mute{{.Source}}">
+                                                    {{end}}
+                                                    <label class="form-check-label" for="Mute{{.Source}}"></label>
+                                                </fieldset>
+                                            </td>
+
+                                            <td class="align-middle text-sm-center">
+                                                <fieldset disabled>
+                                                    {{if .Solo}}
+                                                        <input class="form-check-input" type="checkbox" value="true" data-toggle="toggle" name="Solo{{.Source}}" id="Solo{{.Source}}" checked>
+                                                    {{else}}
+                                                        <input class="form-check-input" type="checkbox" value="true" data-toggle="toggle" name="Solo{{.Source}}" id="Solo{{.Source}}">
+                                                    {{end}}
+                                                    <label class="form-check-label" for="Solo{{.Source}}"></label>
+                                                </fieldset>
+                                            </td>
+
+                                            <td class="align-middle text-sm-center">
+                                                <fieldset disabled>
+                                                {{if .Phantom}}
+                                                    <input class="form-check-input" type="checkbox" value="true" data-toggle="toggle" name="Phantom{{.Source}}" id="Phantom{{.Source}}" checked>
+                                                {{else}}
+                                                    <input class="form-check-input" type="checkbox" value="true" data-toggle="toggle" name="Phantom{{.Source}}" id="Phantom{{.Source}}">
+                                                {{end}}
+                                                <label class="form-check-label" for="Phantom{{.Source}}"></label>
+                                                </fieldset>
+                                            </td>
+                                        </tr>
+                                    {{end}}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar fixed-bottom mx-auto">
+            <div class="pb-0 mx-auto">
+                {{if .Config.State.Updated}}
+                    <div class="alert alert-success alert-dismissible fade show mx-auto" id="success-alert" role="alert">Updated OK
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {{end}}
+            </div>
+        </div>
+    </form>
+
+</body>
+</html>

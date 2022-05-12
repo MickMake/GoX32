@@ -19,6 +19,7 @@ type ResponseCommon struct {
 	ResultMsg    string        `json:"result_msg"`
 }
 
+
 func (req ResponseCommon) IsValid() error {
 	var err error
 	for range Only.Once {

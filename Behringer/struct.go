@@ -23,6 +23,8 @@ type X32 struct {
 
 	Info Info
 
+	Points api.PointsMap
+
 	messageHandler MessageHandlerFunc
 
 	cache MessageMap
@@ -96,18 +98,6 @@ func NewX32(host string, port string, cacheDir string, cacheTimeout time.Duratio
 		if x.Error != nil {
 			break
 		}
-
-		go x.XremoteSender()
-
-		// p.Error = p.ApiRoot.SetUrl(baseUrl)
-		// if p.Error != nil {
-		// 	break
-		// }
-		//
-		// p.Error = p.ApiRoot.SetCacheDir(cacheDir)
-		// if p.Error != nil {
-		// 	break
-		// }
 	}
 	return &x
 }
@@ -130,6 +120,14 @@ func (x *X32) Connect() error {
 
 		x.Info = CreateInfo(info.Arguments)
 		x.Prefix = x.Info.Model
+
+		x.Points, x.Error = api.ImportPoints("points.json", x.Info.Model)
+		if x.Error != nil {
+			break
+		}
+
+		go x.XremoteSender()
+
 		// fmt.Println("Got info from the OSC server:", info.Arguments)
 		// time.Sleep(time.Second * 30)
 		// sg.Areas = make(api.Areas)

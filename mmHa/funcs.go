@@ -21,6 +21,10 @@ func JoinStringsForId(args ...string) string {
 		a = strings.TrimSpace(a)
 		a = re.ReplaceAllString(a, `_`)
 		a = re2.ReplaceAllString(a, ``)
+		a = strings.TrimPrefix(a, `-`)
+		a = strings.TrimPrefix(a, `_`)
+		a = strings.TrimSuffix(a, `-`)
+		a = strings.TrimSuffix(a, `_`)
 		newargs = append(newargs, a)
 	}
 	// return strings.ReplaceAll(strings.TrimSpace(strings.Join(args, ".")), ".", "_")

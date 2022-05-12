@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/index.css">
+  <title>mmAutoRecord</title>
+</head>
+
+<body>
+<script src="/assets/js/jquery-3.4.1.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/index.js"></script>
+
+<div class="container-fluid">
+  <nav class="fixed-top bg-dark">
+    <ul class="nav nav-tabs pt-2">
+      <li class="nav-item pl-2 pr-1 pb-2">
+        <h4 class="shadow px-2 py-1 bg-white rounded row-bottom-margin">mmAutoRecord</h4>
+      </li>
+      <li class="nav-item px-2">
+        <a class="nav-link" href="/config">Config</a>
+      </li>
+
+      <li class="nav-item px-0 separator"></li>
+
+      <li class="nav-item px-2">
+        <a class="nav-link" href="/trigger/sermon">Trigger (sermon)</a>
+      </li>
+
+      <li class="nav-item px-0 separator"></li>
+
+      <li class="nav-item px-2">
+        <a class="nav-link" href="/trigger/band">Trigger (band)</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div class="container-fluid">
+  <div class="row mb-3">
+    <div class="col-12 mx-auto">
+      <div class="shadow mb-2 bg-white rounded row-bottom-margin">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Information</h5>
+            <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+            <p class="table table-hover table-bordered table-striped table-dark table-sm">
+              This application connects to the Behringer X32 mixer console via USB and Ethernet and provides automatic recording of audio based on defined triggers.
+            </p>
+            <p class="table table-hover table-bordered table-striped table-dark table-sm">
+              Two separate triggers can be defined for "<a href="/trigger/sermon">Sermon</a>" and/or "<a href="/trigger/band">Band</a>".
+              Channels to record can also be selected for either "<a href="/select/sermon">Sermon</a>" or "<a href="/select/band">Band</a>" independently.
+            </p>
+            <p class="table table-hover table-bordered table-striped table-dark table-sm">
+              Once a pre-defined trigger event is fired from the X32 mixer, recording will start immediately and saved locally along with timestamps for easy identification.
+              If Google Drive is setup locally, these files can be synced to remote computers.
+            </p>
+
+            <table class="table table-dark">
+              {{if eq .State.MixerState "CONNECTED"}}
+                <tr>
+                  <td>Mixer State</td>
+                  <td><p class="text-success flex-sm-fill text-sm-center nav-link text-center">{{.State.MixerState}}</p>
+                  </td>
+                </tr>
+              {{else if eq .State.MixerState "CONNECTING"}}
+                <tr>
+                  <td>Mixer State</td>
+                  <td><p class="text-warning">{{.State.MixerState}}</p></td>
+                </tr>
+              {{else if eq .State.MixerState "DISCONNECTED"}}
+                <tr>
+                  <td>Mixer State</td>
+                  <td>
+                    <p class="text-danger flex-sm-fill text-sm-center nav-link text-center">{{.State.MixerState}}
+                      <button class="btn btn-sm btn-outline-success my-2 my-sm-0 card-link" type="submit" formaction="/connect">Connect</button>
+                    </p>
+                  </td>
+                </tr>
+              {{else}}
+                <tr>
+                  <td>Mixer State</td>
+                  <td><p class="text-danger">NOT CONNECTED</p></td>
+                </tr>
+              {{end}}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="navbar fixed-bottom mx-auto">
+  <div class="pb-0 mx-auto">
+    {{if .State.Updated}}
+      <div class="alert alert-success alert-dismissible fade show mx-auto" id="alert" role="alert">Updated OK
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {{end}}
+  </div>
+</div>
+
+</body>
+</html>

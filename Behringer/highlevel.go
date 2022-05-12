@@ -8,20 +8,24 @@ import (
 
 
 type Channel struct {
-	Name		string	`json:"name"`
-	Colour		string	`json:"colour"`
-	Icon		string	`json:"icon"`
-	Mute    	bool	`json:"mute"`
-	Solo    	bool	`json:"solo"`
-	Source  	string	`json:"source"`
-	Gain		float64	`json:"gain"`
-	Trim		float64	`json:"trim"`
-	Phantom		bool	`json:"phantom"`
-	Phantom2	bool	`json:"phantom2"`
-	Selected	bool	`json:"selected"`
+	Topic       string  `json:"-"`
 
-	Fader		float64	`json:"fader"`
-	Level		float64	`json:"level"`
+	Data struct {
+		Name     string  `json:"name"`
+		Colour   string  `json:"colour"`
+		Icon     string  `json:"icon"`
+		Mute     bool    `json:"mute"`
+		Solo     bool    `json:"solo"`
+		Source   string  `json:"source"`
+		Gain     float64 `json:"gain"`
+		Trim     float64 `json:"trim"`
+		Phantom  bool    `json:"phantom"`
+		Phantom2 bool    `json:"phantom2"`
+		Selected bool    `json:"selected"`
+
+		Fader float64 `json:"fader"`
+		Level float64 `json:"level"`
+	}
 }
 type Channels []Channel	// We're keeping a 1:1 mapping of array -> channel numbers.
 
@@ -44,77 +48,77 @@ func (x *X32) GetChannel(i int) Channel {
 
 	for range Only.Once {
 		// channels start from index 1
-		base := fmt.Sprintf("/ch/%.2d/", i + 1)
+		ret.Topic = fmt.Sprintf("/ch/%.2d/", i + 1)
 
-		msg := x.Call(base + "config/name")
+		msg := x.Call(ret.Topic + "config/name")
 		if msg.Error != nil {
 			break
 		}
-		ret.Name = msg.GetStringValue()
+		ret.Data.Name = msg.GetStringValue()
 
-		msg = x.Call(base + "config/color")
+		msg = x.Call(ret.Topic + "config/color")
 		if msg.Error != nil {
 			break
 		}
-		ret.Colour = msg.GetStringValue()
+		ret.Data.Colour = msg.GetStringValue()
 
-		msg = x.Call(base + "config/source")
+		msg = x.Call(ret.Topic + "config/source")
 		if msg.Error != nil {
 			break
 		}
-		ret.Source = msg.GetStringValue()
+		ret.Data.Source = msg.GetStringValue()
 
-		msg = x.Call(base + "config/icon")
+		msg = x.Call(ret.Topic + "config/icon")
 		if msg.Error != nil {
 			break
 		}
-		ret.Icon = msg.GetStringValue()
+		ret.Data.Icon = msg.GetStringValue()
 
-		msg = x.Call(base + "preamp/trim")
+		msg = x.Call(ret.Topic + "preamp/trim")
 		if msg.Error != nil {
 			break
 		}
-		ret.Trim = msg.GetFloatValue()
+		ret.Data.Trim = msg.GetFloatValue()
 
-		// msg = x.Call(base + "pramp/hpon")
+		// msg = x.Call(ret.Topic + "pramp/hpon")
 		// if msg.Error != nil {
 		// 	break
 		// }
 		// ret.Phantom2 = msg.GetBoolValue()
 
-		msg = x.Call(base + "mix/on")
+		msg = x.Call(ret.Topic + "mix/on")
 		if msg.Error != nil {
 			break
 		}
-		ret.Mute = !msg.GetBoolValue()		// Mix ON == Mute OFF
+		ret.Data.Mute = !msg.GetBoolValue()		// Mix ON == Mute OFF
 
-		msg = x.Call(base + "mix/fader")
+		msg = x.Call(ret.Topic + "mix/fader")
 		if msg.Error != nil {
 			break
 		}
-		ret.Fader = msg.GetFloatValue()
+		ret.Data.Fader = msg.GetFloatValue()
 
-		msg = x.Call(base + "mix/01/level")
+		msg = x.Call(ret.Topic + "mix/01/level")
 		if msg.Error != nil {
 			break
 		}
-		ret.Level = msg.GetFloatValue()
+		ret.Data.Level = msg.GetFloatValue()
 
 
 		// headamps start from index 0
-		base = fmt.Sprintf("/headamp/%.3d/", i)
+		// base = fmt.Sprintf("/headamp/%.3d/", i)
 
-		msg = x.Call(base + "gain")
+		msg = x.Call(fmt.Sprintf("/headamp/%.3d/gain", i))
 		if msg.Error != nil {
 			break
 		}
-		ret.Gain = msg.GetFloatValue()
+		ret.Data.Gain = msg.GetFloatValue()
 
-		msg = x.Call(base + "phantom")
+		msg = x.Call(fmt.Sprintf("/headamp/%.3d/phantom", i))
 		if msg.Error != nil {
 			break
 		}
-		ret.Mute = msg.GetBoolValue()
+		ret.Data.Mute = msg.GetBoolValue()
 	}
 
 	return ret

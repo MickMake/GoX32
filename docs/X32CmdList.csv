@@ -1,0 +1,566 @@
+DONE,Command,Type,MinValue,MaxValue,TextValues,Description
+,/-action/addmarker,i,1,100,,Add X‐Live! marker
+,/-action/clearalert,b,0,1,,"Clear X‐Live! alert status, 0 no action, 1 clear alert"
+,/-action/clearsolo,b,0,1,,"Clear all solo buttons, 0 no action, 1 clear solo"
+,/-action/delmarker,i,1,100,,Delete X‐Live! sdcard record session
+,/-action/delsession,i,1,100,,Delete X‐Live! sdcard record session
+,/-action/formatcard,i,,,,Format active sdcard
+,/-action/gocue,i,0,499,0-499,Load a cue fro the list
+,/-action/goscene,i,0,99,0-99,Load a scene from the list
+,/-action/gosnippet,i,0,99,0-99,Load a snippet from the list
+,/-action/initall,b,0,1,,"Initialize X32 Console, 0 (default) no action, 1 initialize"
+,/-action/initlib,b,0,1,,"Initialize X32 libraries, 0 (default) no action, 1 initialize"
+,/-action/initshow,b,0,1,,"Initialize X32 show data, 0 (default) no action, 1 initialize"
+,/-action/newscreen,b,0,1,,"Renew LCD screen display, 0 no, 1 yes"
+,/-action/playtrack,i,-1,1,-1|1,"USB Player control (-1 prev track, 0 not playing, next track"
+,/-action/recselect,i,0,n,0-n,Select and execute record <int> in the current directory
+,/-action/savemarker,i,1,100,,Save X‐Live! sdcard position at marker
+,/-action/savestate,b,0,1,,"Save X32/M32 state, 0 (default) no action, 1 save state (before power off)"
+,/-action/selmarker,i,1,100,,Select X‐Live! marker
+,/-action/selsession,i,1,100,,Select X‐Live! sdcard record session
+,/-action/setclock,s,,,,Set clock value
+,/-action/setip,b,0,1,,0 by default; changing to 1 resets Network parameters
+,/-action/setposition,i,0,86399999,,"Set X‐Live! sdcard position, in milliseconds"
+,/-action/setrtasrc,i,0,72,0-72,Selects the source used for RTA display
+,/-action/setsrate,b,0,1,,"Select sampling rate, 0 48khz, 1 44.1khz"
+,/-action/undopt,i,,,,Creates checkpoint to get back to upon issuing an undo command
+,/-ha/00-39/index,i,0,127,,(Read only) returns the actual headamp used as source
+,/-insert/fx1L,i,,,,Channel the FX1 L input is inserted into
+,/-insert/fx1R,i,,,,Channel the FX1 R input is inserted into
+,/-insert/fx2L,i,,,,Channel the FX2 L input is inserted into
+,/-insert/fx2R,i,,,,Channel the FX2 R input is inserted into
+,/-insert/fx3L,i,,,,Channel the FX3 L input is inserted into
+,/-insert/fx3R,i,,,,Channel the FX3 R input is inserted into
+,/-insert/fx4L,i,,,,Channel the FX4 L input is inserted into
+,/-insert/fx4R,i,,,,Channel the FX4 R input is inserted into
+,/-insert/aux1,i,,,,Channel the aux input [1…6] is inserted into
+,/-libs/ch/001/flags,i,,,,Lists scope of channel preset (bitwise integer)
+,/-libs/ch/001/hasdata,b,0,1,,Reports whether a channel preset has data
+,/-libs/ch/001/name,s,,,,Name of the channel preset
+,/-libs/ch/001/pos,i,1,100,001-100,The position of the channel preset number
+,/-libs/ch/001/type,i,,,,Type of the channel preset
+,/-libs/fx/001/flags,i,,,,"Use as an int to list the effect type “Ambiance”, etc."
+,/-libs/fx/001/hasdata,b,0,1,,Reports whether a effects preset has data
+,/-libs/fx/001/name,s,,,,Name of the effects preset
+,/-libs/fx/001/pos,i,1,100,001-100,The position of the effects preset number
+,/-libs/fx/001/type,i,,,,Type of the effects preset
+,/-libs/r/001/flags,i,,,,Unused (all 0)
+,/-libs/r/001/hasdata,b,0,1,,Reports whether a routing preset has data
+,/-libs/r/001/name,s,,,,Name of the routing preset
+,/-libs/r/001/pos,i,1,100,001-100,The position of the routing preset number
+,/-libs/fx/001/type,i,,,,Type of the routing preset
+,/-prefs/autosel,b,0,1,OFF|ON,View Preference - Auto select
+,/-prefs/bright,f,0,1,10;100,Main LCD brightness
+,/-prefs/card/ADATsync,i,0,4,WC|ADAT1|ADAT2|ADAT3|ADAT4,ADAT synchronization
+,/-prefs/card/ADATwc,b,0,1,IN|OUT,ADAT wordclock
+,/-prefs/card/MADIin,i,0,4,1-32|9-40|17-48|25-56|33-64,MADI inputs
+,/-prefs/card/MADImode,b,0,1,56|64,MADI mode
+,/-prefs/card/MADIout,i,0,5,OFF|1-32|9-40|17-48|25-56|33-64,MADI outputs
+,/-prefs/card/MADIsrc,i,0,3,OFF|OPT|COAX|BOTH,MADI source
+,/-prefs/card/UFifc,b,0,1,FW|USB,Card interface type
+,/-prefs/card/UFmode,i,0,3,1-4,X‐UF card settings 
+,/-prefs/card/URECplayb,b,0,1,SD|USB,X-Live playback device
+,/-prefs/card/URECrout,i,0,2,Rec|Play|Auto,X-Live routing
+,/-prefs/card/URECsdsel,b,0,1,SD1|SD2,X-Live active SD card
+,/-prefs/card/URECtracks,i,0,2,32|16|8,X-Live number of recorded tracks
+,/-prefs/card/USBmode,i,0,5,1-6,X‐USB card settings
+,/-prefs/clockmode,b,0,1,24h|12h,Clock mode
+,/-prefs/clockrate,b,0,1,48K|44K1,Global sample rate
+,/-prefs/clocksource,i,0,3,INT|AES50A|AES50B|Exp Card,Global synchronization
+,/-prefs/confirm_general,b,0,1,OFF|ON,Confirm Popup - General
+,/-prefs/confirm_overwrite,b,0,1,OFF|ON,Confirm Popup - Overwrite
+,/-prefs/confirm_sceneload,b,0,1,OFF|ON,Confirm Popup - Scene Load
+,/-prefs/dcamute,b,0,1,OFF|ON,"Config, Mute System - DCA groups"
+,/-prefs/haflags,i,0,7,%0000,"Preamps, Global Options/HA Remote (bitwise integer)"
+,/-prefs/hardmute,b,0,1,OFF|ON,"Config, Mute System - Hard mute"
+,/-prefs/invertmute,b,0,1,OFF|ON,"Config, Mute system - Invert LED"
+,/-prefs/ip/addr/0,i,0,255,0-255,IP address (4 numbers)
+,/-prefs/ip/dhcp,b,0,1,OFF|ON,DHCP OFF/ON
+,/-prefs/ip/gateway/0,i,0,255,0-255,IP gateway (4 numbers)
+,/-prefs/ip/mask/0,i,0,255,0-255,IP mask (4 numbers)
+,/-prefs/iQ/[01-16]/iQeqset,i,0,4,,EQ for Turbosound iQ speaker
+,/-prefs/iQ/[01-16]/iQmodel,i,0,6,none iQ8 iQ10 iQ12 iQ15 iQ15B iQ18B,Type of Turbosound iQ speaker
+,/-prefs/iQ/[01-16]/iQsound,i,0,n,,Emulated sound profile (depending on iQ model)
+,/-prefs/lamp,f,0,1,10;100,Lamp dim value
+,/-prefs/lampon,b,0,1,OFF|ON,Lamp is OFF or ON
+,/-prefs/lcdbright,f,0,1,10;100,LED brightness
+,/-prefs/lcdcont,f,0,1,0;100,Channel LCD Contrast
+,/-prefs/name,s,,,,Name of device - eg “X32-02-4A-53” can be changed
+,/-prefs/rec_control,b,0,1,,"Recorder type displayed in status line - 0 USB, 1 X-Live"
+,/-prefs/remote/enable,b,0,1,OFF|ON,X32/M32 remote enable state
+,/-prefs/remote/ioenable,i,0,2047,%0000  (11),Enables X32/M32’s Remote mode (bitwise integer)
+,/-prefs/remote/port,i,0,7,MIDI|CARD|RTP,Port used for MIDI remote (bitwise integer)
+,/-prefs/remote/protocol,i,0,7,HCU|HUI|CC,Protocol type for X32/M32 Remote
+,/-prefs/rta/autogain,b,0,1,OFF|ON,RTA autogain
+,/-prefs/rta/decay,f,0,1,0.25 16 19,RTA decay time
+,/-prefs/rta/det,b,0,1,RMS PEAK,RTA detector
+,/-prefs/rta/gain,f,0,1,0.0;60.0,RTA gain value
+,/-prefs/rta/mode,b,0,1,BAR|SPEC,RTA display mode
+,/-prefs/rta/option,i,0,63,%00000,RTA options (bitwise integer)
+,/-prefs/rta/peakhold,i,0,8,OFF 1-8,RTA peak hold
+,/-prefs/rta/pos,b,0,1,PRE|POST,"RTA chain position (pre EQ, post EQ)"
+,/-prefs/rta/source,i,0,73,1-74,RTA source
+,/-prefs/rta/visibility,i,0,12,OFF|25|30|35|40|45|50|55|60|65|70|75|80,RTA EQ Overlay value (in percent)
+,/-prefs/safe_masterlevels,b,0,1,OFF|ON,General Preference - Safe Main Levels
+,/-prefs/sceneadvance,b,0,1,OFF|ON,General Preference - Scene go next
+,/-prefs/selfollowsbank,b,0,1,OFF|ON,View Preference - Sel follow bank
+,/-prefs/show_control,i,0,2,CUES|SCENES|SNIPPETS,Config - Show control
+,/-prefs/style,s,,,,Name given to your prefs - eg “Patrick”
+,/-prefs/viewrtn,b,0,1,OFF|ON,View Preference - Return to last
+,/-show/prepos/current,i,1,99,0-99,"Scene page cue, scene or snippet slot highlighted line/index"
+,/-show/showfile/cue/000/bit,i,0,99,00-99,Associate Snippet with cue at position [000‐099]
+,/-show/showfile/cue/000/midichan,i,,,,Set MIDI channel number
+,/-show/showfile/cue/000/midipara1,i,0,127,0-127,Set Midi parameter 1 value
+,/-show/showfile/cue/000/midipara2,i,0,127,0-127,Set Midi parameter 2 value
+,/-show/showfile/cue/000/miditype,i,0,3,1-4,Associate MIDI type with cue at position [000‐099]
+,/-show/showfile/cue/000/name,s,,,,Name of cue at position [000‐099]
+,/-show/showfile/cue/000/numb,i,0,499,000;499,"Number of cue in the form xxx.x.x, saved at position [000‐099] "
+,/-show/showfile/cue/000/scene,i,0,99,00-99,Associate Scene with cue at position [000‐099]
+,/-show/showfile/cue/000/skip,b,0,1,OFF|ON,0 (no Skip) or 1 (Skip) for cue at position [000‐099]
+,/-show/showfile/scene/000/hasdata,b,0,1,NO|YES,Scene at position [000‐099] has valid data
+,/-show/showfile/scene/000/name,s,,,,Scene “Name” parameter for scene [000‐099]
+,/-show/showfile/scene/000/notes,s,,,,Scene “Notes” parameter for scene [000‐099]
+,/-show/showfile/scene/000/safes,i,0,255,%0000 (8),Scene “Scene Safes” parameters selection for scene [000‐099]
+,/-show/showfile/show/buses,i,0,65535,%0000  (16),Chan safe page - Buses safe parameters
+,/-show/showfile/show/chan16,i,0,65535,%0000  (16),Chan safe page - Channel safe parameters (ch 1-16)
+,/-show/showfile/show/chan32,i,0,65535,%0000  (16),Chan safe page - Channel safe parameters (ch 17-32)
+,/-show/showfile/show/console,i,0,15,%0000,Param safe page - Scene safe parameters console
+,/-show/showfile/show/effects,i,0,255,%0000  (8),Chan safe page - Effects Slots safe parameters
+,/-show/showfile/show/inputs,i,0,255,%0000  (8),Param safe page -  Scene safe parameters input channels
+,/-show/showfile/show/lrmtxdca,i,0,65535,%0000  (16),Chan safe page - Mtx/Main/Group safe parameters
+,/-show/showfile/show/mxbuses,i,0,255,%0000  (8),Param safe page - Scene safe parameters mixbus
+,/-show/showfile/show/mxsends,i,0,65535,%0000  (16),Param safe page - Scene safe parameters input channels
+,/-show/showfile/show/name,s,,,,Name of current show
+,/-show/showfile/show/return,i,0,65535,%0000  (16),Chan safe page - Return & Aux safe parameters
+,/-show/showfile/snippet/000/auxbuses,i,0,,%0000  (32),Returns and Buses affected by snippet (bitwise value)
+,/-show/showfile/snippet/000/channels,i,0,,%0000  (32),Channels affected by snippet (bitwise value)
+,/-show/showfile/snippet/000/eventtyp,i,0,,%0000  (24), Parameter Filters & Effects affected by snippet (bitwise value)
+,/-show/showfile/snippet/000/hasdata,b,0,1,NO|YES,Snippet at position [000‐099] has valid data
+,/-show/showfile/snippet/000/maingrps,i,0,65535,%0000  (16),Main/Matrix/Group affected by snippet (bitwise value)
+,/-show/showfile/snippet/000/name,s,,,,Snippet “Name” parameter for Snippet [000‐099]
+,/-stat/aes50/A,s,,,,"Detected stagebox chain and preamps on A port (name, preamp)"
+,/-stat/aes50/B,s,,,,Detected stagebox chain and preamps on B port
+,/-stat/aes50/state,i,0,31,%0000  (16),Describes AES50 state (bitmap value)
+,/-stat/autosave,b,0,1,OFF|ON,X32/M32 saves automatically its state (every 2 min)
+,/-stat/bussendbank,i,0,3,0-3,Select bus send bank
+,/-stat/chfaderbank,i,0,3,0-3,Select Main channel fader bank
+,/-stat/eqband,i,0,5,0-5,"Select EQ band (Home, EQ screens)"
+,/-stat/geqonfdr,b,0,1,OFF|ON,EQ on fader feature
+,/-stat/geqpos,i,0,,%00000,EQ on fader window position (bitwise)
+,/-stat/grpfaderbank,i,0,3,0-3,Select Group channel fader bank
+,/-stat/lock,b,0,1,OFF|ON,X32/M32 Lock status
+,/-stat/osc/on,b,0,1,OFF|ON,"Oscillator generator (OFF, ON)"
+,/-stat/remote,b,0,1,OFF|ON,"Remote mode status (0 console, 1 DAW)"
+,/-stat/rtaeqpre,b,0,1,OFF|ON,RTA chain position for channel EQ
+,/-stat/rtaeqpost,b,0,1,OFF|ON,RTA chain position for GEQ effect
+,/-stat/rtamodeeq,b,0,1,BAR|SPEC,"RTA display mode for channel EQ (0 bar, 1 spec)"
+,/-stat/rtamodegeq,b,0,1,BAR|SPEC,"RTA display mode for GEQ (0 bar, 1 spec)"
+,/-stat/rtasource,i,0,170,,RTA source
+,/-stat/screen/ASSIGN/page ,i,0,3,0-3,User Assign screens
+,/-stat/screen/CHAN/page,i,0,6,0-6,Channel (Home) screens
+,/-stat/screen/FX/page,i,0,8,0-8,Effects screens
+,/-stat/screen/LIB/page,i,0,2,0-2,Library screens
+,/-stat/screen/lock,b,0,1,0|1,Lock screen
+,/-stat/screen/METER/page,i,0,4,0-4,Meters screens
+,/-stat/screen/MON/page ,i,0,3,0-3,Monitor screens
+,/-stat/screen/mutegrp ,b,0,1,OFF|ON,Mutegroup screen
+,/-stat/screen/ROUTE/page,i,0,7,0-7,Routing screens
+,/-stat/screen/SCENE/page,i,0,5,0-5,Scene screens
+,/-stat/screen/screen,i,0,10,0-10,X32/M32 LCD active screen
+,/-stat/screen/SETUP/page,i,0,6,0-6,Setup screens
+,/-stat/screen/USB/page,b,0,1,0|1,USB screens
+,/-stat/screen/utils,b,0,1,OFF|ON,Utility screen
+,/-stat/selidx,i,0,71,0-71,Select channel index
+,/-stat/sendsonfader,b,0,1,OFF|ON,"Sends on Fader status (OFF, ON)"
+,/-stat/solo,b,0,1,OFF|ON,Clear Solo button status
+,/-stat/solosw/01,b,0,1,OFF|ON,"Solo switch OFF, ON"
+,/-stat/talk/A,b,0,1,OFF|ON,"Talkback A (OFF, ON)"
+,/-stat/talk/B,b,0,1,OFF|ON,"Talkback B (OFF, ON)"
+,/-stat/tape/etime,i,,,,USB Play/Rec elapse time (sec)
+,/-stat/tape/file,s,,,,USB Play/Rec filename (and path)
+,/-stat/tape/rtime,i,,,,USB Play remaining time (sec)
+,/-stat/tape/state,i,0,6,0-6,USB Player control
+,/-stat/urec/etime,i,,,,X-Live Play/Rec elapse time (sec)
+,/-stat/urec/etime,i,,,,X-Live Play/Rec remaining time (sec)
+,/-stat/urec/state,i,0,3,STOP|PPAUSE|PLAY|REC,X-Live card state
+,/-stat/usbmounted,b,0,1,0|1,USB drive mount status
+,/-stat/userbank ,i,0,2,0-2,"Display User Assign bank (A, B, C)"
+,/-stat/userpar/[id]/value,i,,,,Provides to client program the value of a button or encoder
+,/-stat/xcardsync,b,0,1,OFF|ON,Sync state of expansion card
+,/-stat/xcardtype,i,0,11,,Type of card installed
+,/-undo/time,s,,hh:mm:ss,,Display/Set a time value for changes
+,/-urec/batterystate,i,0,2,,X-Live internal battery state
+,/-urec/errorcode,i,0,24,,X-Live error code
+,/-urec/errormessage,s,,,,X-Live error description string
+,/-urec/marker/001/time,i,,,,X-Live marker time in milliseconds (32 bit value)
+,/-urec/markermax,i,0,100,,X-Live marker max
+,/-urec/markerpos,i,0,100,,X-Live record session current index
+,/-urec/sd1info,s,,,,SD1 card info (32 char string)
+,/-urec/sd1state,i,0,3,,X-Live SDcard 1 state
+,/-urec/sd2info,s,,,,SD2 card info (32 char string)
+,/-urec/sd2state,i,0,3,,X-Live SDcard 2 state
+,/-urec/session/001/name,s,,,,X-Live recording session name (32 char max string)
+,/-urec/sessionlen,i,0,86399999,,X-Live record session length in milliseconds (32 bit value)
+,/-urec/sessionmax,i,0,100,,X-Live record session max index
+,/-urec/sessionoffs,i,0,86399999,,Denotes the endpoint of the first part of X-Live spanned session (ms)
+,/-urec/sessionpos,i,0,100,,X-Live record session current index
+,/-urec/sessionspan,i,0,3,,X-Live record spanning status
+,/-urec/srate,b,0,1,,X-Live record session sampling rate
+,/-urec/tracks,i,0,2,8|16|32,X-Live recording type
+,/-usb/dir/001/name,s,,,,File or Directory name at position (000..999)
+,/-usb/dir/001/type,s,,,,???
+,/-usb/dir/dirpos,i,,,,Current directory entry number
+,/-usb/dir/maxpos,i,,,,Current directory number of entries
+,/-usb/path,s,,,,Current directory name
+,/-usb/title,s,,,,Current file name
+,/add,sis,,,,Add a cue element to the current show
+y,/auxin/01/config/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,AuxIn scribble strip color
+y,/auxin/01/config/icon,i,1,74,1-74,AuxIn scribble strip icon number
+y,/auxin/01/config/name,s,,,,AuxIn scribble strip name
+y,/auxin/01/config/source,i,0,64,OFF|In01|In02|In03|In04|In05|In06|In07|In08|In09|In10|In11|In12|In13|In14|In15|In16|In17|In18|In19|In20|In21|In22|In23|In24|In25|In26|In27|In28|In29|In30|In31|In32|Aux1|Aux2|Aux3|Aux4|Aux5|Aux6|USBL|USBR|Fx1L|Fx1R|Fx2L|Fx2R|Fx3L|Fx3R|Fx4L|FX4R|Bs01|Bs02|Bs03|Bs04|Bs05|Bs06|Bs07|Bs08|Bs09|Bs10|Bs11|Bs12|Bs13|Bs14|Bs15|Bs16,AuxIn source
+y,/auxin/01/eq/01/f,f,0,1,20.0;20000,AuxIn EQ bands 1-4 frequency
+y,/auxin/01/eq/01/g,f,0,1,-15.0;15.0,AuxIn EQ bands 1-4 gain
+y,/auxin/01/eq/01/q,f,0,1,10.0;0.32,AuxIn EQ bands 1-4 Q
+y,/auxin/01/eq/01/type,i,0,4,Lcut|LShv|PEQ|VEQ|HShv|Hcut,AuxIn EQ bands 1-4 type
+y,/auxin/01/eq/on,b,0,1,OFF|ON,AuxIn EQ off/on
+y,/auxin/01/grp/dca,i,,0,%00000000,AuxIn DCA assignments
+y,/auxin/01/grp/mute,i,,0,%00000000,AuxIn Mutegroup assignments
+y,/auxin/01/mix/01/level,f,0,1,-oo;18.0,AuxIn sends fader level
+y,/auxin/01/mix/01/on,b,0,1,OFF|ON,AuxIn sends on/mute
+y,/auxin/01/mix/01/pan,f,0,1,-100;100,AuxIn sends pan
+y,/auxin/01/mix/01/type,i,0,4,IN/LC|<-EQ|EQ->|PRE|POST|GRP,AuxIn sends tap
+y,/auxin/01/mix/fader,f,0,1,-oo;18.0,AuxIn fader level
+y,/auxin/01/mix/mlevel,f,0,1,-oo;18.0,AuxIn mono fader level
+y,/auxin/01/mix/mono,b,0,1,OFF|ON,AuxIn mono on/mute
+y,/auxin/01/mix/on,b,0,1,OFF|ON,AuxIn on/mute
+y,/auxin/01/mix/pan,f,0,1,-100;100,AuxIn pan
+y,/auxin/01/mix/st,b,0,1,OFF|ON,AuxIn to LR on
+y,/auxin/01/preamp/invert,b,0,1,OFF|ON,AuxIn preamp polarity
+y,/auxin/01/preamp/trim,f,0,1,-18.0;18.0,AuxIn preamp trim level
+,/batchsubscribe,ssiii,,,,Assigns an alias to a meter (or meters) command
+y,/bus/01/config/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,Bus scribble strip color
+y,/bus/01/config/icon,i,0,74,0-74,Bus scribble strip icon
+y,/bus/01/config/name,s,,,,Bus scribble strip name
+y,/bus/01/dyn/attack,f,0,1,0.0;120.0,Bus compressor attack
+y,/bus/01/dyn/auto,b,0,1,OFF|ON,Bus compressor auto
+y,/bus/01/dyn/det,b,0,1,PEAK|RMS,Bus compressor detection
+y,/bus/01/dyn/env,b,0,1,LIN|LOG,Bus compressor envelope
+y,/bus/01/dyn/filter/f,f,0,1,20.0;20000,Bus compressor filter frequency
+y,/bus/01/dyn/filter/on,b,0,1,OFF|ON,Bus compressor filter on
+y,/bus/01/dyn/filter/type,i,0,8,LC6|LC12|HC6|HC12|1.0|2.0|3.0|5.0|10.0,Bus compressor filter type
+y,/bus/01/dyn/hold,f,0,1,0.02;2000,Bus compressor hold
+y,/bus/01/dyn/keysrc,i,0,64,OFF|In01|In02|In03|In04|In05|In06|In07|In08|In09|In10|In11|In12|In13|In14|In15|In16|In17|In18|In19|In20|In21|In22|In23|In24|In25|In26|In27|In28|In29|In30|In31|In32|Aux1|Aux2|Aux3|Aux4|Aux5|Aux6|USBL|USBR|Fx1L|Fx1R|Fx2L|Fx2R|Fx3L|Fx3R|Fx4L|FX4R|Bs01|Bs02|Bs03|Bs04|Bs05|Bs06|Bs07|Bs08|Bs09|Bs10|Bs11|Bs12|Bs13|Bs14|Bs15|Bs16,Bus compressor key source
+y,/bus/01/dyn/knee,f,0,1,0.0;5.0,Bus compressor knee
+y,/bus/01/dyn/mgain,f,0,1,0.0;24.0,Bus compressor make up gain
+y,/bus/01/dyn/mix,f,0,1,0;100,Bus compressor mix
+y,/bus/01/dyn/mode,b,0,1,COMP|EXP,Bus compressor mode
+y,/bus/01/dyn/on,b,0,1,OFF|ON,Bus compressor on
+y,/bus/01/dyn/pos,b,0,1,PRE|POST,Bus compressor tap
+y,/bus/01/dyn/ratio,i,0,11,1.1|1.3|1.5|2.0|2.5|3.0|4.0|5.0|7.0|10|20|100,Bus compressor ratio
+y,/bus/01/dyn/release,f,0,1,5.0;4000.0,Bus compressor release
+y,/bus/01/dyn/thr,f,0,1,-60.0;0.0,Bus compressor threshold
+y,/bus/01/eq/01/f,f,0,1,20.0;20000,Bus PEQ frequency
+y,/bus/01/eq/01/g,f,0,1,-15.0;15.0,Bus PEQ gain
+y,/bus/01/eq/01/q,f,0,1,10.0;0.32,Bus PEQ quality (width)
+y,/bus/01/eq/01/type,i,1,5,Lcut|LShv|PEQ|VEQ|HShv|Hcut,Bus PEQ type
+y,/bus/01/eq/on,b,0,1,OFF|ON,Bus PEQ on
+y,/bus/01/grp/dca,i,,0,%00000000,Bus DCA assignments
+y,/bus/01/grp/mute,i,,0,%00000000,Bus Mutegroup assignments
+y,/bus/01/insert/on,b,0,1,OFF|ON,Bus insert on
+y,/bus/01/insert/pos,b,0,1,PRE|POST,Bus insert tap
+y,/bus/01/insert/sel,i,0,22,OFF|FX1L|FX1R|FX2L|FX2R|FX3L|FX3R|FX4L|FX4R|FX5L|FX5R|FX6L|FX6R|FX7L|FX7R|FX8L|FX8R|AUX1|AUX2|AUX3|AUX4|AUX5|AUX6,Bus insert selection
+y,/bus/01/mix/01/level,f,0,1,-oo;18.0,Bus sends fader level (to matrix)
+y,/bus/01/mix/01/on,b,0,1,OFF|ON,Bus sends on/mute (to matrix)
+y,/bus/01/mix/01/pan,f,0,1,-100;100,Bus sends pan (to matrix)
+y,/bus/01/mix/01/type,i,0,4,IN/LC|<-EQ|EQ->|PRE|POST ,Bus sends type (to matrix)
+y,/bus/01/mix/fader,f,0,1,-oo;18.0,Bus fader level
+y,/bus/01/mix/mlevel,f,0,1,-oo;18.0,Bus mono fader level
+y,/bus/01/mix/mono,b,0,1,OFF|ON,Bus mono on/mute
+y,/bus/01/mix/on,b,0,1,OFF|ON,Bus on/mute
+y,/bus/01/mix/pan,f,0,1,-100;100,Bus pan
+y,/bus/01/mix/st,b,0,1,OFF|ON,Bus to LR on
+y,/ch/01/automix/group,i,0,2,OFF|X|Y,Channel automix group
+y,/ch/01/automix/weight,f,0,1,-12;12,Channel automix weight
+y,/ch/01/config/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,Channel scribble strip color
+y,/ch/01/config/icon,i,1,74,1-74,Channel scribble strip icon
+y,/ch/01/config/name,s,,,,Channel scribble strip name
+y,/ch/01/config/source,i,0,64,OFF|In01|In02|In03|In04|In05|In06|In07|In08|In09|In10|In11|In12|In13|In14|In15|In16|In17|In18|In19|In20|In21|In22|In23|In24|In25|In26|In27|In28|In29|In30|In31|In32|Aux1|Aux2|Aux3|Aux4|Aux5|Aux6|USBL|USBR|Fx1L|Fx1R|Fx2L|Fx2R|Fx3L|Fx3R|Fx4L|FX4R|Bs01|Bs02|Bs03|Bs04|Bs05|Bs06|Bs07|Bs08|Bs09|Bs10|Bs11|Bs12|Bs13|Bs14|Bs15|Bs16,Channel source
+y,/ch/01/delay/on,b,0,1,OFF|ON,Channel input delay OFF/ON
+y,/ch/01/delay/time,f,0,1,0.3;500.0,Channel input delay time
+y,/ch/01/dyn/attack,f,0,1,0.0;120.0,Channel compressor attack value
+y,/ch/01/dyn/auto,b,0,1,OFF|ON,Channel compressor auto OFF/ON
+y,/ch/01/dyn/det,b,0,1,PEAK|RMS,"Channel compressor detection (PEAK, RMS)"
+y,/ch/01/dyn/env,b,0,1,LIN|LOG,"Channel compressor envelope (LIN, LOG)"
+y,/ch/01/dyn/filter/f,f,0,1,20.0;20000,Channel compressor filter frequency
+y,/ch/01/dyn/filter/on,b,0,1,OFF|ON,Turn OFF/ON compressor filter
+y,/ch/01/dyn/filter/type,i,0,8,LC6|LC12|HC6|HC12|1.0|2.0|3.0|5.0|10.0,Channel compressor filter type
+y,/ch/01/dyn/hold,f,0,1,0.02;2000,Channel compressor hold
+y,/ch/01/dyn/keysrc,i,0,64,OFF|In01|In02|In03|In04|In05|In06|In07|In08|In09|In10|In11|In12|In13|In14|In15|In16|In17|In18|In19|In20|In21|In22|In23|In24|In25|In26|In27|In28|In29|In30|In31|In32|Aux1|Aux2|Aux3|Aux4|Aux5|Aux6|USBL|USBR|Fx1L|Fx1R|Fx2L|Fx2R|Fx3L|Fx3R|Fx4L|FX4R|Bs01|Bs02|Bs03|Bs04|Bs05|Bs06|Bs07|Bs08|Bs09|Bs10|Bs11|Bs12|Bs13|Bs14|Bs15|Bs16,Channel compressor sidechain key source
+y,/ch/01/dyn/knee,f,0,1,0.0;5.0,Channel compressor knee
+y,/ch/01/dyn/mgain,f,0,1,0.0;24.0,Channel compressor make up gain
+y,/ch/01/dyn/mix,f,0,1,0.0;100,Channel compressor mix
+y,/ch/01/dyn/mode,b,0,1,COMP|EXP,"Channel compressor mode [COMP, EXP]"
+y,/ch/01/dyn/on,b,0,1,OFF|ON,Channel compressor OFF/ON
+y,/ch/01/dyn/pos,b,0,1,PRE|POST,Channel compressor tap
+y,/ch/01/dyn/ratio,i,0,11,1.1|1.3|1.5|2.0|2.5|3.0|4.0|5.0|7.0|10|20|100,Channel compressor ratio
+y,/ch/01/dyn/release,f,0,1,5.0;4000,Channel compressor release
+y,/ch/01/dyn/thr,f,0,1,-60.0;0.0,Channel compressor threshold
+y,/ch/01/eq/01/f,f,0,1,20.0;20000,Channel PEQ frequency
+y,/ch/01/eq/01/g,f,0,1,-15.0;15.0,Channel PEQ gain
+y,/ch/01/eq/01/q,f,0,1,10.0;0.32,Channel PEQ quality (width)
+y,/ch/01/eq/01/type,i,1,5,Lcut|LShv|PEQ|VEQ|HShv|Hcut,Channel PEQ type
+y,/ch/01/eq/on,b,0,1,OFF|ON,Channel PEQ on
+y,/ch/01/gate/attack,f,0,1,0.0;120.0,Channel gate attack
+y,/ch/01/gate/filter/f,f,0,1,20;20000,Channel gate filter frequency
+y,/ch/01/gate/filter/on,b,0,1,OFF|ON,Channel gate filter on
+y,/ch/01/gate/filter/type,i,0,8,LC6|LC12|HC6|HC12|1.0|2.0|3.0|5.0|10.0,Channel gate filter type
+y,/ch/01/gate/hold,f,0,1,0.02;2000,Channel gate hold
+y,/ch/01/gate/keysrc,i,0,64,OFF|In01|In02|In03|In04|In05|In06|In07|In08|In09|In10|In11|In12|In13|In14|In15|In16|In17|In18|In19|In20|In21|In22|In23|In24|In25|In26|In27|In28|In29|In30|In31|In32|Aux1|Aux2|Aux3|Aux4|Aux5|Aux6|USBL|USBR|Fx1L|Fx1R|Fx2L|Fx2R|Fx3L|Fx3R|Fx4L|FX4R|Bs01|Bs02|Bs03|Bs04|Bs05|Bs06|Bs07|Bs08|Bs09|Bs10|Bs11|Bs12|Bs13|Bs14|Bs15|Bs16,Channel gate sidechain key source
+y,/ch/01/gate/mode,i,0,4,EXP2|EXP3|EXP4|GATE|DUCK,Channel gate mode
+y,/ch/01/gate/on,b,0,1,OFF|ON,Channel gate on
+y,/ch/01/gate/range,f,0,1,3.0;60.0,Channel gate range
+y,/ch/01/gate/release,f,0,1,5.0;4000,Channel gate release
+y,/ch/01/gate/thr,f,0,1,-80.0;0.0,Channel gate threshold
+y,/ch/01/grp/dca,i,0,255,%00000000,Channel DCA assignments
+y,/ch/01/grp/mute,i,0,63,%000000,Channel Mutegroup assignments
+y,/ch/01/insert/on,b,0,1,OFF|ON,Channel insert on
+y,/ch/01/insert/pos,b,0,1,PRE|POST,Channel insert tap
+y,/ch/01/insert/sel,i,0,22,OFF|FX1L|FX1R|FX2L|FX2R|FX3L|FX3R|FX4L|FX4R|FX5L|FX5R|FX6L|FX6R|FX7L|FX7R|FX8L|FX8R|AUX1|AUX2|AUX3|AUX4|AUX5|AUX6,Channel insert selection
+y,/ch/01/mix/01/level,f,0,1,-oo;10.0,Channel sends fader level
+y,/ch/01/mix/01/on,b,0,1,OFF|ON,Channel sends on/mute
+y,/ch/01/mix/01/pan,f,0,1,-100;100,Channel sends pan
+y,/ch/01/mix/01/type,i,0,5,IN/LC|<-EQ|EQ->|PRE|POST|GRP,Channel sends type
+y,/ch/01/mix/fader,f,0,1,-oo;10.0,Channel fader level
+y,/ch/01/mix/mlevel,f,0,1,-oo;10.0,Channel to mono fader level
+y,/ch/01/mix/mono,b,0,1,OFF|ON,Channel to mono on/mute
+y,/ch/01/mix/on,b,0,1,OFF|ON,Channel on/mute
+y,/ch/01/mix/pan,f,0,1,-100;100,Channel pan
+y,/ch/01/mix/st,b,0,1,OFF|ON,Channel to LR
+y,/ch/01/preamp/hpf,f,0,1,20.0;400.0,Channel low cut frequency
+y,/ch/01/preamp/invert,b,0,1,OFF|ON,Channel preamp polarity
+y,/ch/01/preamp/hpon,b,0,1,OFF|ON,Channel low cut on
+y,/ch/01/preamp/hpslope,i,0,2,12|18|24,Channel low cut slope
+y,/ch/01/preamp/time,f,0,1,0.3;500.0,Channel preamp delay time
+y,/ch/01/preamp/trim,f,0,1,-18.0;18.0,Channel preamp trim level
+,/config/amixenable/X,b,0,1,OFF|ON,Automix group X enable
+,/config/amixenable/Y,b,0,1,OFF|ON,Automix group Y enable
+,/config/auxlink/1-2,b,0,1,OFF|ON,Links/unlinks odd/even Aux strips (1-8)
+,/config/buslink/1-2,b,0,1,OFF|ON,Links/unlinks odd/even Bus strips (1-16)
+,/config/chlink/1-2,b,0,1,OFF|ON,Links/unlinks odd/even Channel strips (1-32)
+,/config/fxlink/1-2,b,0,1,OFF|ON,Links/unlinks odd/even FX strips (1-8)
+,/config/linkcfg/dyn,b,0,1,OFF|ON,Sets Dynamics link
+,/config/linkcfg/eq,b,0,1,OFF|ON,Sets EQ link
+,/config/linkcfg/fdrmute,b,0,1,OFF|ON,Sets Mute/Fader link
+,/config/linkcfg/hadly,b,0,1,OFF|ON,Sets Delay + HA link
+,/config/mono/link,b,0,1,OFF|ON,Sets M/C depends on Main L/R
+,/config/mono/mode,b,0,1,LR+M|LCR,"Sets mono mode [LR+M, LCR]"
+,/config/mtxlink/1-2,b,0,1,OFF|ON,Links/unlinks odd/even Matrix strips (1-8)
+,/config/mute/1,b,0,1,OFF|ON,Turns off/on mutegroup
+,/config/osc/dest,i,0,25,MixBus1-16|L|R|L+R|M/C|Matrix1-6,Destination of oscillator
+,/config/osc/f1,f,0,1,20;20000,Oscillator frequency 1
+,/config/osc/f2,f,0,1,20;20000,Oscillator frequency 2
+,/config/osc/fsel,b,0,1,F1|F2,"Selects oscillator frequency [F1, F2]"
+,/config/osc/level,f,0,1,-oo;10.0,Oscillator level
+,/config/osc/type,i,0,2,SINE|PINK|WHITE,"Oscillator type [sine, pink, white]"
+,/config/routing/AES50A/1-8,i,0,25,AN1-8|AN9-16|AN17-24|AN25-32|etc,Assigns bank-of-8 to AES50 A banks
+,/config/routing/AES50B/1-8,i,0,25,AN1-8|AN9-16|AN17-24|AN25-32|etc,Assigns bank-of-8 to AES50 B banks
+,/config/routing/CARD/1-8,i,0,25,AN1-8|AN9-16|AN17-24|AN25-32|etc,Assigns bank-of-8 to Card banks
+,/config/routing/IN/1-8,i,0,19,AN1-8|AN9-16|AN17-24|AN25-32|etc,Assigns bank-of-8 to Inputs (Home) banks
+,/config/routing/IN/AUX,i,0,12,AN1-8|AN9-16|AN17-24|AN25-32|etc,Assigns bank-of-8 to Aux banks
+,/config/routing/OUT/1-4,i,0,25,AN1-8|AN9-16|AN17-24|AN25-32|etc,Assigns bank-of-8 to XLR Out banks
+,/config/solo/busmode,b,0,1,PFL|AFL,Solo option - Mixbus solo AFL
+,/config/solo/chmode,b,0,1,PFL|AFL,Solo option - Channel solo AFL
+,/config/solo/dcamode,b,0,1,PFL|AFL,Solo option - DCA solo AFL
+,/config/solo/delay,b,0,1,OFF|ON,Turns off/on solo delay
+,/config/solo/delaytime,f,0,1,0.3;500.0,Sets solo delay time
+,/config/solo/dim,b,0,1,OFF|ON,Turns off/on solo dim attenuation
+,/config/solo/dimatt,f,0,1,-40.0;0.0,Sets solo dim level
+,/config/solo/dimpfl,b,0,1,OFF|ON,Solo option - Use DIM for PFL
+,/config/solo/exclusive,b,0,1,OFF|ON,Solo option - Exclusive (last)
+,/config/solo/followsel,b,0,1,OFF|ON,Solo option - Solo follows select
+,/config/solo/followsolo,b,0,1,OFF|ON,Solo option - Select follows solo
+,/config/solo/level,f,0,1,-oo;10.0,Sets solo level
+,/config/solo/masterctrl,b,0,1,OFF|ON,Solo option - Use Master Fader
+,/config/solo/mono,b,0,1,OFF|ON,Solo Mono off/on
+,/config/solo/mute,b,0,1,OFF|ON,Solo Mutes off/on
+,/config/solo/source,i,0,6,OFF|LR|LR+C|LR PFL|LR AFL|AUX56|AUX78,Assigns solo source
+,/config/solo/sourcetrim,f,0,1,-18.0;18.0,Sets solo trim
+,/config/talk/A/destmap,i,0,262143,%000000000000000000,Talkback A Destination (bitmap)
+,/config/talk/A/dim,b,0,1,OFF|ON,Talkback A Dim Mode
+,/config/talk/A/latch,b,0,1,OFF|ON,Talkback A Latch
+,/config/talk/A/level,f,0,1,-oo;10.0,Talkback A Level
+,/config/talk/B/destmap,i,0,262143,%000000000000000000,Talkback B Destination (bitmap)
+,/config/talk/B/dim,b,0,1,OFF|ON,Talkback B Dim Mode
+,/config/talk/B/latch,b,0,1,OFF|ON,Talkback B Latch
+,/config/talk/B/level,f,0,1,-oo;10.0,Talkback B Level
+,/config/talk/enable,b,0,1,OFF|ON,Talkback A/B Enable
+,/config/talk/source,b,0,1,INT|EXT,Talkback A/B Source mode
+,/config/tape/autoplay,b,0,1,OFF|ON,USB recorder play mode: single or folder
+,/config/tape/gainL,f,0,1,-6.0;24.0,USB recorder left gain level
+,/config/tape/gainR,f,0,1,-6.0;24.0,USB recorder right gain level
+,/config/userctrl/A/btn/5,s,,,,Assignment to user assign button - Set A
+,/config/userctrl/A/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,Color of Set A scribble strips
+,/config/userctrl/A/enc/1,s,,,,Assignment to user assign encoder - Set A
+,/config/userctrl/B/btn/5,s,,,,Assignment to user assign button - Set B
+,/config/userctrl/B/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,Color of Set B scribble strips
+,/config/userctrl/B/enc/1,s,,,,Assignment to user assign encoder - Set B
+,/config/userctrl/C/btn/5,s,,,,Assignment to user assign button - Set C
+,/config/userctrl/C/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,Color of Set C scribble strips
+,/config/userctrl/C/enc/1,s,,,,Assignment to user assign encoder - Set C
+,/copy,siii,,,,Copies an X32/M32 internal set to another
+y,/dca/01/config/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,DCA scribble strip color
+y,/dca/01/config/icon,i,1,74,1-74,DCA icon
+y,/dca/01/config/name,s,,,,DCA name
+y,/dca/01/fader,f,0,1,-oo;10.0,DCA fader level
+y,/dca/01/on,b,0,1,OFF|ON,DCA mute on/off
+,/delete,si,,,,"Deletes a scene, snippet or preset at a given index"
+,/formatsubscribe,sssiii,,,,Assign an alias to a command or commands
+,/fx/01/par/01,f,0,1,See Fx Parameters chapter,FX slot parameters
+,/fx/01/source/l,i,0,17,INS|MIX1|MIX2|MIX3|MIX4|MIX5|MIX6|MIX7|MIX8|MIX9|MIX10|MIX11|MIX12|MIX13|MIX14|MIX15|MIX16|M/C,FX slot left source
+,/fx/01/type,i,0,60,HALL|AMBI|RPLT|CHAM|PLAT|VREV|VRM|etc,FX slot type
+,/fxrtn/01/config/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,FX Return scribble strip color
+,/fxrtn/01/config/icon,i,1,74,1-74,FX Return scribble strip icon
+,/fxrtn/01/config/name,s,,,,FX Return scribble strip name
+,/fxrtn/01/eq/01/f,f,0,1,20;20000,FX Return PEQ frequency
+,/fxrtn/01/eq/01/g,f,0,1,-15.0;15.0,FX Return PEQ gain
+,/fxrtn/01/eq/01/q,f,0,1,10.0;0.32,FX Return PEQ quality (width)
+,/fxrtn/01/eq/01/type,i,0,5,IN/LC|<‐EQ|EQ‐>|PRE|POST|GRP,FX Return PEQ type
+,/fxrtn/01/eq/on,b,0,1,OFF|ON,FX Return PEQ on
+,/fxrtn/01/grp/dca,i,0,255,%00000000,FX Return DCA assignments
+,/fxrtn/01/grp/mute,i,0,63,%000000,FX Return Mutegroup assignments
+,/fxrtn/01/mix/01/level,f,0,1,-oo;10.0,FX Return sends fader level
+,/fxrtn/01/mix/01/on,b,0,1,OFF|ON,FX Return sends on/mute
+,/fxrtn/01/mix/01/pan,f,0,1,-100;100,FX Return sends pan
+,/fxrtn/01/mix/01/type,i,,,IN/LC|<‐EQ|EQ‐>|PRE|POST|GRP,FX Return sends type
+,/fxrtn/01/mix/fader,f,0,1,-oo;10.0,FX Return fader level
+,/fxrtn/01/mix/mlevel,f,0,1,-oo;10.0,FX Return mono fader level
+,/fxrtn/01/mix/mono,b,0,1,OFF|ON,FX Return mono on/mute
+,/fxrtn/01/mix/on,b,0,1,OFF|ON,FX Return on/mute
+,/fxrtn/01/mix/pan,f,0,1,-100;100,FX Return pan
+,/fxrtn/01/mix/st,b,0,1,OFF|ON,FX Return to LR
+,/headamp/001/gain,f,0,1,-12.0;60.0,Headamps gain level
+,/headamp/001/phantom,b,0,1,OFF|ON,Headamps phantom on
+,/info,,,,,"Returns info of X32 (eg. firmware version, etc)"
+,/insert/aux/1,i,0,,,???
+,/load,siii,,,,"Loads a scene, snippet or preset at a given index"
+y,/main/m/config/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,M/C scribble strip color
+y,/main/m/config/icon,i,1,74,1-74,M/C scribble strip icon
+y,/main/m/config/name,s,,,,M/C scribble strip name
+y,/main/m/dyn/attack,f,0,1,0.0;120.0,M/C compressor attack
+y,/main/m/dyn/auto,b,0,1,OFF|ON,M/C compressor auto
+y,/main/m/dyn/det,b,0,1,PEAK|RMS,M/C compressor detection
+y,/main/m/dyn/env,b,0,1,LIN|LOG,M/C compressor envelope
+y,/main/m/dyn/filter/f,f,0,1,20;20000,M/C compressor filter frequency
+y,/main/m/dyn/filter/on,b,0,1,OFF|ON,M/C compressor filter on
+y,/main/m/dyn/filter/type,i,0,8,LC6|LC12|HC6|HC12|1.0|2.0|3.0|5.0|10.0,M/C compressor filter type
+y,/main/m/dyn/hold,f,0,1,0.02;2000,M/C compressor hold
+y,/main/m/dyn/knee,f,0,1,0.0;5.0,M/C compressor knee
+y,/main/m/dyn/mgain,f,0,1,0.0;24.0,M/C compressor make up gain
+y,/main/m/dyn/mix,f,0,1,0;100,M/C compressor mix
+y,/main/m/dyn/mode,b,0,1,COMP|EXP,M/C compressor mode
+y,/main/m/dyn/on,b,0,1,OFF|ON,M/C compressor on
+y,/main/m/dyn/pos,b,0,1,PRE|POST,M/C compressor tap
+y,/main/m/dyn/ratio,i,0,11,LC6|LC12|HC6|HC12|1.0|2.0|3.0|5.0|10.0,M/C compressor ratio
+y,/main/m/dyn/release,f,0,1,5.0;4000.0,M/C compressor release
+y,/main/m/dyn/thr,f,0,1,-60.0;0.0,M/C compressor threshold
+y,/main/m/eq/01/f,f,0,1,20;20000,M/C PEQ frequency
+y,/main/m/eq/01/g,f,0,1,-15.0;15.0,M/C PEQ gain
+y,/main/m/eq/01/q,f,0,1,10.0;0.32,M/C PEQ quality (width)
+y,/main/m/eq/01/type,i,0,5,LCut|LShv|PEQ|VEQ|HShv|HCut,M/C PEQ tap
+y,/main/m/eq/on,b,0,1,OFF|ON,M/C PEQ on
+y,/main/m/insert/on,b,0,1,OFF|ON,M/C insert on
+y,/main/m/insert/pos,b,0,1,PRE|POST,M/C insert tap
+y,/main/m/insert/sel,i,0,22,OFF|FX1L|FX1R|FX2L|FX2R|FX3L|FX3R|FX4L|FX4R|FX5L|FX5R|FX6L|FX6R|FX7L|FX7R|FX8L|FX8R|AUX1|AUX2|AUX3|AUX4|AUX5|AUX6,M/C insert selection
+y,/main/m/mix/01/level,f,0,1,-oo;10.0,M/C sends fader level (to matrix)
+y,/main/m/mix/01/on,b,0,1,OFF|ON,M/C sends on/mute (to matrix)
+y,/main/m/mix/01/pan,f,0,1,-100;100,M/C sends pan (to matrix)
+y,/main/m/mix/01/type,i,0,5,IN/LC|<‐EQ|EQ‐>|PRE|POST,M/C sends tap (to matrix)
+y,/main/m/mix/fader,f,0,1,-oo;10.0,M/C fader level
+y,/main/m/mix/on,b,0,1,OFF|ON,M/C on/mute
+y,/main/st/config/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,Main LR scribble strip color
+y,/main/st/config/icon,i,1,74,1-74,Main LR scribble strip icon
+y,/main/st/config/name,s,,,,Main LR scribble strip name
+y,/main/st/dyn/attack,f,0,1,0.0;120.0,Main LR compressor attack
+y,/main/st/dyn/auto,b,0,1,OFF|ON,Main LR compressor auto
+y,/main/st/dyn/det,b,0,1,PEAK|RMS,Main LR compressor detection
+y,/main/st/dyn/env,b,0,1,LIN|LOG,Main LR compressor envelope
+y,/main/st/dyn/filter/f,f,0,1,20;20000,Main LR compressor filter frequency
+y,/main/st/dyn/filter/on,b,0,1,OFF|ON,Main LR compressor filter on
+y,/main/st/dyn/filter/type,i,0,8,LC6|LC12|HC6|HC12|1.0|2.0|3.0|5.0|10.0,Main LR compressor filter tap
+y,/main/st/dyn/hold,f,0,1,0.02;2000,Main LR compressor hold
+y,/main/st/dyn/knee,b,0,1,0.0|-5.0,Main LR compressor knee
+y,/main/st/dyn/mgain,f,0,1,0.0;24.0,Main LR compressor make up gain
+y,/main/st/dyn/mix,b,0,1,OFF|ON,Main LR compressor mix
+y,/main/st/dyn/mode,b,0,1,COMP|EXP,Main LR compressor mode
+y,/main/st/dyn/on,b,0,1,OFF|ON,Main LR compressor on
+y,/main/st/dyn/pos,b,0,1,PRE|POST,Main LR compressor tap
+y,/main/st/dyn/ratio,i,0,100,1.1|1.3|1.5|2.0|2.5|3.0|4.0|5.0|7.0|10|20|100,Main LR compressor ratio
+y,/main/st/dyn/release,f,0,1,5.0;4000.0,Main LR compressor release
+y,/main/st/dyn/thr,f,0,1,-60.0;0.0,Main LR compressor threshold
+y,/main/st/eq/01/f,f,0,1,20 -20000,Main LR PEQ frequency
+y,/main/st/eq/01/g,f,0,1,-15.0;15.0,Main LR PEQ gain
+y,/main/st/eq/01/q,f,0,1,10.0 -0.32,Main LR PEQ quality (width)
+y,/main/st/eq/01/type,i,0,5,Lcut|LShv|PEQ|VEQ|HShv|Hcut,Main LR PEQ tap
+y,/main/st/eq/on,b,0,1,OFF|ON,Main LR PEQ on
+y,/main/st/insert/on,b,0,1,OFF|ON,Main LR insert on
+y,/main/st/insert/pos,b,0,1,PRE|POST,Main LR insert tap
+y,/main/st/insert/sel,i,0,22,OFF|FX1L|FX1R|FX2L|FX2R|FX3L|FX3R|FX4L|FX4R|FX5L|FX5R|FX6L|FX6R|FX7L|FX7R|FX8L|FX8R|AUX1|AUX2|AUX3|AUX4|AUX5|AUX6,Main LR insert selection
+y,/main/st/mix/01/level,f,0,1,-oo;10.0,Main LR sends fader level (to matrix)
+y,/main/st/mix/01/on,b,0,1,OFF|ON,Main LR sends on/mute (to matrix)
+y,/main/st/mix/01/pan,f,0,1,-100;100,Main LR sends pan (to matrix)
+y,/main/st/mix/01/type,i,0,5,IN/LC|<‐EQ|EQ‐>|PRE|POST,Main LR sends tap (to matrix)
+y,/main/st/mix/fader,f,0,1,-oo;10.0,Main LR fader level
+y,/main/st/mix/on,b,0,1,OFF|ON,Main LR on/mute
+y,/main/st/mix/pan,f,0,1,-100;1000-15,Main LR pan
+y,/mtx/01/config/color,i,0,15,OFF|RD|GN|YE|BL|MG|CY|WH|OFFi|RDi|GNi|YEi|BLi|MGi|CYi|Whi,Matrix scribble strip color
+y,/mtx/01/config/icon,i,1,74,1-74,Matrix scribble strip icon
+y,/mtx/01/config/name,s,,,,Matrix scribble strip name
+y,/mtx/01/config/preamp/invert,b,0,1,OFF|ON,Matrix preamp polarity
+y,/mtx/01/dyn/attack,f,0,1,0.0;120.0,Matrix compressor attack
+y,/mtx/01/dyn/auto,b,0,1,OFF|ON,Matrix compressor auto
+y,/mtx/01/dyn/det,b,0,1,PEAK|RMS,Matrix compressor detection
+y,/mtx/01/dyn/env,b,0,1,LIN|LOG,Matrix compressor envelope
+y,/mtx/01/dyn/filter/f,f,0,1,20;20000,Matrix compressor filter frequency
+y,/mtx/01/dyn/filter/on,b,0,1,OFF|ON,Matrix compressor filter on
+y,/mtx/01/dyn/filter/type,i,0,5,LC6|LC12|HC6|HC12|1.0|2.0|3.0|5.0|10.0,Matrix compressor filter tap
+y,/mtx/01/dyn/hold,f,0,1,0.02;2000.0,Matrix compressor hold
+y,/mtx/01/dyn/knee,f,0,1,0.0;5.0,Matrix compressor knee
+y,/mtx/01/dyn/mgain,f,0,1,0.0;24.0,Matrix compressor make up gain
+y,/mtx/01/dyn/mix,f,0,1,0;100,Matrix compressor mix
+y,/mtx/01/dyn/mode,b,0,1,COMP|EXP,Matrix compressor mode
+y,/mtx/01/dyn/on,b,0,1,OFF|ON,Matrix compressor on
+y,/mtx/01/dyn/pos,b,0,1,PRE|POST,Matrix compressor tap
+y,/mtx/01/dyn/ratio,i,0,11,LC6|LC12|HC6|HC12|1.0|2.0|3.0|5.0|10.0,Matrix compressor ratio
+y,/mtx/01/dyn/release,f,0,1,5.0;4000.0,Matrix compressor release
+y,/mtx/01/dyn/thr,f,0,1,-60.0;0.0,Matrix compressor threshold
+y,/mtx/01/eq/01/f,f,0,1,20;20000,Matrix PEQ frequency
+y,/mtx/01/eq/01/g,f,0,1,-15.0;15.0,Matrix PEQ gain
+y,/mtx/01/eq/01/q,f,0,1,10.0;0.32,Matrix PEQ quality (width)
+y,/mtx/01/eq/01/type,i,0,5,LCut|LShv|PEQ|VEQ|HShv|HCut,Matrix PEQ tap
+y,/mtx/01/eq/on,b,0,1,OFF|ON,Matrix PEQ on
+y,/mtx/01/insert/on,b,0,1,OFF|ON,Matrix insert on
+y,/mtx/01/insert/pos,b,0,1,PRE|POST,Matrix insert tap
+y,/mtx/01/insert/sel,i,0,22,OFF|FX1L|FX1R|FX2L|FX2R|FX3L|FX3R|FX4L|FX4R|FX5L|FX5R|FX6L|FX6R|FX7L|FX7R|FX8L|FX8R|AUX1|AUX2|AUX3|AUX4|AUX5|AUX6,Matrix insert selection
+y,/mtx/01/mix/fader,f,0,1,-oo;10.0,Matrix fader level
+y,/mtx/01/mix/on,b,0,1,OFF|ON,Matrix on/mute
+,/node,,,,,node command
+,/outputs/aes/01/pos,i,0,8,IN/LC|IN/LC+M|<‐EQ|<‐EQ+M|EQ‐>|EQ‐>+M|PRE|PRE+M|POST,AES/EBU Output tap
+,/outputs/aes/01/src,i,0,76,OFF|Main L|Main R|M/C|MixBus 01-16|Matrix 1-6|etc,AES/EBU Output source
+,/outputs/aux/01/pos,i,0,8,IN/LC|IN/LC+M|<‐EQ|<‐EQ+M|EQ‐>|EQ‐>+M|PRE|PRE+M|POST,Aux Output tap
+,/outputs/aux/01/src,i,0,76,OFF|Main L|Main R|M/C|MixBus 01-16|Matrix 1-6|etc,Aux Output source
+,/outputs/main/01/delay/on,b,0,1,OFF|ON,Outputs 1-16 delay on
+,/outputs/main/01/delay/time,f,0,1,0.3;500.0,Outputs 1-16 delay time
+,/outputs/main/01/pos,i,0,8,IN/LC|IN/LC+M|<‐EQ|<‐EQ+M|EQ‐>|EQ‐>+M|PRE|PRE+M|POST,Outputs 1-16 delay tap
+,/outputs/main/01/src,i,0,76,OFF|Main L|Main R|M/C|MixBus 01-16|Matrix 1-6|etc,Outputs 1-16 delay source
+,/outputs/p16/01/pos,i,0,8,IN/LC|IN/LC+M|<‐EQ|<‐EQ+M|EQ‐>|EQ‐>+M|PRE|PRE+M|POST,Ultranet tap
+,/outputs/p16/01/src,i,0,76,OFF|Main L|Main R|M/C|MixBus 01-16|Matrix 1-6|etc,Ultranet source
+,/outputs/rec/01/pos,i,0,8,IN/LC|IN/LC+M|<‐EQ|<‐EQ+M|EQ‐>|EQ‐>+M|PRE|PRE+M|POST,USB recorder tap
+,/outputs/rec/01/src,i,0,76,OFF|Main L|Main R|M/C|MixBus 01-16|Matrix 1-6|etc,USB recorder source
+,/rename,si,,,,"Renames a scene, snippet or preset at a given index"
+,/renew,s,,,,Element to be renewed (can be an alias of a command)
+,/save,sissi,,,,"Saves or updates a scene, snippet or preset at a given index"
+,/showdump,,,,,"Request the X32/M32 to send all Cue, Scene and Snippet related data"
+,/status,,,,,Server responds with /status message
+,/subscribe,si,,,,"String: an X32/M32 command, int is a time_factor"
+,/unsubscribe,s,,,,Subscription to be stopped (can be an alias of a command)
+,/xinfo,,,,,Server responds with /xinfo message

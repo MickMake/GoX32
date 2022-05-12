@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap-slider.css">
+    <link rel="stylesheet" href="/assets/index.css">
+    <link rel="stylesheet" href="/assets/trigger.css">
+    <title>Auto-record trigger [{{.Name}}]</title>
+</head>
+
+<body>
+    <script type="text/javascript" src="/assets/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap-slider.js"></script>
+    <script type="text/javascript" src="/assets/trigger.js"></script>
+
+    <form class="form-inline" method="POST" id="trigger">
+        <input name="updated" type="hidden" value="YES">
+
+        <div class="container-fluid">
+            <nav class="fixed-top bg-dark">
+                <ul class="nav nav-tabs pt-2">
+                    <li class="nav-item pl-2 pr-5 pb-2">
+                        <h4 class="shadow px-2 py-1 bg-white rounded row-bottom-margin">Auto-record [{{.Name}}]</h4>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a class="nav-link disabled" href="/config">Config</a>
+                    </li>
+
+                    <li class="nav-item px-0 separator"></li>
+
+                    <li class="nav-item px-2">
+                        <a class="nav-link active disabled" href="/trigger/{{.Name}}">Trigger</a>
+                    </li>
+
+                    <li class="nav-item px-0 separator"></li>
+
+                    <li class="nav-item px-2">
+                        <a class="nav-link " href="/select/{{.Name}}">Channels</a>
+                    </li>
+
+                    <li class="nav-item px-0 separator"></li>
+
+                    <li class="nav-item px-2 pt-1">
+                        <button class="btn btn-sm btn-outline-success align-middle text-sm-center" type="submit" formaction="/trigger/{{.Name}}">Save</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-7 mx-auto">
+                    <div class="shadow mb-2 bg-white rounded row-bottom-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Current auto-record trigger</h5>
+                                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                                <table class="table table-hover table-bordered table-striped table-dark table-sm">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Trigger Source</th>
+                                            <th scope="col">Condition</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tr class="">
+                                        <th rowspan="2" class="align-middle" scope="row">
+                                            <label for="CurrentTrigger"></label>
+                                            <input type="text" name="CurrentTrigger" id="CurrentTrigger" class="form-control" value="{{.AutoRecord.Trigger}}" disabled placeholder="{{.AutoRecord.Trigger}}">
+                                        </th>
+                                        <td class="align-middle text-sm-center">ON</td>
+                                        <td class="align-middle text-sm-center">Start recording</td>
+                                    </tr>
+
+                                    <tr class="">
+                                        <td class="align-middle text-sm-center">OFF</td>
+                                        <td class="align-middle text-sm-center">Stop recording</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shadow mb-2 bg-white rounded row-bottom-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">New auto-record trigger</h5>
+                                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                                <table class="table table-hover table-bordered table-striped table-dark table-sm">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Trigger Source</th>
+                                        <th scope="col">Condition</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tr class="">
+                                        <th rowspan="2" class="align-middle" scope="row">
+                                            <label for="Trigger"></label><input type="text" name="Trigger" id="Trigger" value="{{.LastCmd}}" class="form-control">
+                                        </th>
+                                        <td class="align-middle text-sm-center"><p id="ON" class="">ON</p></td>
+                                        <td class="align-middle text-sm-center">Start recording</td>
+                                    </tr>
+
+                                    <tr class="">
+                                        <td class="align-middle text-sm-center"><p id="OFF" class="">OFF</p></td>
+                                        <td class="align-middle text-sm-center">Stop recording</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shadow mb-2 bg-white rounded row-bottom-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Last button seen from mixer</h5>
+                                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                                <table class="table table-hover table-bordered table-striped table-dark table-sm">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Trigger Source</th>
+                                        <th scope="col">State</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tr class="">
+                                        <td id="LastCmd" class="align-middle">{{.LastCmd}}</td>
+                                        <th id="LastArgs" class="align-middle" scope="row">{{.LastArgs}}</th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-5">
+                    <div class="shadow mb-2 bg-white rounded row-bottom-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Help</h5>
+                                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                                <p class="table table-hover table-bordered table-striped table-dark table-sm">
+                                    Press any button on the mixer to set a trigger for auto-recording {{.Name}} channels.
+                                    This will be shown in the "Trigger Source" column.
+                                    Once happy with the trigger button, click on save.
+                                </p>
+                                <p class="table table-hover table-bordered table-striped table-dark table-sm">
+                                    Then select channels to monitor by clicking the tab above or <a href="/select/{{.Name}}">here</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar fixed-bottom mx-auto">
+            <div class="pb-0 mx-auto">
+                {{if .Config.State.Updated}}
+                    <div class="alert alert-success alert-dismissible fade show mx-auto" id="success-alert" role="alert">Updated OK
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {{end}}
+            </div>
+        </div>
+    </form>
+
+</body>
+</html>

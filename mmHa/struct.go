@@ -186,6 +186,19 @@ func (m *Mqtt) PublishValue(config EntityConfig) error {
 	return m.err
 }
 
+type Fields map[string]string
+func (m *Mqtt) PublishConfigs(configs []EntityConfig) error {
+	for range Only.Once {
+		for _, config := range configs {
+			m.err = m.PublishConfig(config)
+			if m.err != nil {
+				break
+			}
+		}
+	}
+	return m.err
+}
+
 
 func (m *Mqtt) SetDeviceConfig(swname string, id string, name string, model string, vendor string, area string) error {
 	for range Only.Once {
@@ -205,6 +218,12 @@ func (m *Mqtt) SetDeviceConfig(swname string, id string, name string, model stri
 		}
 	}
 	return m.err
+}
+
+func (m *Mqtt) GetSensorStateTopic(config EntityConfig) string {
+	st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+	st = JoinStringsForTopic(m.sensorPrefix, st, "state")		// m.GetSensorStateTopic(name, config.SubName),m.EntityPrefix, m.Device.FullName, config.SubName
+	return st
 }
 
 
@@ -255,32 +274,33 @@ func (m *Mqtt) GetLastReset(pointType string) string {
 
 
 type EntityConfig struct {
-	// Type          string
-	Name          string
-	SubName       string
+	// Type       string
+	Name        string
+	SubName     string
 
-	ParentId      string
-	ParentName    string
+	ParentId    string
+	ParentName  string
 
-	UniqueId string
-	FullId   string
-	Units    string
-	ValueName     string
-	DeviceClass   string
-	StateClass    string
-	Icon          string
+	UniqueId    string
+	// FullId      string
+	Units       string
+	ValueName   string
+	DeviceClass string
+	StateClass  string
+	StateTopic  string
+	Icon        string
+	// Connections []string
 
 	Value         string
 	ValueTemplate string
 
-	LastReset     string
+	LastReset              string
 	LastResetValueTemplate string
 
-	haType        string
+	haType string
 }
 
-var SensorNames = []string{"int", "int32", "int64", "float", "float32", "float64", "sensor"}
-
+var SensorLabels = Labels{"int", "int32", "int64", "float", "float32", "float64", "sensor", "string"}
 func (config *EntityConfig) IsSensor() bool {
 	var ok bool
 
@@ -295,11 +315,10 @@ func (config *EntityConfig) IsSensor() bool {
 			break
 		}
 
-		for _, n := range SensorNames {
-			if config.Units == n {
-				ok = true
-				break
-			}
+		if SensorLabels.ValueExists(config.Units) {
+			ok = true
+			config.Units = ""
+			break
 		}
 
 		ok = true
@@ -308,16 +327,19 @@ func (config *EntityConfig) IsSensor() bool {
 	return ok
 }
 
+var BinarySensorLabels = Labels{"binary", "toggle", "state"}
 func (config *EntityConfig) IsBinarySensor() bool {
 	var ok bool
 
 	for range Only.Once {
-		if config.Units == LabelBinarySensor {
+		if BinarySensorLabels.ValueExists(config.Units) {
 			ok = true
+			// config.Units = ""
 			break
 		}
-		if config.haType == LabelBinarySensor {
+		if BinarySensorLabels.ValueExists(config.haType) {
 			ok = true
+			// config.Units = ""
 			break
 		}
 	}
@@ -346,11 +368,11 @@ func (config *EntityConfig) IsLight() bool {
 	var ok bool
 
 	for range Only.Once {
-		if config.Units == LabelBinarySensor {
+		if config.Units == "light" {
 			ok = true
 			break
 		}
-		if config.haType == LabelBinarySensor {
+		if config.haType == "light" {
 			ok = true
 			break
 		}
@@ -375,7 +397,7 @@ func (config *EntityConfig) FixConfig() {
 		// mdi:check-circle-outline | mdi:arrow-right-bold
 
 		switch config.Units {
-			case LabelBinarySensor:
+			case "light":
 				config.DeviceClass = SetDefault(config.DeviceClass, "")
 				config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
 				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
@@ -430,9 +452,24 @@ func (config *EntityConfig) FixConfig() {
 				config.Icon = SetDefault(config.Icon, "mdi:thermometer")
 				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
 
-			case "%":
+			case "battery":
 				config.DeviceClass = SetDefault(config.DeviceClass, "battery")
 				config.Icon = SetDefault(config.Icon, "mdi:home-battery-outline")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+
+			case "%":
+				config.DeviceClass = SetDefault(config.DeviceClass, "percent")
+				config.Icon = SetDefault(config.Icon, "")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+
+			case "dB":
+				config.DeviceClass = SetDefault(config.DeviceClass, "signal_strength")
+				config.Icon = SetDefault(config.Icon, "mdi:volume-high")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+
+			case "mS":
+				config.DeviceClass = SetDefault(config.DeviceClass, "time")
+				config.Icon = SetDefault(config.Icon, "mdi:clock")
 				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
 
 			default:
@@ -445,7 +482,7 @@ func (config *EntityConfig) FixConfig() {
 			break
 		}
 
-		pt := api.GetDevicePoint(config.FullId)
+		pt := api.GetDevicePoint(config.UniqueId)
 		if !pt.Valid {
 			break
 		}

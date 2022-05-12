@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/index.css">
+    <link rel="stylesheet" href="/assets/config.css">
+    {{if eq .State.MixerState "CONNECTING"}}
+        <meta http-equiv="refresh" content="10; URL=/config">
+    {{end}}
+    <title>mmAutoRecord configuration</title>
+</head>
+
+<body>
+    <script src="/assets/js/jquery-3.4.1.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/config.js"></script>
+
+    <form class="form-inline" method="POST" id="config">
+        <input name="updated" type="hidden" value="YES">
+
+        <div class="container-fluid">
+            <nav class="fixed-top bg-dark">
+                <ul class="nav nav-tabs pt-2">
+                    <li class="nav-item pl-2 pr-5 pb-2">
+                        <h4 class="shadow px-2 py-1 bg-white rounded row-bottom-margin">mmAutoRecord configuration</h4>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a class="nav-link active disabled" href="/config">Config</a>
+                    </li>
+
+                    <li class="nav-item px-0 separator"></li>
+
+                    <li class="nav-item px-2">
+                        <a class="nav-link disabled" href="/trigger">Trigger</a>
+                    </li>
+
+                    <li class="nav-item px-0 separator"></li>
+
+                    <li class="nav-item px-2">
+                        <a class="nav-link disabled" href="/select">Channels</a>
+                    </li>
+
+                    <li class="nav-item px-0 separator"></li>
+
+                    <li class="nav-item px-2 pt-1">
+                        <button class="btn btn-sm btn-outline-success align-middle text-sm-center" type="submit" formaction="/config">Save</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col-6 mx-auto">
+                    <div class="shadow mb-2 bg-white rounded row-bottom-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Connection options</h5>
+                                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                                <table class="table table-dark">
+                                    {{if eq .State.MixerState "CONNECTED"}}
+                                        <tr>
+                                            <td>Mixer State</td>
+                                            <td><p class="text-success flex-sm-fill text-sm-center nav-link text-center">{{.State.MixerState}}</p></td>
+                                        </tr>
+                                    {{else if eq .State.MixerState "CONNECTING"}}
+                                        <tr>
+                                            <td>Mixer State</td>
+                                            <td><p class="text-warning">{{.State.MixerState}}</p></td>
+                                        </tr>
+                                    {{else if eq .State.MixerState "DISCONNECTED"}}
+                                        <tr>
+                                            <td>Mixer State</td>
+                                            <td>
+                                                <p class="text-danger flex-sm-fill text-sm-center nav-link text-center">{{.State.MixerState}}
+                                                    <button class="btn btn-sm btn-outline-success my-2 my-sm-0 card-link" type="submit" formaction="/connect">Connect</button>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    {{else}}
+                                        <tr>
+                                            <td>Mixer State</td>
+                                            <td><p class="text-danger">NOT CONNECTED</p></td>
+                                        </tr>
+                                    {{end}}
+
+                                    <tr class="table-dark">
+                                        <td>Mixer Model</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="mixer_model"></label>
+                                                <input type="text" name="mixer_model" id="mixer_model" class="form-control" value="{{.Mixer.MixerModel}}" placeholder="{{.Mixer.MixerModel}}">
+                                            </div>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr class="table-dark">
+                                        <td>Mixer IP Address</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="mixer_address"></label>
+                                                <input type="text" name="mixer_address" id="mixer_address" class="form-control" value="{{.Mixer.MixerAddress}}" placeholder="{{.Mixer.MixerAddress}}">
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Mixer Port</td>
+                                        <td>
+                                            <fieldset disabled>
+                                                <div class="form-group">
+                                                    <label for="mixer_port"></label>
+                                                    <input type="text" name="mixer_port" id="mixer_port" class="form-control" placeholder="{{.Mixer.MixerPort}}">
+                                                </div>
+                                            </fieldset>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>PC IP Address</td>
+                                        <td>
+                                            <fieldset disabled>
+                                                <div class="form-group">
+                                                    <label for="local_address"></label>
+                                                    <input type="text" name="local_address" id="local_address" class="form-control" placeholder="{{.Mixer.LocalAddress}}">
+                                                </div>
+                                            </fieldset>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>PC Port</td>
+                                        <td>
+                                            <fieldset disabled>
+                                                <div class="form-group">
+                                                    <label for="local_port"></label>
+                                                    <input type="text" name="local_port" id="local_port" class="form-control" placeholder="{{.Mixer.LocalPort}}">
+                                                </div>
+                                            </fieldset>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 mx-auto">
+                    <div class="shadow mb-2 bg-white rounded row-bottom-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Other options</h5>
+                                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                                <table class="table table-dark">
+                                    <tr class="table-dark">
+                                        <td>Current Mode</td>
+                                        {{if eq .State.Mode "listen"}}
+                                            <td><p class="text-dark">waiting for trigger</p></td>
+                                        {{else}}
+                                            <td><p class="text-dark">idle</p></td>
+                                        {{end}}
+                                    </tr>
+
+                                    <tr class="table-dark">
+                                        <td>Sermon Auto Record</td>
+                                        <td>
+                                            {{if .RecordSermon.Enabled}}
+                                                <input class="form-check-input" type="checkbox" value="true" data-toggle="toggle" name="record_sermon" id="record_sermon" checked>
+                                            {{else}}
+                                                <input class="form-check-input" type="checkbox" value="true" data-toggle="toggle" name="record_sermon" id="record_sermon">
+                                            {{end}}
+                                            <label class="form-check-label" for="record_sermon"></label>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="table-dark">
+                                        <td>Band Auto Record</td>
+                                        <td>
+                                            {{if .RecordBand.Enabled}}
+                                                <input class="form-check-input" type="checkbox" value="true" data-toggle="toggle" name="record_band" id="record_band" checked>
+                                            {{else}}
+                                                <input class="form-check-input" type="checkbox" value="true" data-toggle="toggle" name="record_band" id="record_band">
+                                            {{end}}
+                                            <label class="form-check-label" for="record_band"></label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar fixed-bottom mx-auto">
+            <div class="pb-0 mx-auto">
+                {{if .State.Updated}}
+                    <div class="alert alert-success alert-dismissible fade show mx-auto" id="alert" role="alert">Updated OK
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {{end}}
+            </div>
+        </div>
+    </form>
+
+</body>
+</html>

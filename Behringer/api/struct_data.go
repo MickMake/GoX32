@@ -130,6 +130,10 @@ func (dm *DataMap) StructToPoints(endpoint string, ref interface{}) {
 						uv = valueTo.(UnitValue)
 						uv = uv.UnitValueFix()
 
+					case "bool":
+						uv.Unit = "binary"
+						uv.Value = fmt.Sprintf("%v", valueTo)
+
 					default:
 						ignore = true
 				}
@@ -152,7 +156,7 @@ func (dm *DataMap) StructToPoints(endpoint string, ref interface{}) {
 			p := Point {
 				EndPoint:  endpoint,
 				FullId:    fullName,
-				PsKey:     device,
+				ParentId:  device,
 				Id:        pid,
 				GroupName: "",
 				Name:      name,
@@ -228,7 +232,7 @@ func (dm *DataMap) GetValue(refname string) float64 {
 // 	dm.Entries[point] = v.CreateState(psId, point, name)
 // 	dm.Order = append(dm.Order, point)
 // }
-
+//
 // func (dm *DataMap) AddVirtualValue(refname string, point string, name string, value float64) {
 // 	v := dm.GetEntry(refname)
 // 	dm.Entries[point] = v.CreateFloat(VirtualPsId, point, name, value)
@@ -261,19 +265,19 @@ func (dm *DataMap) AddEntry(point Point, date DateTime, value string) {
 		unit := point.Unit	// Save unit.
 
 		// Match to a previously defined point.
-		p := GetPoint(point.PsKey, point.Id)
+		p := GetPoint(point.ParentId, point.Id)
 		if p == nil {
 			point = *p
 		}
 
-		if point.PsKey == "" {
-			point.PsKey = "virtual"
+		if point.ParentId == "" {
+			point.ParentId = "virtual"
 		}
 		if point.Name == "" {
 			point.Name = PointToName(point.Id)
 		}
 		if point.FullId == "" {
-			point.FullId = JoinDevicePoint(point.PsKey, point.Id)
+			point.FullId = JoinDevicePoint(point.ParentId, point.Id)
 		}
 		ref := CreateUnitValue(value, unit)
 		point.Unit = ref.Unit
@@ -352,9 +356,9 @@ func (dm *DataMap) FromRefAddAlias2(refname string, psId string, point string, n
 
 func (dm *DataMap) AddEntryFromRef(refPoint Point, point Point, date DateTime, value string) {
 	for range Only.Once {
-		p := GetPoint(refPoint.PsKey, refPoint.Id)
+		p := GetPoint(refPoint.ParentId, refPoint.Id)
 		if p != nil {
-			fmt.Printf("Found point already: %s.%s\n", p.PsKey, p.Id)
+			fmt.Printf("Found point already: %s.%s\n", p.ParentId, p.Id)
 			fmt.Println("&point")
 			spew.Dump(&point)
 			fmt.Println("&p")
@@ -362,14 +366,14 @@ func (dm *DataMap) AddEntryFromRef(refPoint Point, point Point, date DateTime, v
 			break
 		}
 
-		if point.PsKey == "" {
-			point.PsKey = "virtual"
+		if point.ParentId == "" {
+			point.ParentId = "virtual"
 		}
 		if point.Name == "" {
 			point.Name = PointToName(point.Id)
 		}
 		if point.FullId == "" {
-			point.FullId = JoinDevicePoint(point.PsKey, point.Id)
+			point.FullId = JoinDevicePoint(point.ParentId, point.Id)
 		}
 		ref := CreateUnitValue(value, point.Unit)
 		point.Unit = ref.Unit
@@ -505,7 +509,7 @@ func (de *DataEntry) CreateAlias(psId string, point string, name string) DataEnt
 	}
 
 	de.Point.FullId = NameDevicePoint(psId, point)
-	de.Point.PsKey = psId
+	de.Point.ParentId = psId
 	de.Point.Id = point
 	de.Point.Name = name
 	de.Point.GroupName = psId
@@ -588,7 +592,7 @@ func (de *DataEntry) UpdateMeta(date *DateTime, psId string, point string, name 
 	}
 
 	de.Point.FullId = NameDevicePoint(psId, point)
-	de.Point.PsKey = psId
+	de.Point.ParentId = psId
 	de.Point.Id = point
 	de.Point.Name = name
 	de.Point.GroupName = psId
@@ -659,7 +663,7 @@ func CreatePoint(psId string, point string, name string, unit string) *Point {
 
 	return &Point {
 			FullId:    NameDevicePoint(psId, point),
-			PsKey:     psId,
+			ParentId:  psId,
 			Id:        point,
 			GroupName: psId,
 			Name:      name,
@@ -741,12 +745,12 @@ func (ref *UnitValue) UnitValueToPoint(psId string, point string, name string) *
 	vt := GetPoint(psId, point)
 	if !vt.Valid {
 		vt = &Point {
-			PsKey: psId,
-			Id:    point,
-			Name:  name,
-			Unit:  uv.Unit,
-			Type:  "PointTypeInstant",
-			Valid: true,
+			ParentId: psId,
+			Id:       point,
+			Name:     name,
+			Unit:     uv.Unit,
+			Type:     "PointTypeInstant",
+			Valid:    true,
 		}
 	}
 

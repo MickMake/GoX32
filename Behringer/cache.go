@@ -3,6 +3,7 @@ package Behringer
 import (
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoX32/Behringer/api"
 	"github.com/MickMake/GoX32/Behringer/api/output"
 	"github.com/MickMake/GoX32/Only"
 	"github.com/loffa/gosc"
@@ -88,6 +89,12 @@ func (x *X32) CacheRead() error {
 	for range Only.Once {
 		fn := filepath.Join(x.cacheDir, "states.json")
 		x.Error = output.FileRead(fn, &x.cache)
+		if x.Error != nil {
+			if x.Error.Error() == "EOF" {
+				x.Error = nil
+				break
+			}
+		}
 		for n := range x.cache {
 			x.cache[n].SeenBefore = false	// Force refresh on re-read.
 			x.cache[n].LastSeen = time.Now().Add(- x.cacheTimeout)
@@ -234,10 +241,12 @@ func (m *Message) GetType() string {
 			break
 		}
 
-		for _, a := range m.Arguments {
-			ret = reflect.TypeOf(a).Name()
+		if len(m.Arguments) > 1 {
+			ret = api.UnitArray
 			break
 		}
+
+		ret = reflect.TypeOf(m.Arguments[0]).Name()
 	}
 	return ret
 }
