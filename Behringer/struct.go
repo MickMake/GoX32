@@ -121,7 +121,7 @@ func (x *X32) Connect() error {
 		x.Info = CreateInfo(info.Arguments)
 		x.Prefix = x.Info.Model
 
-		x.Points, x.Error = api.ImportPoints("points.json", x.Info.Model)
+		x.Points, x.Error = api.ImportPoints(x.Info.Model, "points.json", "misc.json")
 		if x.Error != nil {
 			break
 		}

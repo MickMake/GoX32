@@ -267,6 +267,63 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// var pm api.PointsMap
 		// pm, ca.Error = api.ImportPoints("points.json", ca.X32.Info.Model)
 		// fmt.Printf("\n%v\n", pm)
+
+		// /-show/showfile/scene/000/name
+		foo := ca.X32.Call("/-show/showfile/show/name")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/lamp")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/lampon")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/lcdbright")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/lcdcont")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/rec_control")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/lamp")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/sceneadvance")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/selfollowsbank")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/show_control")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/style")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("/-prefs/viewrtn")
+		fmt.Printf("%v\n", foo)
+		foo = ca.X32.Call("foo")
+		fmt.Printf("%v\n", foo)
+
+		// foo = ca.X32.Call("/-show/showfile/show/buses")
+		// fmt.Printf("%v\n", foo)
+		// foo = ca.X32.Call("/-show/showfile/show/chan16")
+		// fmt.Printf("%v\n", foo)
+		// foo = ca.X32.Call("/-show/showfile/show/chan32")
+		// fmt.Printf("%v\n", foo)
+		// foo = ca.X32.Call("/-show/showfile/show/console")
+		// fmt.Printf("%v\n", foo)
+		// foo = ca.X32.Call("/-show/showfile/show/effects")
+		// fmt.Printf("%v\n", foo)
+		// foo = ca.X32.Call("/-show/showfile/show/inputs")
+		// fmt.Printf("%v\n", foo)
+		// // foo = ca.X32.Call("/-show/showfile/show/lrmtxdce")
+		// // fmt.Printf("%v\n", foo)
+		// foo = ca.X32.Call("/-show/showfile/show/mxbuses")
+		// fmt.Printf("%v\n", foo)
+		// foo = ca.X32.Call("/-show/showfile/show/mxsends")
+		// fmt.Printf("%v\n", foo)
+		// foo = ca.X32.Call("/-show/showfile/show/return")
+		// fmt.Printf("%v\n", foo)
+
+		foo2 := ca.X32.GetScene(0)
+		fmt.Printf("%v\n", foo2)
+		foo2 = ca.X32.GetScene(1)
+		fmt.Printf("%v\n", foo2)
+		foo2 = ca.X32.GetScene(2)
+		fmt.Printf("%v\n", foo2)
+
 		time.Sleep(time.Hour * 24)
 
 		ca.PublishChannels()
@@ -508,16 +565,22 @@ func X32MessageHandler(msg *Behringer.Message) {
 		p := Cmd.X32.Points.Resolve(msg.Address)
 		if p == nil {
 			fmt.Printf("Missing Point: %s - %v\n", msg.Address, p)
+			break
 		}
 		p.CorrectUnit(msg.GetType())
 
 		if len(msg.Arguments) == 1 {
 			value := fmt.Sprintf("%v", msg.Arguments[0])
-			if p.States != nil {
-				if v, ok := p.States[value]; ok {
-					value = v
-				}
-			}
+
+			// if msg.Address == "/ch/01/mix/fader" {
+			// 	foo1 := api.ToLinDb(value, "0", "1")
+			// 	foo2 := api.ToLogDb(value)
+			// 	fmt.Printf("foo1: %s\tfoo2: %s\n", foo1, foo2)
+			// }
+
+			value = p.Convert.Get(value)
+			fmt.Printf("Value: %s\n", value)
+
 			ec := mmHa.EntityConfig {
 				Name:        p.Name,	// name,
 				SubName:     "",

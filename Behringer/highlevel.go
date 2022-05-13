@@ -137,6 +137,66 @@ func (x *X32) GetChannels() Channels {
 }
 
 
+type Scene struct {
+	Topic string `json:"-"`
+
+	Data struct {
+		HasData bool   `json:"has_data"`
+		Name    string `json:"name"`
+		Notes   string `json:"notes"`
+		Safes   string `json:"safes"`
+	}
+}
+type Scenes []Scene
+
+func (x *X32) GetScene(i int) Scene {
+	var ret Scene
+
+	for range Only.Once {
+		// channels start from index 1
+		ret.Topic = fmt.Sprintf("/-show/showfile/scene/%.3d/", i)
+
+		msg := x.Call(ret.Topic + "name")
+		if msg.Error != nil {
+			break
+		}
+		ret.Data.Name = msg.GetStringValue()
+
+		msg = x.Call(ret.Topic + "hasdata")
+		if msg.Error != nil {
+			break
+		}
+		ret.Data.HasData = msg.GetBoolValue()
+
+		msg = x.Call(ret.Topic + "notes")
+		if msg.Error != nil {
+			break
+		}
+		ret.Data.Notes = msg.GetStringValue()
+
+		msg = x.Call(ret.Topic + "safes")
+		if msg.Error != nil {
+			break
+		}
+		ret.Data.Safes = msg.GetStringValue()
+	}
+
+	return ret
+}
+
+func (x *X32) GetScenes() Scenes {
+	var ret Scenes
+
+	for range Only.Once {
+		for c := 0; c < 32; c++ {
+			ret = append(ret, x.GetScene(c))
+		}
+	}
+
+	return ret
+}
+
+
 // func (x *X32) GetPointNamesFromTemplate(template string) api.TemplatePoints {
 // 	var ret api.TemplatePoints
 //

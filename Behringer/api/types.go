@@ -20,7 +20,6 @@ type UnitValues []UnitValue
 type UnitValueMap map[string]UnitValue
 
 
-
 func (u *UnitValueMap) Sort() []string {
 	var ret []string
 	for n := range *u {
@@ -28,6 +27,81 @@ func (u *UnitValueMap) Sort() []string {
 	}
 	sort.Strings(ret)
 	return ret
+}
+
+
+func (ref *UnitValue) UnitValueFix() UnitValue {
+	if ref.Unit == "W" {
+		fvs, err := DivideByThousand(ref.Value)
+		// fv, err := strconv.ParseFloat(p.Value, 64)
+		// fv = fv / 1000
+		if err == nil {
+			// p.Value = fmt.Sprintf("%.3f", fv)
+			ref.Value = fvs
+			ref.Unit = "kW"
+		}
+	}
+
+	if ref.Unit == "Wh" {
+		fvs, err := DivideByThousand(ref.Value)
+		// fv, err := strconv.ParseFloat(p.Value, 64)
+		// fv = fv / 1000
+		if err == nil {
+			// p.Value = fmt.Sprintf("%.3f", fv)
+			ref.Value = fvs
+			ref.Unit = "kWh"
+		}
+	}
+
+	ref.ValueFloat, _ = strconv.ParseFloat(ref.Value, 64)
+
+	return *ref
+}
+
+func (ref *UnitValue) UnitValueToPoint(psId string, point string, name string) *Point {
+	uv := ref.UnitValueFix()
+
+	// u := ref.Unit
+	//
+	// if ref.Unit == "W" {
+	// 	fvs, err := DivideByThousand(ref.Value)
+	// 	// fv, err := strconv.ParseFloat(p.Value, 64)
+	// 	// fv = fv / 1000
+	// 	if err == nil {
+	// 		// p.Value = fmt.Sprintf("%.3f", fv)
+	// 		ref.Value = fvs
+	// 		ref.Unit = "kW"
+	// 	}
+	// }
+	//
+	// if ref.Unit == "Wh" {
+	// 	fvs, err := DivideByThousand(ref.Value)
+	// 	// fv, err := strconv.ParseFloat(p.Value, 64)
+	// 	// fv = fv / 1000
+	// 	if err == nil {
+	// 		// p.Value = fmt.Sprintf("%.3f", fv)
+	// 		ref.Value = fvs
+	// 		ref.Unit = "kWh"
+	// 	}
+	// }
+
+	if name == "" {
+		name = PointToName(point)
+	}
+
+	vt := GetPoint(psId, point)
+	if !vt.Valid {
+		vt = &Point {
+			ParentId: psId,
+			Id:       point,
+			Name:     name,
+			Unit:     uv.Unit,
+			Type:     "PointTypeInstant",
+			Valid:    true,
+		}
+	}
+
+	return vt
 }
 
 
@@ -61,15 +135,3 @@ func DivideByThousand(num string) (string, error) {
 	}
 	return num, err
 }
-
-// func (u *UnitValue) GetStructName() string {
-// 	var ret string
-// 	apiReflect.GetName()
-// 	return ret
-// }
-//
-// func (u *UnitValue) GetJsonName() string {
-// 	var ret string
-// 	apiReflect.GetOptionsRequired()
-// 	return ret
-// }

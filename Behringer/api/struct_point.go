@@ -17,7 +17,9 @@ type Point struct {
 	Unit 		string	`json:"unit"`
 	Type        string	`json:"type"`
 	Valid       bool	`json:"valid"`
-	States      map[string]string `json:"states"`
+	// States      map[string]string `json:"states"`
+
+	Convert     ConvertStruct `json:"convert"`
 }
 
 
