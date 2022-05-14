@@ -20,7 +20,7 @@
 	"/-stat/selidx": { "endpoint": "/-stat/selidx", "convert": { "alias": "fader-bank-select" } },
 	"/-stat/sendsonfader": { "endpoint": "/-stat/sendsonfader", "unit": "dB" },
 	"/-stat/solo": { "endpoint": "/-stat/solo", "convert": { "binary": "normal" } },
-	"/-stat/usbmounted": { "endpoint": "/-stat/usbmounted", "unit": "" },
+	"/-stat/usbmounted": { "endpoint": "/-stat/usbmounted", "convert": { "binary": "normal" } },
 	"/-stat/userbank": { "endpoint": "/-stat/userbank", "unit": "" },
 
 	"/-stat/aes50/A": { "endpoint": "/-stat/aes50/A", "unit": "" },

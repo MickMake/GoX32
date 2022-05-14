@@ -567,7 +567,8 @@ func X32MessageHandler(msg *Behringer.Message) {
 			fmt.Printf("Missing Point: %s - %v\n", msg.Address, p)
 			break
 		}
-		p.CorrectUnit(msg.GetType())
+
+		// p.CorrectUnit(msg.GetType())	// @TODO - Not really required since we're now referencing all endpoints.
 
 		if len(msg.Arguments) == 1 {
 			value := fmt.Sprintf("%v", msg.Arguments[0])
@@ -579,7 +580,7 @@ func X32MessageHandler(msg *Behringer.Message) {
 			// }
 
 			value = p.Convert.Get(value)
-			fmt.Printf("Value: %s\n", value)
+			fmt.Printf("Value: %s %s\n", value, p.Unit)
 
 			ec := mmHa.EntityConfig {
 				Name:        p.Name,	// name,

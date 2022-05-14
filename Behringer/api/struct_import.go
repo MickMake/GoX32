@@ -95,13 +95,15 @@ func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
 			if p.Type == "" {
 				p.Type = TypeInstant
 			}
-			if p.Convert.Map != nil {
-				// p.Unit = UnitState
-				// @TODO = States are binary.
-			}
 
 			if p.Convert.Alias != nil {
 				p.Convert = pm.Aliases.Get(p.Convert.Alias)
+			}
+
+			if p.Convert.Map != nil {
+				p.Unit = ""
+				// p.Unit = UnitState
+				// @TODO = States are binary.
 			}
 
 			if p.Convert.Range != nil {
@@ -111,7 +113,16 @@ func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
 				}
 			}
 
+			if p.Convert.BitMap != nil {
+				p.Unit = ""
+			}
+
+			if p.Convert.Asset != nil {
+				p.Unit = ""
+			}
+
 			if p.Convert.Binary != nil {
+				p.Unit = ""
 				switch *p.Convert.Binary {
 					case "":
 						fallthrough
