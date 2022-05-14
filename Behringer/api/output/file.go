@@ -5,10 +5,48 @@ import (
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoX32/Only"
+	"io/fs"
 	"io/ioutil"
 	"os"
+	"regexp"
 )
 
+
+// DirectoryRead -
+func DirectoryRead(dir string, glob string) ([]string, error) {
+	var ret []string
+	var err error
+
+	for range Only.Once {
+		if dir == "" {
+			err = errors.New("empty dir")
+			break
+		}
+
+		var files []fs.FileInfo
+		files, err = ioutil.ReadDir(dir)
+		if err != nil {
+			break
+		}
+
+		var re = regexp.MustCompile(glob)
+		for _, file := range files {
+			if file.IsDir() {
+				continue
+			}
+			if file.Size() == 0 {
+				continue
+			}
+			if !re.MatchString(file.Name()) {
+				continue
+			}
+			ret = append(ret, file.Name())
+			// fmt.Println(file.Name(), file.IsDir())
+		}
+	}
+
+	return ret, err
+}
 
 // FileRead Retrieves data from a local file.
 func FileRead(fn string, ref interface{}) error {

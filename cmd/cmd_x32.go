@@ -299,7 +299,13 @@ func SwitchOutput(cmd *cobra.Command) error {
 
 func (ca *CommandArgs) X32Args(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
-		ca.X32 = Behringer.NewX32(ca.X32Host, ca.X32Port, ca.CacheDir, ca.X32Timeout)
+		ca.X32 = Behringer.NewX32(Behringer.ArgsX32 {
+			Host:         ca.X32Host,
+			Port:         ca.X32Port,
+			ConfigDir:    ".",	// ca.ConfigDir,	// @TODO - DEBUG
+			CacheDir:     ca.CacheDir,
+			CacheTimeout: ca.X32Timeout,
+		})
 		if ca.X32.Error != nil {
 			ca.Error = ca.X32.Error
 			break

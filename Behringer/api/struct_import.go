@@ -33,7 +33,6 @@ const (
 )
 
 
-// type StringMap map[string]string
 type Aliases map[ConvertAlias]ConvertStruct
 
 func (s *Aliases) Get(selector *ConvertAlias) ConvertStruct {
@@ -110,6 +109,23 @@ func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
 					p.Convert.Range.InMin = 0
 					p.Convert.Range.InMax = 1
 				}
+			}
+
+			if p.Convert.Binary != nil {
+				switch *p.Convert.Binary {
+					case "":
+						fallthrough
+					case "normal":
+						p.Convert.Map = &ConvertMap{ "0":"OFF", "1":"ON" }
+
+					case "swap":
+						fallthrough
+					case "invert":
+						fallthrough
+					case "inverted":
+						p.Convert.Map = &ConvertMap{ "0":"ON", "1":"OFF" }
+				}
+				p.Convert.Binary = nil
 			}
 
 			// switch {
@@ -290,21 +306,14 @@ func JoinStringsForId(args ...string) string {
 }
 
 
-// type ConvFunc    func(ConvertStruct) float64
-
 type ConvertStruct struct {
-	// Min 		float64
-	// Max 		float64
-	// Linear		bool
-	// Increment	float64
-	// MapRange 	func(float64) (float64, error)
-
 	Increment  *ConvertIncrement `json:"increment"`
 	Range         *ConvertRange `json:"range"`
 	Map   *ConvertMap   `json:"map"`
 	Alias *ConvertAlias `json:"alias"`
 	Function *ConvertFunction `json:"function"`
-	BitMap   *ConvertBitMap   `json:"bit_map"`
+	BitMap         *ConvertBitMap         `json:"bit_map"`
+	Binary         *ConvertBinary         `json:"binary"`
 }
 
 type ConvertIncrement struct {
@@ -330,6 +339,9 @@ type ConvertAlias string
 
 type ConvertFunction string
 
+type ConvertBinary string
+
+
 func (c *ConvertStruct) Get(value string) string {
 	for range Only.Once {
 		switch {
@@ -350,6 +362,10 @@ func (c *ConvertStruct) Get(value string) string {
 				break
 
 			case c.BitMap != nil:
+				value = ToBitMap(value, *c.BitMap)
+				break
+
+			case c.Binary != nil:
 				value = ToBitMap(value, *c.BitMap)
 				break
 

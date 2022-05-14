@@ -8,6 +8,8 @@ import (
 	"github.com/MickMake/GoX32/Only"
 	"github.com/loffa/gosc"
 	"log"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -27,6 +29,7 @@ type X32 struct {
 
 	messageHandler MessageHandlerFunc
 
+	configDir string
 	cache MessageMap
 	cacheDir string
 	cacheTimeout time.Duration
@@ -68,19 +71,27 @@ func CreateInfo(args []any) Info {
 	return ret
 }
 
-func NewX32(host string, port string, cacheDir string, cacheTimeout time.Duration) *X32 {
+type ArgsX32 struct {
+	Host      string
+	Port      string
+	ConfigDir    string
+	CacheDir     string
+	CacheTimeout time.Duration
+}
+func NewX32(args ArgsX32) *X32 {
+// func NewX32(host string, port string, configDir string, cacheDir string, cacheTimeout time.Duration) *X32 {
 	var x X32
 
 	for range Only.Once {
-		if host == "" {
-			x.Error = errors.New("Invalid x32 host")
+		if args.Host == "" {
+			x.Error = errors.New("invalid x32 host")
 			break
 		}
-		if port == "" {
-			port = DefaultPort
+		if args.Port == "" {
+			args.Port = DefaultPort
 		}
 
-		x.Address = fmt.Sprintf("%s:%s", host, port)
+		x.Address = fmt.Sprintf("%s:%s", args.Host, args.Port)
 		x.Client, x.Error = gosc.NewClient(x.Address)
 		if x.Error != nil {
 			break
@@ -92,9 +103,14 @@ func NewX32(host string, port string, cacheDir string, cacheTimeout time.Duratio
 			x.Prefix = "x32"
 		}
 
+		x.Error = x.SetConfigDir(args.ConfigDir)
+		if x.Error != nil {
+			break
+		}
+
 		x.cache = make(MessageMap)
-		x.SetCacheTimeout(cacheTimeout)
-		x.Error = x.SetCacheDir(cacheDir)
+		x.SetCacheTimeout(args.CacheTimeout)
+		x.Error = x.SetCacheDir(args.CacheDir)
 		if x.Error != nil {
 			break
 		}
@@ -121,7 +137,15 @@ func (x *X32) Connect() error {
 		x.Info = CreateInfo(info.Arguments)
 		x.Prefix = x.Info.Model
 
-		x.Points, x.Error = api.ImportPoints(x.Info.Model, "points.json", "misc.json")
+		// Look for files in directory and parse all json.
+		var files []string
+		files, x.Error = output.DirectoryRead(x.configDir, "points_.*.json")
+		if x.Error != nil {
+			fmt.Printf("\nCould not get mixer info: %s\n", x.Error)
+			break
+		}
+
+		x.Points, x.Error = api.ImportPoints(x.Info.Model, files...)
 		if x.Error != nil {
 			break
 		}
@@ -137,6 +161,24 @@ func (x *X32) Connect() error {
 		// sg.Areas[api.GetArea(PowerPointService.Area{})] = api.AreaStruct(PowerPointService.Init(sg.ApiRoot))
 		// sg.Areas[api.GetArea(WebAppService.Area{})] = api.AreaStruct(WebAppService.Init(sg.ApiRoot))
 		// sg.Areas[api.GetArea(WebIscmAppService.Area{})] = api.AreaStruct(WebIscmAppService.Init(sg.ApiRoot))
+	}
+
+	return x.Error
+}
+
+func (x *X32) SetConfigDir(basedir string) error {
+	for range Only.Once {
+		x.configDir = filepath.Join(basedir)
+		_, x.Error = os.Stat(x.configDir)
+		if os.IsExist(x.Error) {
+			x.Error = nil
+			break
+		}
+
+		x.Error = os.MkdirAll(x.configDir, 0700)
+		if x.Error != nil {
+			break
+		}
 	}
 
 	return x.Error
