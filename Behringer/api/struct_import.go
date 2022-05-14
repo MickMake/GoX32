@@ -307,13 +307,14 @@ func JoinStringsForId(args ...string) string {
 
 
 type ConvertStruct struct {
-	Increment  *ConvertIncrement `json:"increment"`
-	Range         *ConvertRange `json:"range"`
-	Map   *ConvertMap   `json:"map"`
-	Alias *ConvertAlias `json:"alias"`
-	Function *ConvertFunction `json:"function"`
-	BitMap         *ConvertBitMap         `json:"bit_map"`
-	Binary         *ConvertBinary         `json:"binary"`
+	Increment *ConvertIncrement `json:"increment"`
+	Range     *ConvertRange     `json:"range"`
+	Map       *ConvertMap       `json:"map"`
+	Alias     *ConvertAlias     `json:"alias"`
+	Function  *ConvertFunction  `json:"function"`
+	BitMap    *ConvertBitMap    `json:"bit_map"`
+	Binary    *ConvertBinary    `json:"binary"`
+	Asset      *ConvertAsset     `json:"asset"`
 }
 
 type ConvertIncrement struct {
@@ -340,6 +341,12 @@ type ConvertAlias string
 type ConvertFunction string
 
 type ConvertBinary string
+
+type ConvertAsset struct {
+	Url    bool `json:"url"`
+	Icon   bool `json:"icon"`
+	String bool `json:"string"`
+}
 
 
 func (c *ConvertStruct) Get(value string) string {
@@ -375,6 +382,9 @@ func (c *ConvertStruct) Get(value string) string {
 					break
 				}
 				break
+
+			case c.Asset != nil:
+				break
 		}
 	}
 	return value
@@ -403,7 +413,7 @@ func ToBitMap(value string, array []string) string {
 		}
 
 		var elems []string
-		for j := 0; j < 8; j++ {
+		for j := 0; j < 32; j++ {
 			if iv & (1 << byte(j)) != 0 {
 				elems = append(elems, array[j+1])
 			}

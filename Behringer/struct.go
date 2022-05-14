@@ -194,7 +194,7 @@ func (x *X32) XremoteSender() {
 		for {
 			select {
 				case _ = <-ticker.C:
-					fmt.Printf("# XremoteSender()\n")
+					// fmt.Printf("# XremoteSender()\n")
 					x.Error = x.Client.EmitMessage("/xremote")
 					if x.Error != nil {
 						break

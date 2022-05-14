@@ -26,6 +26,7 @@
 	},
 	"talkback-map": {
 	  "bit_map": [
+		"OFF",
 		"MixBus 1",
 		"MixBus 2",
 		"MixBus 3",
@@ -622,6 +623,77 @@
 	  "range": {
 		"out_min": -18,
 		"out_max": 18
+	  }
+	},
+	"osc-sel-map": {
+	  "map": {
+		"0": "F1",
+		"1": "F2"
+	  }
+	},
+	"osc-freq": {
+	  "range": {
+		"out_min": 20,
+		"out_max": 20000,
+		"note": "@TBD - this is wrong"
+	  }
+	},
+	"osc-type-map": {
+	  "map": {
+		"0": "Sine Wave",
+		"1": "Pink Noise",
+		"2": "White Noise"
+	  }
+	},
+	"osc-dest-map": {
+	  "map": {
+		"0": "MixBus 1",
+		"1": "MixBus 2",
+		"2": "MixBus 3",
+		"3": "MixBus 4",
+		"4": "MixBus 5",
+		"5": "MixBus 6",
+		"6": "MixBus 7",
+		"7": "MixBus 8",
+		"8": "MixBus 9",
+		"9": "MixBus 10",
+		"10": "MixBus 11",
+		"11": "MixBus 12",
+		"12": "MixBus 13",
+		"13": "MixBus 14",
+		"14": "MixBus 15",
+		"15": "MixBus 16",
+		"16": "Main L",
+		"17": "Main R",
+		"18": "Main L+R",
+		"19": "Main M/C",
+		"20": "Matrix 1",
+		"21": "Matrix 2",
+		"22": "Matrix 3",
+		"23": "Matrix 4",
+		"24": "Matrix 5",
+		"25": "Matrix 6"
+	  }
+	},
+	"fx-insert-source": {
+	  "map": {
+		"0": "Insert",
+		"1": "Bus 01",
+		"2": "Bus 02",
+		"3": "Bus 03",
+		"4": "Bus 04",
+		"5": "Bus 05",
+		"6": "Bus 06",
+		"7": "Bus 07",
+		"8": "Bus 08",
+		"9": "Bus 09",
+		"10": "Bus 10",
+		"11": "Bus 11",
+		"12": "Bus 12",
+		"13": "Bus 13",
+		"14": "Bus 14",
+		"15": "Bus 15",
+		"16": "Bus 16"
 	  }
 	}
   }
