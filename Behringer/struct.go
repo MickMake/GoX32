@@ -267,7 +267,7 @@ func (x *X32) CallDeskName() *Message {
 
 func (x *X32) GetTopic(msg *gosc.Message) string {
 	topic := fmt.Sprintf("%s%s", x.Prefix, msg.Address)
-	fmt.Printf("# GetTopic() - Topic: %s\n", topic)
+	// fmt.Printf("# GetTopic() - Topic: %s\n", topic)
 	return topic
 }
 
@@ -282,8 +282,8 @@ func (x *X32) SetMessageHandler(fn MessageHandlerFunc) error {
 func (x *X32) oscMessageHandler(msg *gosc.Message) {
 	for range Only.Once {
 		m := x.UpdateCache(msg)
-		topic := x.GetTopic(msg)
-		fmt.Printf("MSG: %s\n%v\n", topic, msg)
+		// topic := x.GetTopic(msg)
+		// fmt.Printf("MSG: %s\n%v\n", topic, msg)
 		if x.messageHandler == nil {
 			break
 		}

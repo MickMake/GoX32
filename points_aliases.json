@@ -463,14 +463,48 @@
 		"2": "Y"
 	  }
 	},
-	"mix-st": { "map": {"0": "MONO", "1": "STEREO" } },
-	"dyn-auto": { "map": {"0": "MANUAL", "1": "AUTO" } },
-	"dyn-det": { "map": {"0": "PEAK", "1": "RMS" } },
-	"dyn-env": { "map": {"0": "LINEAR", "1": "LOG" } },
-	"dyn-mode": { "map": {"0": "COMP", "1": "EXP" } },
-	"insert-pos": { "map": {"0": "PRE", "1": "POST" } },
-	"dyn-pos": { "map": {"0": "SWAPPED", "1": "NORMAL" } },
-
+	"mix-st": {
+	  "map": {
+		"0": "MONO",
+		"1": "STEREO"
+	  }
+	},
+	"dyn-auto": {
+	  "map": {
+		"0": "MANUAL",
+		"1": "AUTO"
+	  }
+	},
+	"dyn-det": {
+	  "map": {
+		"0": "PEAK",
+		"1": "RMS"
+	  }
+	},
+	"dyn-env": {
+	  "map": {
+		"0": "LINEAR",
+		"1": "LOG"
+	  }
+	},
+	"dyn-mode": {
+	  "map": {
+		"0": "COMP",
+		"1": "EXP"
+	  }
+	},
+	"insert-pos": {
+	  "map": {
+		"0": "PRE",
+		"1": "POST"
+	  }
+	},
+	"dyn-pos": {
+	  "map": {
+		"0": "SWAPPED",
+		"1": "NORMAL"
+	  }
+	},
 	"pan-range": {
 	  "range": {
 		"in_min": 0,
@@ -753,6 +787,54 @@
 	  "map": {
 		"0": "SINGLE",
 		"1": "FOLDER"
+	  }
+	},
+	"clock-source": {
+	  "map": {
+		"0": "Internal",
+		"1": "AES50 A",
+		"2": "AES50 B",
+		"3": "Exp. Card"
+	  }
+	},
+	"clock-rate": {
+	  "map": {
+		"0": "48 kHz",
+		"1": "44.1 kHz"
+	  }
+	},
+	"clock-mode": {
+	  "map": {
+		"0": "24 hour",
+		"1": "12 hour"
+	  }
+	},
+	"monitor-source-trim": {
+	  "range": {
+		"out_min": -18,
+		"out_max": 18
+	  }
+	},
+	"monitor-dim-att": {
+	  "range": {
+		"out_min": -40,
+		"out_max": 0
+	  }
+	},
+	"monitor-delay-time": {
+	  "range": {
+		"out_min": 0.3,
+		"out_max": 500
+	  }
+	},
+	"tape-state": {
+	  "map": {
+		"0": "STOP",
+		"1": "PAUSE",
+		"2": "PLAY",
+		"3": "REWIND",
+		"4": "RECORD",
+		"5": "FORWARD"
 	  }
 	}
   }
