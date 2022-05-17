@@ -3,7 +3,6 @@ package Behringer
 import (
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoX32/Behringer/api"
 	"github.com/MickMake/GoX32/Behringer/api/output"
 	"github.com/MickMake/GoX32/Only"
 	"github.com/loffa/gosc"
@@ -130,7 +129,7 @@ func (x *X32) UpdateCache(msg *gosc.Message) *Message {
 		}
 		if !x.MessageExists(msg.Address) {
 			x.cache[msg.Address] = &Message{
-				Message:    *msg,
+				Message:    msg,
 				SeenBefore: false,
 				Counter:    1,
 				LastSeen:   time.Now(),
@@ -144,14 +143,14 @@ func (x *X32) UpdateCache(msg *gosc.Message) *Message {
 		if then.Before(now) {
 			x.cache[msg.Address].Counter++
 			x.cache[msg.Address].SeenBefore = false
-			x.cache[msg.Address].Message = *msg
+			x.cache[msg.Address].Message = msg
 			x.cache[msg.Address].LastSeen = time.Now()
 			break
 		}
 
 		x.cache[msg.Address].Counter++
 		x.cache[msg.Address].SeenBefore = true
-		x.cache[msg.Address].Message = *msg
+		x.cache[msg.Address].Message = msg
 		x.cache[msg.Address].LastSeen = time.Now()
 	}
 
@@ -196,7 +195,7 @@ func (m *MessageMap) SeenBefore(address string) bool {
 
 
 type Message struct {
-	gosc.Message `json:"Message"`
+	*gosc.Message `json:"Message"`
 	SeenBefore   bool      `json:"seen_before"`
 	LastSeen     time.Time `json:"last_seen"`
 	Counter      int       `json:"counter"`
@@ -241,10 +240,10 @@ func (m *Message) GetType() string {
 			break
 		}
 
-		if len(m.Arguments) > 1 {
-			ret = api.UnitArray
-			break
-		}
+		// if len(m.Arguments) > 1 {
+		// 	ret = api.UnitArray
+		// 	break
+		// }
 
 		ret = reflect.TypeOf(m.Arguments[0]).Name()
 	}

@@ -212,57 +212,68 @@ func (x *X32) XremoteSender() {
 	}
 }
 
-func (x *X32) Send(msg string) error {
-	x.Error = x.Client.EmitMessage(msg)
-	return x.Error
-}
-func (x *X32) GetStatus() error {
-	return x.Send("/status")
-}
-func (x *X32) GetInfo() error {
-	return x.Send("/info")
-}
-func (x *X32) GetXinfo() error {
-	return x.Send("/xinfo")
-}
-func (x *X32) GetShowDump() error {
-	return x.Send("/showdump")
-}
+// func (x *X32) Send(address string, wait bool) error {
+// 	x.Error = x.Client.EmitMessage(address)
+// 	return x.Error
+// }
 
-func (x *X32) Call(address string) *Message {
+func (x *X32) Get(address string, wait bool) Message {
 	var msg Message
+
 	for range Only.Once {
-		var m *gosc.Message
-		m, msg.Error = x.Client.CallMessage(address)
-		if msg.Error != nil {
-			x.Error = msg.Error
+		if !wait {
+			x.Error = x.Emit(address)
+			msg.Error = x.Error
 			break
 		}
+
+		msg = x.Call(address)
+	}
+
+	return msg
+}
+
+func (x *X32) Emit(address string, args ...any) error {
+
+	for range Only.Once {
+		x.Error = x.Client.EmitMessage(address, args)
+		break
+	}
+
+	return x.Error
+}
+
+func (x *X32) Call(address string, args ...any) Message {
+	var msg Message
+
+	for range Only.Once {
 		msg = Message {
-			Message:    *m,
+			Message:    nil,
 			SeenBefore: false,
 			LastSeen:   time.Now(),
 			Counter:    1,
 			Type:       "call",
 			Error:      nil,
 		}
+		msg.Message, x.Error = x.Client.CallMessage(address, args...)
+
+		// var m *gosc.Message
+		// m, msg.Error = x.Client.CallMessage(address)
+		// if msg.Error != nil {
+		// 	x.Error = msg.Error
+		// 	break
+		// }
+		// msg = Message {
+		// 	Message:    *m,
+		// 	SeenBefore: false,
+		// 	LastSeen:   time.Now(),
+		// 	Counter:    1,
+		// 	Type:       "call",
+		// 	Error:      nil,
+		// }
 	}
-	return &msg
-}
-func (x *X32) CallStatus() *Message {
-	return x.Call("/status")
-}
-func (x *X32) CallInfo() *Message {
-	return x.Call("/info")
-}
-func (x *X32) CallXinfo() *Message {
-	return x.Call("/xinfo")
-}
-func (x *X32) CallShowDump() *Message {
-	return x.Call("/showdump")
-}
-func (x *X32) CallDeskName() *Message {
-	return x.Call("/-prefs/name")
+
+	return msg
 }
 
 func (x *X32) GetTopic(msg *gosc.Message) string {

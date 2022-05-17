@@ -16,30 +16,30 @@ const (
 
 	TypeInstant = "instant"
 
-	UnitArray = "array"
-	UnitState = "state"
-	UnitToggle = "toggle"
-	UnitToggleInvert = "toggle-invert"
-	UnitSourceSelect = "source-select"
-	UnitOutputSelect = "output-select"
-	UnitFilterTypeSelect = "filter-type-select"
-	UnitColourSelect = "colour-select"
-	UnitIconSelect = "icon-select"
-	UnitRatioSelect = "ratio-select"
-	UnitEqModeSelect = "eq-type-select"
-	UnitRecPosSelect = "rec-pos-select"
-	UnitMonitorSourceSelect = "monitor-source-select"
-	UnitString = "string"
+	// UnitArray = "array"
+	// UnitState = "state"
+	// UnitToggle = "toggle"
+	// UnitToggleInvert = "toggle-invert"
+	// UnitSourceSelect = "source-select"
+	// UnitOutputSelect = "output-select"
+	// UnitFilterTypeSelect = "filter-type-select"
+	// UnitColourSelect = "colour-select"
+	// UnitIconSelect = "icon-select"
+	// UnitRatioSelect = "ratio-select"
+	// UnitEqModeSelect = "eq-type-select"
+	// UnitRecPosSelect = "rec-pos-select"
+	// UnitMonitorSourceSelect = "monitor-source-select"
+	// UnitString = "string"
 )
 
 
 type Aliases map[ConvertAlias]ConvertStruct
 
-func (s *Aliases) Get(selector *ConvertAlias) ConvertStruct {
+func (a *Aliases) Get(selector *ConvertAlias) ConvertStruct {
 	if selector == nil {
 		return ConvertStruct{}
 	}
-	if ret, ok := (*s)[*selector]; ok {
+	if ret, ok := (*a)[*selector]; ok {
 		return ret
 	}
 	return ConvertStruct{}
@@ -77,6 +77,8 @@ func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
 				delete(pm.PointsMap, n)
 				continue
 			}
+
+			p.Valid = true
 			if p.EndPoint == "" {
 				p.EndPoint = n
 			}
@@ -137,6 +139,28 @@ func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
 						p.Convert.Map = &ConvertMap{ "0":"ON", "1":"OFF" }
 				}
 				p.Convert.Binary = nil
+			}
+
+			if p.Convert.FloatMap != nil {
+				p.Convert.FloatMap.Map = make(map[string]string)
+				if p.Convert.FloatMap.Precision == 0 {
+					p.Convert.FloatMap.Precision = 4
+				}
+				minFv := 1.0
+				for k, v := range p.Convert.FloatMap.Values {
+					var fv float64
+					fv, err = strconv.ParseFloat(k, 64)
+					if err != nil {
+						p.Valid = false
+						break
+					}
+					if fv < minFv {
+						minFv = fv
+					}
+					k = strconv.FormatFloat(fv, 'f', p.Convert.FloatMap.Precision, 32)
+					p.Convert.FloatMap.Map[k] = v
+				}
+				p.Convert.FloatMap.DefaultZero = strconv.FormatFloat(minFv, 'f', p.Convert.FloatMap.Precision, 32)
 			}
 
 			// switch {
@@ -254,7 +278,6 @@ func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
 			// 		p.Unit = ""
 			// }
 
-			p.Valid = true
 			pm.PointsMap[n] = p
 		}
 
@@ -270,11 +293,11 @@ func (a *Aliases) Append(b Aliases) *Aliases {
 	return a
 }
 
-func (a *PointsMap) Append(b PointsMap) *PointsMap {
+func (pm *PointsMap) Append(b PointsMap) *PointsMap {
 	for k, v := range b {
-		(*a)[k] = v
+		(*pm)[k] = v
 	}
-	return a
+	return pm
 }
 
 
@@ -296,37 +319,51 @@ func JoinStrings(args ...string) string {
 }
 
 func JoinStringsForId(args ...string) string {
-	var newargs []string
-	var re = regexp.MustCompile(`(/| |:|\.)+`)
-	var re2 = regexp.MustCompile(`^(-|_)+`)
-	for _, a := range args {
-		if a == "" {
-			continue
+	var ret string
+
+	for range Only.Once {
+		var newargs []string
+		var re = regexp.MustCompile(`(/| |:|\.)+`)
+		var re2 = regexp.MustCompile(`^(-|_)+`)
+		var re3 = regexp.MustCompile(`(-|_)+$`)
+
+		for _, a := range args {
+			if a == "" {
+				continue
+			}
+
+			a = strings.TrimSpace(a)
+			a = re.ReplaceAllString(a, `_`)
+			a = re2.ReplaceAllString(a, ``)
+			a = re3.ReplaceAllString(a, ``)
+			// a = strings.TrimPrefix(a, `-`)
+			// a = strings.TrimPrefix(a, `_`)
+			// a = strings.TrimSuffix(a, `-`)
+			// a = strings.TrimSuffix(a, `_`)
+			newargs = append(newargs, a)
 		}
-		a = strings.TrimSpace(a)
-		a = re.ReplaceAllString(a, `_`)
-		a = re2.ReplaceAllString(a, ``)
-		a = strings.TrimPrefix(a, `-`)
-		a = strings.TrimPrefix(a, `_`)
-		a = strings.TrimSuffix(a, `-`)
-		a = strings.TrimSuffix(a, `_`)
-		newargs = append(newargs, a)
+
+		ret =  strings.Join(newargs, "-")
 	}
-	// return strings.ReplaceAll(strings.TrimSpace(strings.Join(args, ".")), ".", "_")
-	return strings.Join(newargs, "-")
+	return ret
 }
 
 
 type ConvertStruct struct {
+	Alias     *ConvertAlias     `json:"alias"`
 	Increment *ConvertIncrement `json:"increment"`
 	Range     *ConvertRange     `json:"range"`
 	Map       *ConvertMap       `json:"map"`
-	Alias     *ConvertAlias     `json:"alias"`
-	Function  *ConvertFunction  `json:"function"`
 	BitMap    *ConvertBitMap    `json:"bit_map"`
+	Function  *ConvertFunction  `json:"function"`
 	Binary    *ConvertBinary    `json:"binary"`
-	Asset      *ConvertAsset     `json:"asset"`
+	String    *ConvertString    `json:"string"`
+	Asset     *ConvertAsset     `json:"asset"`
+	Array     *ConvertArray     `json:"array"`
+	FloatMap  *ConvertFloatMap  `json:"float_map"`
 }
+
+type ConvertAlias string
 
 type ConvertIncrement struct {
 	Min 		float64 `json:"min"`
@@ -347,11 +384,13 @@ type ConvertMap map[string]string
 
 type ConvertBitMap []string
 
-type ConvertAlias string
-
 type ConvertFunction string
 
 type ConvertBinary string
+
+type ConvertString struct {
+	Size int `json:"size"`
+}
 
 type ConvertAsset struct {
 	Url    bool `json:"url"`
@@ -359,15 +398,31 @@ type ConvertAsset struct {
 	String bool `json:"string"`
 }
 
+type ConvertArray struct {
+	Expected int      `json:"expected"`
+	Names    []string `json:"names"`
+}
 
-func (c *ConvertStruct) Get(value string) string {
+type ConvertFloatMap struct {
+	Values      map[string]string `json:"values"`
+	Precision   int               `json:"precision"`
+	Map         map[string]string `json:"-"`
+	DefaultZero string            `json:"-"`
+}
+
+
+func (c *ConvertStruct) GetString(value string) string {
 	for range Only.Once {
 		switch {
+			case c.Alias != nil:
+				break
+
 			case c.Increment != nil:
+				// value = ToLinearDb(value, c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
 				break
 
 			case c.Range != nil:
-				value = ToLinDb(value, c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
+				value = ToRange(value, c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
 				break
 
 			case c.Map != nil:
@@ -376,25 +431,33 @@ func (c *ConvertStruct) Get(value string) string {
 				}
 				break
 
-			case c.Alias != nil:
-				break
-
 			case c.BitMap != nil:
 				value = ToBitMap(value, *c.BitMap)
+				break
+
+			case c.Function != nil:
+				if *c.Function == "log" {
+					value = ToLogFunc(value, 1)
+					break
+				}
 				break
 
 			case c.Binary != nil:
 				value = ToBitMap(value, *c.BitMap)
 				break
 
-			case c.Function != nil:
-				if *c.Function == "log" {
-					value = ToLogDb(value, 1)
-					break
-				}
+			case c.String != nil:
 				break
 
 			case c.Asset != nil:
+				break
+
+			case c.Array != nil:
+				// 	value = strings.Join(*c.Array, ", ")
+				break
+
+			case c.FloatMap != nil:
+				value = ToFloatMap(value, *c.FloatMap)
 				break
 		}
 	}
@@ -436,7 +499,7 @@ func ToBitMap(value string, array []string) string {
 	return value
 }
 
-func ToLogDb(value string, precision int) string {
+func ToLogFunc(value string, precision int) string {
 	for range Only.Once {
 		// s = strconv.FormatFloat(float64(fv), 'f', -1, 32)
 		fv, err := strconv.ParseFloat(value, 64)
@@ -451,18 +514,18 @@ func ToLogDb(value string, precision int) string {
 		}
 
 		// Convert to log scale.
-		var d float32
+		var d float64
 		if fv >= 0.5 {
-			d = float32(fv * 40.0 - 30.0)
+			d = float64(fv * 40.0 - 30.0)
 
 		} else if fv >= 0.25 {
-			d = float32(fv * 80.0 - 50.0)
+			d = float64(fv * 80.0 - 50.0)
 
 		} else if fv >= 0.0625 {
-			d = float32(fv * 160.0 - 70.0)
+			d = float64(fv * 160.0 - 70.0)
 
 		} else if fv >= 0.0 {
-			d = float32(fv * 480.0 - 90.0)
+			d = float64(fv * 480.0 - 90.0)
 		}
 
 		// def float_to_db(f):
@@ -486,7 +549,7 @@ func ToLogDb(value string, precision int) string {
 	return value
 }
 
-func ToLinDb(value string, inMin float64, inMax float64, outMin float64, outMax float64, precision int) string {
+func ToRange(value string, inMin float64, inMax float64, outMin float64, outMax float64, precision int) string {
 	for range Only.Once {
 		var err error
 		var fv float64
@@ -517,7 +580,7 @@ func ToLinDb(value string, inMin float64, inMax float64, outMin float64, outMax 
 	return value
 }
 
-func ToLinDbString(value string, inMin string, inMax string, outMin string, outMax string) string {
+func ToLinear(value string, inMin string, inMax string, outMin string, outMax string) string {
 	for range Only.Once {
 		var err error
 		var fv float64
@@ -527,26 +590,6 @@ func ToLinDbString(value string, inMin string, inMax string, outMin string, outM
 		var outMaxFloat float64
 
 		fv, err = strconv.ParseFloat(value, 64)
-		if err != nil {
-			break
-		}
-
-		outMinFloat, err = strconv.ParseFloat(inMin, 64)
-		if err != nil {
-			break
-		}
-
-		outMaxFloat, err = strconv.ParseFloat(inMax, 64)
-		if err != nil {
-			break
-		}
-
-		outMinFloat, err = strconv.ParseFloat(outMin, 64)
-		if err != nil {
-			break
-		}
-
-		outMaxFloat, err = strconv.ParseFloat(outMax, 64)
 		if err != nil {
 			break
 		}
@@ -567,6 +610,43 @@ func ToLinDbString(value string, inMin string, inMax string, outMin string, outM
 
 	return value
 }
+
+func ToFloatMap(value string, array ConvertFloatMap) string {
+	for range Only.Once {
+		if len(array.Values) == 0 {
+			break
+		}
+
+		if len(array.Map) == 0 {
+			break
+		}
+
+		if value == "" {
+			// value = array.FloatValues[0]
+			break
+		}
+
+		fv, err := strconv.ParseFloat(value, 64)
+		if err != nil {
+			break
+		}
+
+		value = strconv.FormatFloat(fv, 'f', array.Precision, 32)
+
+		// if fv == 0 {
+		// 	// value = array.FloatValues[0]
+		// 	break
+		// }
+
+		if v, ok := array.Map[value]; ok {
+			value = v
+			break
+		}
+	}
+
+	return value
+}
+
 
 type RangeFloat32 struct {
 	Min float32

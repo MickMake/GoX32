@@ -233,12 +233,10 @@ func (ca *CommandArgs) MqttCron() error {
 
 		if ca.Mqtt.IsFirstRun() {
 			ca.Mqtt.UnsetFirstRun()
-			ca.X32.GetStatus()
-			ca.X32.GetInfo()
-			ca.X32.GetXinfo()
-			ca.X32.CallDeskName()
-		} else {
-			time.Sleep(time.Second * 40)	// Takes up to 40 seconds for data to come in.
+			ca.Error = ca.X32.GetAllInfo()
+			if ca.Error != nil {
+				break
+			}
 		}
 
 		newDay := false
@@ -269,52 +267,40 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// fmt.Printf("\n%v\n", pm)
 
 		// /-show/showfile/scene/000/name
-		foo := ca.X32.Call("/-show/showfile/show/name")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/lamp")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/lampon")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/lcdbright")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/lcdcont")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/rec_control")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/lamp")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/sceneadvance")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/selfollowsbank")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/show_control")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/style")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("/-prefs/viewrtn")
-		fmt.Printf("%v\n", foo)
-		foo = ca.X32.Call("foo")
-		fmt.Printf("%v\n", foo)
+		ca.Error = ca.X32.Emit("/-show/showfile/show/name")
+		ca.Error = ca.X32.Emit("/-prefs/lamp")
+		ca.Error = ca.X32.Emit("/-prefs/lampon")
+		ca.Error = ca.X32.Emit("/-prefs/lcdbright")
+		ca.Error = ca.X32.Emit("/-prefs/lcdcont")
+		ca.Error = ca.X32.Emit("/-prefs/rec_control")
+		ca.Error = ca.X32.Emit("/-prefs/lamp")
+		ca.Error = ca.X32.Emit("/-prefs/sceneadvance")
+		ca.Error = ca.X32.Emit("/-prefs/selfollowsbank")
+		ca.Error = ca.X32.Emit("/-prefs/show_control")
+		ca.Error = ca.X32.Emit("/-prefs/style")
+		ca.Error = ca.X32.Emit("/-prefs/viewrtn")
+		ca.Error = ca.X32.Emit("/-prefs/??????")
+		// ca.Error = ca.X32.Call("foo")
 
-		// foo = ca.X32.Call("/-show/showfile/show/buses")
+		// ca.Error = ca.X32.Call("/-show/showfile/show/buses")
 		// fmt.Printf("%v\n", foo)
-		// foo = ca.X32.Call("/-show/showfile/show/chan16")
+		// ca.Error = ca.X32.Call("/-show/showfile/show/chan16")
 		// fmt.Printf("%v\n", foo)
-		// foo = ca.X32.Call("/-show/showfile/show/chan32")
+		// ca.Error = ca.X32.Call("/-show/showfile/show/chan32")
 		// fmt.Printf("%v\n", foo)
-		// foo = ca.X32.Call("/-show/showfile/show/console")
+		// ca.Error = ca.X32.Call("/-show/showfile/show/console")
 		// fmt.Printf("%v\n", foo)
-		// foo = ca.X32.Call("/-show/showfile/show/effects")
+		// ca.Error = ca.X32.Call("/-show/showfile/show/effects")
 		// fmt.Printf("%v\n", foo)
-		// foo = ca.X32.Call("/-show/showfile/show/inputs")
+		// ca.Error = ca.X32.Call("/-show/showfile/show/inputs")
 		// fmt.Printf("%v\n", foo)
-		// // foo = ca.X32.Call("/-show/showfile/show/lrmtxdce")
+		// // ca.Error = ca.X32.Call("/-show/showfile/show/lrmtxdce")
 		// // fmt.Printf("%v\n", foo)
-		// foo = ca.X32.Call("/-show/showfile/show/mxbuses")
+		// ca.Error = ca.X32.Call("/-show/showfile/show/mxbuses")
 		// fmt.Printf("%v\n", foo)
-		// foo = ca.X32.Call("/-show/showfile/show/mxsends")
+		// ca.Error = ca.X32.Call("/-show/showfile/show/mxsends")
 		// fmt.Printf("%v\n", foo)
-		// foo = ca.X32.Call("/-show/showfile/show/return")
+		// ca.Error = ca.X32.Call("/-show/showfile/show/return")
 		// fmt.Printf("%v\n", foo)
 
 		foo2 := ca.X32.GetScene(0)
@@ -554,7 +540,7 @@ func MqttMessageHandler(_ mqtt.Client, message mqtt.Message) {
 
 func X32MessageHandler(msg *Behringer.Message) {
 	for range Only.Once {
-		LogPrintDate("X32MessageHandler() - %v\n", msg)
+		LogPrintDate("X32MessageHandler() - %v\t", msg.Address)
 		// a := fmt.Sprintf("%s", msg.Address)
 		// a = strings.TrimPrefix(a, "-")
 		// a = strings.TrimSuffix(a, "-")
@@ -564,7 +550,7 @@ func X32MessageHandler(msg *Behringer.Message) {
 
 		p := Cmd.X32.Points.Resolve(msg.Address)
 		if p == nil {
-			fmt.Printf("Missing Point: %s - %v\n", msg.Address, p)
+			fmt.Printf("- Missing Point: %v\n", p)
 			break
 		}
 
@@ -579,18 +565,17 @@ func X32MessageHandler(msg *Behringer.Message) {
 			// 	fmt.Printf("foo1: %s\tfoo2: %s\n", foo1, foo2)
 			// }
 
-			value = p.Convert.Get(value)
-			fmt.Printf("Value: %s %s\n", value, p.Unit)
+			value = p.Convert.GetString(value)
+			fmt.Printf("- Value: %s %s\t (%v)\n", value, p.Unit, msg.Arguments[0])
 
 			ec := mmHa.EntityConfig {
-				Name:        p.Name,	// name,
+				Name:        p.Name,
 				SubName:     "",
-				ParentId:    p.ParentId,	// Cmd.X32.Info.Model,
-				ParentName:  p.ParentId,	// Cmd.X32.Info.Model,
-				UniqueId:    api.CleanString(p.Name),	// name,
-				// FullId:      p.ParentId,	// a,
+				ParentId:    p.ParentId,
+				ParentName:  p.ParentId,
+				UniqueId:    api.CleanString(p.Id),
 				Units:       p.Unit,	// msg.GetType(),
-				ValueName:   "",	// fmt.Sprintf("%v", msg.Arguments[0]),
+				ValueName:   "",
 				DeviceClass: "",
 				StateClass:  "measurement",
 				Value:       value,
@@ -618,29 +603,32 @@ func X32MessageHandler(msg *Behringer.Message) {
 		}
 
 		var entities []mmHa.EntityConfig
-		for i, v := range msg.Arguments {
+		var values []string
+		for i := range msg.Arguments {
+			value := fmt.Sprintf("%v", msg.Arguments[i])
+			values = append(values, value)
 			p.Unit = ""		// @TODO - Fix this up!
 
-			foo := mmHa.EntityConfig {
-				Name:        fmt.Sprintf("%s %d", msg.Address, i),
+			ec := mmHa.EntityConfig {
+				Name:        fmt.Sprintf("%s %d", p.Name, i),
 				SubName:     "",
-				ParentId:    p.ParentId,	// Cmd.X32.Info.Model,
-				ParentName:  p.ParentId,	// Cmd.X32.Info.Model,
-				UniqueId:    api.CleanString(fmt.Sprintf("%s_%d", msg.Address, i)),
-				// FullId:      fmt.Sprintf("%s_%d", msg.Address, i),
+				ParentId:    p.ParentId,
+				ParentName:  p.ParentId,
+				UniqueId:    api.CleanString(fmt.Sprintf("%s_%d", p.Id, i)),
 				Units:       p.Unit,	// msg.GetType(),
-				ValueName:   "",	// fmt.Sprintf("%v", v),
+				ValueName:   "",
 				DeviceClass: "",
 				StateClass:  "measurement",
-				StateTopic:  p.Name,	// name,
-				Value:       fmt.Sprintf("%v", v),
+				Value:       value,
+
+				StateTopic:  p.Name,
 				ValueTemplate:          fmt.Sprintf("{{ value_json.value%d }}", i),
 
 				// Icon:                   "",
 				// LastReset:              "",
 				// LastResetValueTemplate: "",
 			}
-			entities = append(entities, foo)
+			entities = append(entities, ec)
 
 			// if !msg.SeenBefore {
 			// 	Cmd.Error = Cmd.Mqtt.PublishConfig(ec)
@@ -656,6 +644,7 @@ func X32MessageHandler(msg *Behringer.Message) {
 			// 	break
 			// }
 		}
+		fmt.Printf("- Values: %s %s\n", strings.Join(values, ", "), p.Unit)
 
 		if !msg.SeenBefore {
 			Cmd.Error = Cmd.Mqtt.PublishConfigs(entities)

@@ -197,6 +197,66 @@ func (x *X32) GetScenes() Scenes {
 }
 
 
+func (x *X32) GetAllInfo() error {
+	for range Only.Once {
+		x.Error = x.EmitStatus()
+		if x.Error != nil {
+			break
+		}
+
+		x.Error = x.EmitInfo()
+		if x.Error != nil {
+			break
+		}
+
+		x.Error = x.EmitXinfo()
+		if x.Error != nil {
+			break
+		}
+
+		x.Error = x.EmitNode()
+		if x.Error != nil {
+			break
+		}
+
+		x.Error = x.EmitId()
+		if x.Error != nil {
+			break
+		}
+
+		x.GetDeskName()
+	}
+
+	return x.Error
+}
+
+const CmdStatus = "/status"
+func (x *X32) EmitStatus() error  { return x.Emit(CmdStatus) }
+func (x *X32) GetStatus() Message { return x.Call(CmdStatus) }
+
+const CmdInfo = "/info"
+func (x *X32) EmitInfo() error  { return x.Emit(CmdInfo) }
+func (x *X32) GetInfo() Message { return x.Call(CmdInfo) }
+
+const CmdXinfo = "/xinfo"
+func (x *X32) EmitXinfo() error  { return x.Emit(CmdXinfo) }
+func (x *X32) GetXinfo() Message { return x.Call(CmdXinfo) }
+
+const CmdShowDump = "/showdump"
+func (x *X32) EmitShowDump() error  { return x.Emit(CmdShowDump) }
+func (x *X32) GetShowDump() Message { return x.Call(CmdShowDump) }
+
+const CmdNode = "/node"
+func (x *X32) EmitNode() error  { return x.Emit(CmdNode) }
+func (x *X32) GetNode() Message { return x.Call(CmdNode) }
+
+const CmdId = "/-prefs/??????"
+func (x *X32) EmitId() error  { return x.Emit(CmdId) }
+func (x *X32) GetId() Message { return x.Call(CmdId) }
+
+func (x *X32) GetDeskName() Message { return x.Call("/-prefs/name") }
+
+
 // func (x *X32) GetPointNamesFromTemplate(template string) api.TemplatePoints {
 // 	var ret api.TemplatePoints
 //
