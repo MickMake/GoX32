@@ -280,7 +280,24 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		ca.Error = ca.X32.Emit("/-prefs/style")
 		ca.Error = ca.X32.Emit("/-prefs/viewrtn")
 		ca.Error = ca.X32.Emit("/-prefs/??????")
-		// ca.Error = ca.X32.Call("foo")
+		ca.Error = ca.X32.Emit("/-stat/geqpos")
+		ca.Error = ca.X32.Emit("/-stat/rtageqpost")
+
+		// sm := gosc.Message {
+		// 	Address:   "/node",
+		// 	Arguments: []any{"ch/01/config"},
+		// }
+		// fmt.Printf("TYPE: %s\n", sm.GetType())
+		// m := ca.X32.Call("/-prefs/viewrtn")
+		// fmt.Printf("FOO:\n%v\n", m)
+		//
+		// m2, e := ca.X32.Client.SendAndReceiveMessage(&sm)
+		// fmt.Printf("FOO:\n%v\n%s", m2, e)
+		//
+		// m = ca.X32.Call("/node", "ch/01/config")
+		// fmt.Printf("FOO:\n%v\n", m)
+
+		ca.Error = ca.X32.GetAllInfo()
 
 		// ca.Error = ca.X32.Call("/-show/showfile/show/buses")
 		// fmt.Printf("%v\n", foo)
@@ -309,6 +326,8 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		fmt.Printf("%v\n", foo2)
 		foo2 = ca.X32.GetScene(2)
 		fmt.Printf("%v\n", foo2)
+
+		fmt.Println(ca.X32.Points.String())
 
 		time.Sleep(time.Hour * 24)
 

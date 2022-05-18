@@ -1,0 +1,102 @@
+{
+  "aliases": {
+	"talkback-map": {
+	  "bit_map": [
+		"OFF",
+		"MixBus 1",
+		"MixBus 2",
+		"MixBus 3",
+		"MixBus 4",
+		"MixBus 5",
+		"MixBus 6",
+		"MixBus 7",
+		"MixBus 8",
+		"MixBus 9",
+		"MixBus 10",
+		"MixBus 11",
+		"MixBus 12",
+		"MixBus 13",
+		"MixBus 14",
+		"MixBus 15",
+		"MixBus 16",
+		"L/R",
+		"M/C"
+	  ]
+	},
+	"monitor-source-map": {
+	  "map": {
+		"0": "Off",
+		"1": "LR Bus",
+		"2": "LR+M/C",
+		"3": "LR PFL",
+		"4": "LR AFL",
+		"5": "Aux 5/6",
+		"6": "Aux 7/8"
+	  }
+	},
+	"monitor-source-trim": {
+	  "range": {
+		"out_min": -18,
+		"out_max": 18
+	  }
+	},
+	"monitor-dim-att": {
+	  "range": {
+		"out_min": -40,
+		"out_max": 0
+	  }
+	},
+	"monitor-delay-time": {
+	  "range": {
+		"out_min": 0.3,
+		"out_max": 500
+	  }
+	}
+  },
+  "points_array_map": {
+	"min": 1,
+	"max": 80,
+	"increment": 1,
+	"points": {
+	  "/-stat/solosw/%.2d": { "endpoint": "/-stat/solosw/%.2d", "convert": { "binary": "normal" } }
+	}
+  },
+  "points": {
+	"/-stat/keysolo": { "endpoint": "/-stat/keysolo", "convert": { "binary": "normal" } },
+	"/-stat/solo": { "endpoint": "/-stat/solo", "convert": { "binary": "normal" } },
+
+	"/-action/clearsolo": { "endpoint": "/-action/clearsolo", "convert": { "binary": "normal" } },
+
+	"/config/solo/busmode": { "endpoint": "/config/solo/busmode", "convert": { "binary": "normal" } },
+	"/config/solo/chmode": { "endpoint": "/config/solo/chmode", "convert": { "binary": "normal" } },
+	"/config/solo/dcamode": { "endpoint": "/config/solo/dcamode", "convert": { "binary": "normal" } },
+	"/config/solo/delay": { "endpoint": "/config/solo/delay", "convert": { "binary": "normal" } },
+	"/config/solo/delaytime": { "endpoint": "/config/solo/delaytime", "unit": "mS", "convert": { "alias": "monitor-delay-time" } },
+	"/config/solo/dim": { "endpoint": "/config/solo/dim", "convert": { "binary": "normal" } },
+	"/config/solo/dimatt": { "endpoint": "/config/solo/dimatt", "unit": "dB", "convert": { "alias": "monitor-dim-att" } },
+	"/config/solo/dimpfl": { "endpoint": "/config/solo/dimpfl", "convert": { "binary": "normal" } },
+	"/config/solo/exclusive": { "endpoint": "/config/solo/exclusive", "convert": { "binary": "normal" } },
+	"/config/solo/followsel": { "endpoint": "/config/solo/followsel", "convert": { "binary": "normal" } },
+	"/config/solo/followsolo": { "endpoint": "/config/solo/followsolo", "convert": { "binary": "normal" } },
+	"/config/solo/level": { "endpoint": "/config/solo/level", "unit": "dB", "convert": { "function": "log" } },
+	"/config/solo/masterctrl": { "endpoint": "/config/solo/masterctrl", "convert": { "binary": "normal" } },
+	"/config/solo/mono": { "endpoint": "/config/solo/mono", "convert": { "binary": "normal" } },
+	"/config/solo/mute": { "endpoint": "/config/solo/mute", "convert": { "binary": "normal" } },
+	"/config/solo/source": { "endpoint": "/config/solo/source", "convert": { "alias": "monitor-source-map" } },
+	"/config/solo/sourcetrim": { "endpoint": "/config/solo/sourcetrim", "unit": "dB", "convert": { "alias": "monitor-source-trim" } },
+
+	"/-stat/talk/A": { "endpoint": "/-stat/talk/A", "convert": { "binary": "normal" } },
+	"/-stat/talk/B": { "endpoint": "/-stat/talk/B", "convert": { "binary": "normal" } },
+
+	"/config/talk/A/destmap": { "endpoint": "/config/talk/A/destmap", "convert": { "alias": "talkback-map" } },
+	"/config/talk/A/dim": { "endpoint": "/config/talk/A/dim", "convert": { "binary": "normal" } },
+	"/config/talk/A/latch": { "endpoint": "/config/talk/A/latch", "convert": { "binary": "normal" } },
+	"/config/talk/A/level": { "endpoint": "/config/talk/A/level", "unit": "dB", "convert": { "function": "log" } },
+	"/config/talk/B/destmap": { "endpoint": "/config/talk/B/destmap", "convert": { "alias": "talkback-map" } },
+	"/config/talk/B/dim": { "endpoint": "/config/talk/B/dim", "convert": { "binary": "normal" } },
+	"/config/talk/B/latch": { "endpoint": "/config/talk/B/latch", "convert": { "binary": "normal" } },
+	"/config/talk/B/level": { "endpoint": "/config/talk/B/level", "unit": "dB", "convert": { "function": "log" } },
+	"/config/talk/enable": { "endpoint": "/config/talk/enable", "convert": { "binary": "normal" } },
+	"/config/talk/source": { "endpoint": "/config/talk/source", "convert": { "binary": "normal" } }
+  }
+}

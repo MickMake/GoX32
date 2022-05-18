@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"github.com/MickMake/GoX32/Only"
 	"strings"
 )
@@ -13,6 +14,11 @@ const (
 
 type PointsMap map[string]Point
 
+
+func (pm *PointsMap) String() string {
+	j, _ := json.Marshal(*pm)
+	return string(j)
+}
 
 func (pm *PointsMap) Resolve(point string) *Point {
 	if ret, ok := (*pm)[point]; ok {
