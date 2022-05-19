@@ -10,6 +10,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
+	"strconv"
 	"time"
 )
 
@@ -20,6 +22,7 @@ type X32 struct {
 	Client     *gosc.Client
 	Error      error
 	NeedLogin  bool
+	Debug      bool
 
 	OutputType output.OutputType
 
@@ -29,6 +32,7 @@ type X32 struct {
 
 	messageHandler MessageHandlerFunc
 
+	meters    map[string]bool
 	configDir string
 	cache MessageMap
 	cacheDir string
@@ -145,10 +149,27 @@ func (x *X32) Connect() error {
 			break
 		}
 
+		fmt.Printf("Importing points...")
 		x.Points, x.Error = api.ImportPoints(x.Info.Model, files...)
 		if x.Error != nil {
 			break
 		}
+		fmt.Println("Done")
+
+
+		// m := x.Points["/meters/2"]
+		// foo := m.Convert.Blob.Get(data)
+		// fmt.Printf("FOO: %s\n", foo)
+		//
+		// hey1 := x.Call("/status")
+		// fmt.Printf("%v\n", hey1)
+		//
+		// fmt.Println("")
+		//
+		//
+		// hey := x.Emit("/meters/0", "")
+		// fmt.Printf("%v\n", hey)
+		// fmt.Println("")
 
 		go x.XremoteSender()
 
@@ -184,21 +205,101 @@ func (x *X32) SetConfigDir(basedir string) error {
 	return x.Error
 }
 
+func AnyToStringArray(array ...any) []string {
+	var ret []string
+	for _, a := range array {
+		ret = append(ret, fmt.Sprintf("%v", a))
+	}
+	return ret
+}
+
+func StringArrayToAny(array ...string) []any {
+	var ret []any
+	for _, a := range array {
+		ret = append(ret, a)
+	}
+	return ret
+}
+
+func (x *X32) StartMeters(meters ...string) error {
+	for range Only.Once {
+		if x.meters == nil {
+			x.meters = make(map[string]bool)
+		}
+
+		for _, m := range meters {
+			x.meters[m] = true
+		}
+
+		x.Error = x.Emit("/meters", StringArrayToAny(meters...)...)
+		if x.Error != nil {
+			break
+		}
+
+		x.Error = x.Emit("/-prefs/remote/ioenable", 4089)
+		if x.Error != nil {
+			break
+		}
+	}
+
+	return x.Error
+}
+
+func (x *X32) StopMeters(meters ...string) error {
+	for range Only.Once {
+		for _, m := range meters {
+			delete(x.meters, m)
+		}
+	}
+
+	return x.Error
+}
+
+func (x *X32) renewMeters() error {
+	for range Only.Once {
+		if len(x.meters) == 0 {
+			break
+		}
+
+		var am []any
+		for _, m := range x.meters {
+			am = append(am, m)
+		}
+
+		x.Error = x.Emit("/meters", am...)
+		if x.Error != nil {
+			break
+		}
+	}
+
+	return x.Error
+}
+
 func (x *X32) XremoteSender() {
 	for range Only.Once {
+
 		ticker := time.NewTicker(time.Second * 9)
 		x.Error = x.Client.EmitMessage("/xremote")
 		if x.Error != nil {
 			break
 		}
+
 		for {
 			select {
 				case _ = <-ticker.C:
-					// fmt.Printf("# XremoteSender()\n")
+					if x.Debug { fmt.Printf("# XremoteSender()\n") }
 					x.Error = x.Client.EmitMessage("/xremote")
 					if x.Error != nil {
 						break
 					}
+
+					if x.Debug { fmt.Printf("# renewMeters()\n") }
+					x.Error = x.renewMeters()
+					if x.Error != nil {
+						break
+					}
+
+					if x.Debug { fmt.Printf("# CacheWrite()\n") }
 					x.Error = x.CacheWrite()
 					if x.Error != nil {
 						break
@@ -212,10 +313,40 @@ func (x *X32) XremoteSender() {
 	}
 }
 
-// func (x *X32) Send(address string, wait bool) error {
-// 	x.Error = x.Client.EmitMessage(address)
-// 	return x.Error
-// }
+func (x *X32) Process(point string, value ...any) (*api.Point, map[string]api.UnitValue, error) {
+	var ret *api.Point
+	values := make(map[string]api.UnitValue)
+	var err error
+
+	for range Only.Once {
+		ret = x.Points.Resolve(point)
+		if ret == nil {
+			err = errors.New(fmt.Sprintf("Missing Point: %v data: %v\n", point, value))
+			break
+		}
+
+		foo := ret.Convert.GetValues(value...)
+		keys := make([]string, 0, len(foo))
+		for k := range foo {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+
+		for _, k := range keys {
+			v2 := foo[k]
+			vf, _ := strconv.ParseFloat(v2, 64)
+
+			values[k] = api.UnitValue {
+				Unit:       ret.Unit,
+				Value:      v2,
+				ValueFloat: vf,
+				ValueInt:   0,
+			}
+		}
+	}
+
+	return ret, values, err
+}
 
 func (x *X32) Get(address string, wait bool) Message {
 	var msg Message
@@ -236,7 +367,10 @@ func (x *X32) Get(address string, wait bool) Message {
 func (x *X32) Emit(address string, args ...any) error {
 
 	for range Only.Once {
-		x.Error = x.Client.EmitMessage(address, args)
+		if x.Debug {
+			fmt.Printf("# Emit() - address: %v, args: %v\n", address, args)
+		}
+		x.Error = x.Client.EmitMessage(address, args...)
 		break
 	}
 
@@ -255,22 +389,13 @@ func (x *X32) Call(address string, args ...any) Message {
 			Type:       "call",
 			Error:      nil,
 		}
+		if x.Debug {
+			fmt.Printf("# Call() - msg: %v\n", msg)
+		}
 		msg.Message, x.Error = x.Client.CallMessage(address, args...)
-
-		// var m *gosc.Message
-		// m, msg.Error = x.Client.CallMessage(address)
-		// if msg.Error != nil {
-		// 	x.Error = msg.Error
-		// 	break
-		// }
-		// msg = Message {
-		// 	Message:    *m,
-		// 	SeenBefore: false,
-		// 	LastSeen:   time.Now(),
-		// 	Counter:    1,
-		// 	Type:       "call",
-		// 	Error:      nil,
-		// }
+		if x.Debug {
+			fmt.Printf("# Call() - msg.Message: %v\n", msg.Message)
+		}
 	}
 
 	return msg
@@ -278,7 +403,9 @@ func (x *X32) Call(address string, args ...any) Message {
 
 func (x *X32) GetTopic(msg *gosc.Message) string {
 	topic := fmt.Sprintf("%s%s", x.Prefix, msg.Address)
-	// fmt.Printf("# GetTopic() - Topic: %s\n", topic)
+	if x.Debug {
+		fmt.Printf("# GetTopic() - Topic: %s\n", topic)
+	}
 	return topic
 }
 
@@ -293,182 +420,16 @@ func (x *X32) SetMessageHandler(fn MessageHandlerFunc) error {
 func (x *X32) oscMessageHandler(msg *gosc.Message) {
 	for range Only.Once {
 		m := x.UpdateCache(msg)
-		// topic := x.GetTopic(msg)
-		// fmt.Printf("MSG: %s\n%v\n", topic, msg)
+		if x.Debug {
+			fmt.Printf("# oscMessageHandler() - msg: %v\n", msg)
+		}
+
 		if x.messageHandler == nil {
 			break
 		}
 		x.messageHandler(m)
 	}
 }
-
-// func (sg *Behringer) AppendUrl(endpoint string) api.EndPointUrl {
-// 	return sg.ApiRoot.AppendUrl(endpoint)
-// }
-//
-// func (sg *Behringer) GetEndpoint(ae string) api.EndPoint {
-// 	var ep api.EndPoint
-// 	for range Only.Once {
-// 		area, endpoint := sg.SplitEndPoint(ae)
-// 		if sg.Error != nil {
-// 			break
-// 		}
-//
-// 		ep = sg.Areas.GetEndPoint(api.AreaName(area), api.EndPointName(endpoint))
-// 		if ep == nil {
-// 			sg.Error = errors.New("EndPoint not found")
-// 			break
-// 		}
-//
-// 		if ep.IsDisabled() {
-// 			sg.Error = errors.New("API EndPoint is not implemented")
-// 			break
-// 		}
-//
-// 		if sg.Auth.Token() != "" {
-// 			ep = ep.SetRequest(api.RequestCommon{
-// 				Appkey:    sg.GetAppKey(), // sg.Auth.RequestCommon.Appkey
-// 				Lang:      "_en_US",
-// 				SysCode:   "200",
-// 				Token:     sg.GetToken(),
-// 				UserID:    sg.GetUserId(),
-// 				ValidFlag: "1,3",
-// 			})
-// 		}
-// 	}
-// 	return ep
-// }
-//
-// func (sg *Behringer) GetByJson(endpoint string, request string) api.EndPoint {
-// 	var ret api.EndPoint
-// 	for range Only.Once {
-// 		ret = sg.GetEndpoint(endpoint)
-// 		if sg.Error != nil {
-// 			break
-// 		}
-// 		if ret.IsError() {
-// 			sg.Error = ret.GetError()
-// 			break
-// 		}
-//
-// 		if request != "" {
-// 			ret = ret.SetRequestByJson(output.Json(request))
-// 			if ret.IsError() {
-// 				fmt.Println(ret.Help())
-// 				sg.Error = ret.GetError()
-// 				break
-// 			}
-// 		}
-//
-// 		ret = ret.Call()
-// 		if ret.IsError() {
-// 			fmt.Println(ret.Help())
-// 			sg.Error = ret.GetError()
-// 			break
-// 		}
-//
-// 		switch {
-// 		case sg.OutputType.IsNone():
-//
-// 		case sg.OutputType.IsFile():
-// 			sg.Error = ret.WriteDataFile()
-//
-// 		case sg.OutputType.IsRaw():
-// 			fmt.Println(ret.GetJsonData(true))
-//
-// 		case sg.OutputType.IsJson():
-// 			fmt.Println(ret.GetJsonData(false))
-//
-// 		default:
-// 		}
-// 	}
-// 	return ret
-// }
-//
-// func (sg *Behringer) GetByStruct(endpoint string, request interface{}, cache time.Duration) api.EndPoint {
-// 	var ret api.EndPoint
-// 	for range Only.Once {
-// 		ret = sg.GetEndpoint(endpoint)
-// 		if sg.Error != nil {
-// 			break
-// 		}
-// 		if ret.IsError() {
-// 			sg.Error = ret.GetError()
-// 			break
-// 		}
-//
-// 		if request != nil {
-// 			ret = ret.SetRequest(request)
-// 			if ret.IsError() {
-// 				sg.Error = ret.GetError()
-// 				break
-// 			}
-// 		}
-//
-// 		ret = ret.SetCacheTimeout(cache)
-// 		// if ret.CheckCache() {
-// 		// 	ret = ret.ReadCache()
-// 		// 	if !ret.IsError() {
-// 		// 		break
-// 		// 	}
-// 		// }
-//
-// 		ret = ret.Call()
-// 		if ret.IsError() {
-// 			sg.Error = ret.GetError()
-// 			break
-// 		}
-//
-// 		// sg.Error = ret.WriteCache()
-// 		// if sg.Error != nil {
-// 		// 	break
-// 		// }
-// 	}
-//
-// 	return ret
-// }
-//
-// func (sg *Behringer) SplitEndPoint(ae string) (string, string) {
-// 	var area string
-// 	var endpoint string
-//
-// 	for range Only.Once {
-// 		s := strings.Split(ae, ".")
-// 		switch len(s) {
-// 		case 0:
-// 			sg.Error = errors.New("empty endpoint")
-//
-// 		case 1:
-// 			area = "AppService"
-// 			endpoint = s[0]
-//
-// 		case 2:
-// 			area = s[0]
-// 			endpoint = s[1]
-//
-// 		default:
-// 			sg.Error = errors.New("too many delimeters defined, (only one '.' allowed)")
-// 		}
-// 	}
-//
-// 	return area, endpoint
-// }
-//
-// func (sg *Behringer) ListEndpoints(area string) error {
-// 	return sg.Areas.ListEndpoints(area)
-// }
-//
-// func (sg *Behringer) ListAreas() {
-// 	sg.Areas.ListAreas()
-// }
-//
-// func (sg *Behringer) AreaExists(area string) bool {
-// 	return sg.Areas.Exists(area)
-// }
-//
-// func (sg *Behringer) AreaNotExists(area string) bool {
-// 	return sg.Areas.NotExists(area)
-// }
 
 func (x *X32) Output(endpoint api.EndPoint, table *output.Table, graphFilter string) error {
 	for range Only.Once {
@@ -516,65 +477,23 @@ func (x *X32) Output(endpoint api.EndPoint, table *output.Table, graphFilter str
 func (x *X32) OutputTable(table *output.Table) error {
 	for range Only.Once {
 		switch {
-		case x.OutputType.IsNone():
+			case x.OutputType.IsNone():
 
-		case x.OutputType.IsHuman():
-			if table == nil {
-				break
-			}
-			table.Print()
+			case x.OutputType.IsHuman():
+				if table == nil {
+					break
+				}
+				table.Print()
 
-		case x.OutputType.IsFile():
-			if table == nil {
-				break
-			}
-			x.Error = table.WriteCsvFile()
+			case x.OutputType.IsFile():
+				if table == nil {
+					break
+				}
+				x.Error = table.WriteCsvFile()
 
-		default:
+			default:
 		}
 	}
 
 	return x.Error
 }
-
-// func (sg *Behringer) Login(auth login.BehringerAuth) error {
-// 	for range Only.Once {
-// 		a := sg.GetEndpoint(AppService.GetAreaName() + ".login")
-// 		sg.Auth = login.Assert(a)
-//
-// 		sg.Error = sg.Auth.Login(&auth)
-// 		if sg.Error != nil {
-// 			break
-// 		}
-// 	}
-//
-// 	return sg.Error
-// }
-//
-// func (sg *Behringer) GetToken() string {
-// 	return sg.Auth.Token()
-// }
-//
-// func (sg *Behringer) GetUserId() string {
-// 	return sg.Auth.UserId()
-// }
-//
-// func (sg *Behringer) GetAppKey() string {
-// 	return sg.Auth.AppKey()
-// }
-//
-// func (sg *Behringer) GetLastLogin() string {
-// 	return sg.Auth.LastLogin().Format(login.DateTimeFormat)
-// }
-//
-// func (sg *Behringer) GetUserName() string {
-// 	return sg.Auth.UserName()
-// }
-//
-// func (sg *Behringer) GetUserEmail() string {
-// 	return sg.Auth.Email()
-// }
-//
-// func (sg *Behringer) HasTokenChanged() bool {
-// 	return sg.Auth.HasTokenChanged()
-// }

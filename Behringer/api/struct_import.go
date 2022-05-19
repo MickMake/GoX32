@@ -1,6 +1,8 @@
 package api
 
 import (
+	"bytes"
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoX32/Behringer/api/output"
@@ -16,21 +18,6 @@ const (
 	DefaultParentId = "virtual"
 
 	TypeInstant = "instant"
-
-	// UnitArray = "array"
-	// UnitState = "state"
-	// UnitToggle = "toggle"
-	// UnitToggleInvert = "toggle-invert"
-	// UnitSourceSelect = "source-select"
-	// UnitOutputSelect = "output-select"
-	// UnitFilterTypeSelect = "filter-type-select"
-	// UnitColourSelect = "colour-select"
-	// UnitIconSelect = "icon-select"
-	// UnitRatioSelect = "ratio-select"
-	// UnitEqModeSelect = "eq-type-select"
-	// UnitRecPosSelect = "rec-pos-select"
-	// UnitMonitorSourceSelect = "monitor-source-select"
-	// UnitString = "string"
 )
 
 
@@ -50,12 +37,14 @@ func (a *Aliases) Get(selector *ConvertAlias) ConvertStruct {
 type PointsMapFile struct {
 	Aliases   Aliases   `json:"aliases"`
 	PointsMap PointsMap `json:"points"`
-	PointsArrayMap struct {
-		Min int `json:"min"`
-		Max int `json:"max"`
-		Increment int `json:"increment"`
-		PointsMap PointsMap `json:"points"`
-	} `json:"points_array_map"`
+	PointsArrayMap PointsArrayMap `json:"points_array_map"`
+}
+
+type PointsArrayMap struct {
+	Min int `json:"min"`
+	Max int `json:"max"`
+	Increment int `json:"increment"`
+	PointsMap PointsMap `json:"points"`
 }
 
 func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
@@ -196,9 +185,72 @@ func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
 				p.Convert.FloatMap.DefaultZero = strconv.FormatFloat(minFv, 'f', p.Convert.FloatMap.Precision, 32)
 			}
 
-			// if n == "/-prefs/viewrtn" {
-			// 	fmt.Sprintf("")
-			// }
+			if p.Convert.Blob != nil {
+				// p.Unit = ""
+				// var blob []ConvertBlobData
+				for _, b := range p.Convert.Blob.Order {
+					switch {
+						case b.Data != nil:
+							if b.Data.Convert != nil {
+								if b.Data.Convert.Alias != nil {
+									foo := pm.Aliases.Get(b.Data.Convert.Alias)
+									b.Data.Convert = &foo
+								}
+							}
+							if b.Data.Key == "" {
+								b.Data.Key = "%d"
+							}
+							p.Convert.Blob.Sequence = append(p.Convert.Blob.Sequence, *b.Data)
+						case b.Array != nil:
+							if b.Array.Data.Convert != nil {
+								if b.Array.Data.Convert.Alias != nil {
+									foo := pm.Aliases.Get(b.Array.Data.Convert.Alias)
+									b.Array.Data.Convert = &foo
+								}
+							}
+
+							if b.Array.Keys != nil {
+								for _, v := range b.Array.Keys {
+									if b.Array.Data.Key == "" {
+										if len(b.Array.Keys) > 0 {
+											b.Array.Data.Key = "%s"
+										} else {
+											b.Array.Data.Key = "%d"
+										}
+									}
+									p.Convert.Blob.Sequence = append(p.Convert.Blob.Sequence, ConvertBlobData {
+										Convert:   b.Array.Data.Convert,
+										Unit:      b.Array.Data.Unit,
+										Key:       fmt.Sprintf("%s", v),
+										Type:      b.Array.Data.Type,
+										BigEndian: b.Array.Data.BigEndian,
+									})
+								}
+								continue
+							}
+
+							for i := 0; i < b.Array.Count; i++ {
+								if b.Array.Data.Key == "" {
+									if len(b.Array.Keys) > 0 {
+										b.Array.Data.Key = "%s"
+									} else {
+										b.Array.Data.Key = "%d"
+									}
+								}
+								p.Convert.Blob.Sequence = append(p.Convert.Blob.Sequence, ConvertBlobData {
+									Convert:   b.Array.Data.Convert,
+									Unit:      b.Array.Data.Unit,
+									Key:       fmt.Sprintf(b.Array.Data.Key, i + b.Array.Offset),	// , b.Array.Data.Unit, v),
+									Type:      b.Array.Data.Type,
+									BigEndian: b.Array.Data.BigEndian,
+								})
+							}
+							continue
+					}
+				}
+				p.Convert.Blob.Order = ConvertBlobOrder{}
+			}
+
 			pm.PointsMap[n] = p
 		}
 	}
@@ -282,6 +334,7 @@ type ConvertStruct struct {
 	Array     *ConvertArray     `json:"array"`
 	FloatMap  *ConvertFloatMap  `json:"float_map"`
 	Integer   *ConvertInteger   `json:"integer"`
+	Blob      *ConvertBlob      `json:"blob"`
 }
 
 type ConvertAlias string
@@ -336,8 +389,105 @@ type ConvertInteger struct {
 	Max int `json:"max"`
 }
 
+type ConvertBlob struct {
+	Order []struct {
+		Data  *ConvertBlobData      `json:"data"`
+		Array *ConvertBlobDataArray `json:"array"`
+	} `json:"order"`
+	Sequence []ConvertBlobData `json:"-"`
+}
+type ConvertBlobOrder []struct {
+	Data  *ConvertBlobData      `json:"data"`
+	Array *ConvertBlobDataArray `json:"array"`
+}
+type ConvertBlobData struct {
+	Convert   *ConvertStruct `json:"convert"`
+	Unit      string         `json:"unit"`
+	Key       string         `json:"key"`
+	Type      string         `json:"type"`
+	BigEndian bool           `json:"big_endian"`
+}
+type ConvertBlobDataArray struct {
+	Data   ConvertBlobData `json:"data"`
+	Count  int             `json:"count"`
+	Offset int             `json:"offset"`
+	Keys   []string        `json:"keys"`
+	// NameFormat string `json:"name_format"`
+}
+type BlobReturn struct {
+}
 
-func (c *ConvertStruct) GetString(value string) string {
+const Single = "0"
+func (c *ConvertStruct) GetValues(values ...any) map[string]string {
+	ret := make(map[string]string)
+
+	for range Only.Once {
+		for _, value := range values {
+			switch {
+				case c.Alias != nil:
+					break
+
+				case c.Increment != nil:
+					// value = ToLinearDb(value, c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
+					break
+
+				case c.Range != nil:
+					ret[Single] = ToRange(fmt.Sprintf("%v", value), c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
+					break
+
+				case c.Map != nil:
+					val := fmt.Sprintf("%v", value)
+					if v, ok := (*c.Map)[val]; ok {
+						ret[Single] = v
+					}
+					break
+
+				case c.BitMap != nil:
+					foo := fmt.Sprintf("%v", value)
+					ret[Single] = ToBitMap(foo, *c.BitMap, 0)
+					break
+
+				case c.Function != nil:
+					if *c.Function == "log" {
+						ret[Single] = ToLogFunc(fmt.Sprintf("%v", value), 1)
+						break
+					}
+					break
+
+				case c.Binary != nil:
+					ret[Single] = ToBitMap(fmt.Sprintf("%v", value), *c.BitMap, 0)
+					break
+
+				case c.String != nil:
+					break
+
+				case c.Asset != nil:
+					break
+
+				case c.Array != nil:
+					// 	value = strings.Join(*c.Array, ", ")
+					break
+
+				case c.FloatMap != nil:
+					ret[Single] = c.FloatMap.Get(fmt.Sprintf("%v", value))
+					break
+
+				case c.Blob != nil:
+					var val []byte
+					for _, v := range value.([]byte) {
+						val = append(val, v)
+					}
+					ret = c.Blob.Get(val)
+					break
+			}
+		}
+	}
+
+	return ret
+}
+func (c *ConvertStruct) GetValue(value any) string {
+	var ret string
+
 	for range Only.Once {
 		switch {
 			case c.Alias != nil:
@@ -348,28 +498,30 @@ func (c *ConvertStruct) GetString(value string) string {
 				break
 
 			case c.Range != nil:
-				value = ToRange(value, c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
+				ret = ToRange(fmt.Sprintf("%v", value), c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
 				break
 
 			case c.Map != nil:
-				if v, ok := (*c.Map)[value]; ok {
-					value = v
+				val := fmt.Sprintf("%v", value)
+				if v, ok := (*c.Map)[val]; ok {
+					ret = v
 				}
 				break
 
 			case c.BitMap != nil:
-				value = ToBitMap(value, *c.BitMap, 0)
+				foo := fmt.Sprintf("%v", value)
+				ret = ToBitMap(foo, *c.BitMap, 0)
 				break
 
 			case c.Function != nil:
 				if *c.Function == "log" {
-					value = ToLogFunc(value, 1)
+					ret = ToLogFunc(fmt.Sprintf("%v", value), 1)
 					break
 				}
 				break
 
 			case c.Binary != nil:
-				value = ToBitMap(value, *c.BitMap, 0)
+				ret = ToBitMap(fmt.Sprintf("%v", value), *c.BitMap, 0)
 				break
 
 			case c.String != nil:
@@ -383,15 +535,19 @@ func (c *ConvertStruct) GetString(value string) string {
 				break
 
 			case c.FloatMap != nil:
-				value = ToFloatMap(value, *c.FloatMap)
+				ret = c.FloatMap.Get(fmt.Sprintf("%v", value))
 				break
+
+			case c.Blob != nil:
+				// Can't have a blob on a blob.
 		}
 	}
-	return value
+
+	return ret
 }
 
 
-func ToBitMap(value string, array []string, size uint8) string {
+func ToBitMap(value string, array []string, size uint32) string {
 	for range Only.Once {
 		if len(array) == 0 {
 			break
@@ -413,11 +569,11 @@ func ToBitMap(value string, array []string, size uint8) string {
 		}
 
 		if size == 0 {
-			size = uint8(len(array))
+			size = uint32(len(array)) - 1
 		}
 
 		var elems []string
-		for j := uint8(0); j < size; j++ {
+		for j := uint32(0); j < size; j++ {
 			if iv & (1 << j) != 0 {
 				elems = append(elems, array[j+1])
 			}
@@ -541,8 +697,12 @@ func ToLinear(value string, inMin string, inMax string, outMin string, outMax st
 	return value
 }
 
-func ToFloatMap(value string, array ConvertFloatMap) string {
+func (array *ConvertFloatMap) Get(value string) string {
 	for range Only.Once {
+		if array == nil {
+			break
+		}
+
 		if len(array.Values) == 0 {
 			break
 		}
@@ -575,6 +735,212 @@ func ToFloatMap(value string, array ConvertFloatMap) string {
 	}
 
 	return value
+}
+
+
+// func (blob *ConvertBlobData) Get(reader *bytes.Reader) string {
+// 	var ret string
+//
+// 	for range Only.Once {
+// 		var bo binary.ByteOrder
+// 		if blob.BigEndian {
+// 			bo = binary.BigEndian
+// 		} else {
+// 			bo = binary.LittleEndian
+// 		}
+//
+// 		var err error
+// 		switch blob.Type {
+// 			case "int32":
+// 				v := int32(0)
+// 				err = binary.Read(reader, bo, &v)
+// 				ret = fmt.Sprintf("int32: %d", v)
+// 			case "int64":
+// 				v := int64(0)
+// 				err = binary.Read(reader, bo, &v)
+// 				ret = fmt.Sprintf("int64: %d", v)
+// 			case "float32":
+// 				v := float32(0)
+// 				err = binary.Read(reader, bo, &v)
+// 				ret = fmt.Sprintf("float32: %f", v)
+// 			case "float64":
+// 				v := float64(0)
+// 				err = binary.Read(reader, bo, &v)
+// 				ret = fmt.Sprintf("float64: %f", v)
+// 		}
+//
+// 		if err != nil {
+// 			ret = fmt.Sprintf(`"%s": "Error: %s"`, blob.Key, err)
+// 			break
+// 		}
+//
+// 		ret = fmt.Sprintf(`"%s": "%s"`, blob.Key, ret)
+// 	}
+//
+// 	return ret
+// }
+
+func (blob *ConvertBlobData) GetValue(reader *bytes.Reader) (string, error) {
+	var ret string
+	var err error
+
+	for range Only.Once {
+		var bo binary.ByteOrder
+		if blob.BigEndian {
+			bo = binary.BigEndian
+		} else {
+			bo = binary.LittleEndian
+		}
+
+		switch blob.Type {
+			case "int32":
+				v := int32(0)
+				err = binary.Read(reader, bo, &v)
+				ret = fmt.Sprintf("%d", v)
+			case "int64":
+				v := int64(0)
+				err = binary.Read(reader, bo, &v)
+				ret = fmt.Sprintf("%d", v)
+			case "float32":
+				v := float32(0)
+				err = binary.Read(reader, bo, &v)
+				ret = fmt.Sprintf("%f", v)
+			case "float64":
+				v := float64(0)
+				err = binary.Read(reader, bo, &v)
+				ret = fmt.Sprintf("%f", v)
+		}
+
+		if err != nil {
+			break
+		}
+
+		if blob.Convert == nil {
+			break
+		}
+		ret = blob.Convert.GetValue(ret)
+	}
+
+	return ret, err
+}
+
+func (blob *ConvertBlobData) GetString(reader *bytes.Reader) string {
+	var ret string
+
+	for range Only.Once {
+		var err error
+		ret, err = blob.GetValue(reader)
+		if err != nil {
+			ret = fmt.Sprintf(`"%s": "Error with value (big_endian:%v) of type %s - %s"`,
+				blob.Key, blob.BigEndian, blob.Type, err)
+		}
+
+		// ret = fmt.Sprintf(`"%s": "%s"`, blob.Key, ret)
+	}
+
+	return ret
+}
+
+func (blob *ConvertBlobDataArray) GetStrings(reader *bytes.Reader) []string {
+	var ret []string
+
+	for range Only.Once {
+
+		// Using string keys instead of counter.
+		if len(blob.Keys) > 0 {
+			for _, i := range blob.Keys {
+				b := ConvertBlobData {
+					Type:      blob.Data.Type,
+					Key:       i,
+					BigEndian: blob.Data.BigEndian,
+				}
+				ret = append(ret, b.GetString(reader))
+			}
+			// ret = strings.Join(ret, ",")
+			break
+		}
+
+		// Using counter instead of string keys.
+		for i := 0; i < blob.Count; i++ {
+			b := ConvertBlobData {
+				Type:      blob.Data.Type,
+				Key:       fmt.Sprintf(blob.Data.Key, i + blob.Offset),
+				BigEndian: blob.Data.BigEndian,
+			}
+			ret = append(ret, b.GetString(reader))
+		}
+		// ret = strings.Join(ret, ",")
+	}
+
+	return ret
+}
+
+func (blob *ConvertBlob) Get(value []byte) map[string]string {
+	ret := make(map[string]string)
+
+	for range Only.Once {
+		if blob == nil {
+			break
+		}
+
+		if len(blob.Sequence) == 0 {
+			break
+		}
+
+		r := bytes.NewReader(value)
+
+		var i int
+		for i = 0; (r.Len() > 0) && (i < len(blob.Sequence)); i++ {
+			// fmt.Printf("Array[%d]: %d\n", i, r.Len())
+
+			v := blob.Sequence[i].GetString(r)
+			ret[blob.Sequence[i].Key] = v
+
+			// switch {
+			// 	case blob.Order[i].Data != nil:
+			// 		v := blob.Order[i].Data.GetString(r)
+			// 		// ret = append(ret, v)
+			// 		ret[blob.Order[i].Data.Key] = v
+			//
+			// 	case blob.Order[i].Array != nil:
+			// 		// v := (*blob)[i].Array.GetStrings(r)
+			// 		// ret = append(ret, v...)
+			// 		for _, v := range blob.Order[i].Array.GetStrings(r) {
+			// 			ret[blob.Order[i].Array.Data.Key] = v
+			// 		}
+			// }
+		}
+
+		i = len(blob.Sequence) - i
+		// fmt.Printf("Array[END]: %d / %d\n", r.Len(), i)
+		if i > 0 {
+			fmt.Printf("Expected %d more array elements.\n", i)
+			// ret = append(ret, fmt.Sprintf(`"expected_count": "%d"`, i))
+			ret["expected_count"] = fmt.Sprintf("%d", i)
+		}
+
+		if r.Len() > 0 {
+			var remBytes string
+			for r.Len() > 0 {
+				v := byte(0)
+				err := binary.Read(r, binary.BigEndian, &v)
+				if err != nil {
+					fmt.Printf("Error: %s\n", err)
+					// ret = append(ret, fmt.Sprintf(`"error": "%s"`, err))
+					ret["error"] = fmt.Sprintf("%s", err)
+					break
+				}
+				remBytes += fmt.Sprintf("%.2X,", v)
+			}
+			fmt.Printf("Remaining bytes[%d]: %s\n", len(remBytes) / 3, remBytes)
+			// ret = append(ret, fmt.Sprintf(`"remaining_bytes": "%s"`, remBytes))
+			ret["remaining_bytes"] = fmt.Sprintf("%s", remBytes)
+		}
+
+		// ret = "{" + strings.Join(retArray, ",") + "}"
+	}
+
+	return ret
 }
 
 

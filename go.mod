@@ -12,8 +12,11 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.11.0
 	github.com/wcharczuk/go-chart/v2 v2.1.0
+	github.com/workanator/bynom v0.0.4
 	go.pennock.tech/tabular v1.1.3
 )
+
+replace github.com/loffa/gosc => ./gosc
 
 require (
 	github.com/fsnotify/fsnotify v1.5.1 // indirect

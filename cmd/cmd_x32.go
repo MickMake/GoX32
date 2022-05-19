@@ -299,6 +299,7 @@ func SwitchOutput(cmd *cobra.Command) error {
 
 func (ca *CommandArgs) X32Args(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
+
 		ca.X32 = Behringer.NewX32(Behringer.ArgsX32 {
 			Host:         ca.X32Host,
 			Port:         ca.X32Port,
@@ -328,46 +329,6 @@ func (ca *CommandArgs) X32Args(cmd *cobra.Command, args []string) error {
 			break
 		}
 		LogPrintDate("Found X32 device.\n%v\n", ca.X32.Info.String())
-
-		// var id int64
-		// id, ca.Error = ca.X32.GetPsId()
-		// if ca.Error != nil {
-		// 	break
-		// }
-		//
-		// var model string
-		// model, ca.Error = ca.X32.GetPsModel()
-		// if ca.Error != nil {
-		// 	break
-		// }
-		//
-		// var serial string
-		// serial, ca.Error = ca.X32.GetPsSerial()
-		// if ca.Error != nil {
-		// 	break
-		// }
-		// LogPrintDate("Found X32 device %s id:%d serial:%s\n", model, id, serial)
-		//
-		// ca.Error = ca.X32.Login(login.X32Auth{
-		// 	AppKey:       ca.ApiAppKey,
-		// 	UserAccount:  ca.ApiUsername,
-		// 	UserPassword: ca.ApiPassword,
-		// 	TokenFile:    ca.ApiTokenFile,
-		// 	Force:        false,
-		// })
-		// if ca.Error != nil {
-		// 	break
-		// }
-		//
-		// if ca.Debug {
-		// 	ca.X32.Auth.Print()
-		// }
-		//
-		// if ca.X32.HasTokenChanged() {
-		// 	ca.ApiLastLogin = ca.X32.GetLastLogin()
-		// 	ca.ApiToken = ca.X32.GetToken()
-		// 	ca.Error = writeConfig()
-		// }
 
 		ca.Valid = true
 	}

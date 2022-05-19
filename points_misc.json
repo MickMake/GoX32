@@ -376,6 +376,7 @@
 	},
 	"remote-ioenable": {
 	  "bit_map": [
+		"OFF",
 		"MIDI In/Out",
 		"Card MIDI",
 		"RTP MIDI",
@@ -406,6 +407,7 @@
 	},
 	"haflags": {
 	  "bit_map": [
+		"OFF",
 		"Lock Stagebox",
 		"X32 HA Gain split mode",
 		"AES50/A HA Gain split mode",
@@ -636,7 +638,7 @@
 	"/-prefs/rta/det": { "endpoint": "/-prefs/rta/det", "convert": { "map": { "0": "RMS", "1": "PEAK" } } },
 	"/-prefs/rta/gain": { "endpoint": "/-prefs/rta/gain", "unit": "dB", "convert": { "alias": "rta-gain" } },
 	"/-prefs/rta/mode": { "endpoint": "/-prefs/rta/mode", "convert": { "alias": "eq-display-mode" } },
-	"/-prefs/rta/option": { "endpoint": "/-prefs/rta/option", "convert": { "bit_map": [ "Pre EQ", "Spectrograph", "Use RTA source", "Post GEQ", "Spectrograph", "Solo Priority" ] } },
+	"/-prefs/rta/option": { "endpoint": "/-prefs/rta/option", "convert": { "bit_map": [ "OFF", "Pre EQ", "Spectrograph", "Use RTA source", "Post GEQ", "Spectrograph", "Solo Priority" ] } },
 	"/-prefs/rta/peakhold": { "endpoint": "/-prefs/rta/peakhold", "convert": { "map": { "0":"Off", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8" } } },
 	"/-prefs/rta/pos": { "endpoint": "/-prefs/rta/pos", "convert": { "alias": "eq-pos" } },
 	"/-prefs/rta/source": { "endpoint": "/-prefs/rta/source", "convert": { "alias": "prefs-rta-source" } },
@@ -644,7 +646,7 @@
 
 	"/-stat/selidx": { "endpoint": "/-stat/selidx", "convert": { "alias": "selidx" } },
 	"/-stat/bussendbank": { "endpoint": "/-stat/bussendbank", "convert": { "map": { "0":"Bus 1-4", "1":"Bus 5-8", "2":"Bus 9-12", "3":"Bus 13-16" } } },
-	"/-stat/chfaderbank": { "endpoint": "/-stat/chfaderbank", "convert": { "map": { "0":"CH 1-16", "1":"CH 17-32", "2":"Aux in / USB / FX returns", "3":"Bus masters" } } },
+	"/-stat/chfaderbank": { "endpoint": "/-stat/chfaderbank", "convert": { "alias": "selidx" } },
 	"/-stat/eqband": { "endpoint": "/-stat/eqband", "convert": { "map": { "0":"Low", "1":"Low2", "2":"Lo-Mid", "3":"Hi-Mid", "4":"High2", "5":"High" } } },
 	"/-stat/grpfaderbank": { "endpoint": "/-stat/grpfaderbank", "convert": { "map": { "0":"DCA 1-8", "1":"BUS 1-8", "2":"BUS 9-16", "3":"Matrix 1-6, Main C" } } },
 	"/-stat/lock": { "endpoint": "/-stat/lock", "convert": { "binary": "normal" } },

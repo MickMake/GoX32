@@ -17,6 +17,7 @@
 	},
 	"scene-safes": {
 	  "bit_map": [
+		"OFF",
 		"",
 		"Talkback",
 		"Effects",
@@ -30,6 +31,7 @@
 	},
 	"snippet-eventtyp": {
 	  "bit_map": [
+		"OFF",
 		"Preamp HA",
 		"Config",
 		"EQ",
@@ -59,6 +61,7 @@
 	},
 	"snippet-channels": {
 	  "bit_map": [
+		"OFF",
 		"Ch 01",
 		"Ch 02",
 		"Ch 03",
@@ -95,6 +98,7 @@
 	},
 	"snippet-auxbuses": {
 	  "bit_map": [
+		"OFF",
 		"Aux 01",
 		"Aux 02",
 		"Aux 03",
@@ -131,6 +135,7 @@
 	},
 	"snippet-maingrps": {
 	  "bit_map": [
+		"OFF",
 		"Matrix 1",
 		"Matrix 2",
 		"Matrix 3",
@@ -152,6 +157,7 @@
 
 	"showfile-inputs": {
 	  "bit_map": [
+		"OFF",
 		"Preamp",
 		"Config",
 		"EQ",
@@ -164,6 +170,7 @@
 	},
 	"showfile-mxsends": {
 	  "bit_map": [
+		"OFF",
 		"Mix 1",
 		"Mix 2",
 		"Mix 3",
@@ -184,6 +191,7 @@
 	},
 	"showfile-mxbuses": {
 	  "bit_map": [
+		"OFF",
 		"Mix Sends",
 		"Config",
 		"EQ",
@@ -196,6 +204,7 @@
 	},
 	"showfile-console": {
 	  "bit_map": [
+		"OFF",
 		"Configuration",
 		"Solo",
 		"Routing",
@@ -204,6 +213,7 @@
 	},
 	"showfile-chan16": {
 	  "bit_map": [
+		"OFF",
 		"Ch 01",
 		"Ch 02",
 		"Ch 03",
@@ -224,6 +234,7 @@
 	},
 	"showfile-chan32": {
 	  "bit_map": [
+		"OFF",
 		"Ch 17",
 		"Ch 18",
 		"Ch 19",
@@ -244,6 +255,7 @@
 	},
 	"showfile-return": {
 	  "bit_map": [
+		"OFF",
 		"Aux 01",
 		"Aux 02",
 		"Aux 03",
@@ -264,6 +276,7 @@
 	},
 	"showfile-buses": {
 	  "bit_map": [
+		"OFF",
 		"MixBus 1",
 		"MixBus 2",
 		"MixBus 3",
@@ -284,6 +297,7 @@
 	},
 	"showfile-lrmtxdca": {
 	  "bit_map": [
+		"OFF",
 		"Matrix 1",
 		"Matrix 2",
 		"Matrix 3",
@@ -304,6 +318,7 @@
 	},
 	"showfile-effects": {
 	  "bit_map": [
+		"OFF",
 		"FX1",
 		"FX2",
 		"FX3",
