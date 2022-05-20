@@ -19,19 +19,19 @@ const (
 )
 
 type ConvertStruct struct {
-	Alias     *ConvertAlias     `json:"alias"`
-	Increment *ConvertIncrement `json:"increment"`
-	Range     *ConvertRange     `json:"range"`
-	Map       *ConvertMap       `json:"map"`
-	BitMap    *ConvertBitMap    `json:"bit_map"`
-	Function  *ConvertFunction  `json:"function"`
-	Binary    *ConvertBinary    `json:"binary"`
-	String    *ConvertString    `json:"string"`
-	Asset     *ConvertAsset     `json:"asset"`
-	Array     *ConvertArray     `json:"array"`
-	FloatMap  *ConvertFloatMap  `json:"float_map"`
-	Integer   *ConvertInteger   `json:"integer"`
-	Blob      *ConvertBlob      `json:"blob"`
+	Alias     *ConvertAlias     `json:"alias,omitempty"`
+	Increment *ConvertIncrement `json:"increment,omitempty"`
+	Range     *ConvertRange     `json:"range,omitempty"`
+	Map       *ConvertMap       `json:"map,omitempty"`
+	BitMap    *ConvertBitMap    `json:"bit_map,omitempty"`
+	Function  *ConvertFunction  `json:"function,omitempty"`
+	Binary    *ConvertBinary    `json:"binary,omitempty"`
+	String    *ConvertString    `json:"string,omitempty"`
+	Asset     *ConvertAsset     `json:"asset,omitempty"`
+	Array     *ConvertArray     `json:"array,omitempty"`
+	FloatMap  *ConvertFloatMap  `json:"float_map,omitempty"`
+	Integer   *ConvertInteger   `json:"integer,omitempty"`
+	Blob      *ConvertBlob      `json:"blob,omitempty"`
 }
 
 type ConvertAlias string
@@ -141,8 +141,7 @@ func (c *ConvertStruct) GetValues(values ...any) map[string]string {
 					break
 
 				case c.BitMap != nil:
-					foo := fmt.Sprintf("%v", value)
-					ret[Single] = c.BitMap.Convert(foo, 0)
+					ret[Single] = c.BitMap.Convert(value, 0)
 					break
 
 				case c.Function != nil:
@@ -153,7 +152,7 @@ func (c *ConvertStruct) GetValues(values ...any) map[string]string {
 					break
 
 				case c.Binary != nil:
-					ret[Single] = c.BitMap.Convert(fmt.Sprintf("%v", value), 0)
+					ret[Single] = c.BitMap.Convert(value, 0)
 					break
 
 				case c.String != nil:
@@ -167,7 +166,7 @@ func (c *ConvertStruct) GetValues(values ...any) map[string]string {
 					break
 
 				case c.FloatMap != nil:
-					ret[Single] = c.FloatMap.Convert(fmt.Sprintf("%v", value))
+					ret[Single] = c.FloatMap.Convert(value)
 					break
 
 				case c.Blob != nil:
@@ -209,8 +208,7 @@ func (c *ConvertStruct) GetValue(value any) string {
 				break
 
 			case c.BitMap != nil:
-				foo := fmt.Sprintf("%v", value)
-				ret = c.BitMap.Convert(foo, 0)
+				ret = c.BitMap.Convert(value, 0)
 				break
 
 			case c.Function != nil:
@@ -221,7 +219,7 @@ func (c *ConvertStruct) GetValue(value any) string {
 				break
 
 			case c.Binary != nil:
-				ret = c.BitMap.Convert(fmt.Sprintf("%v", value), 0)
+				ret = c.BitMap.Convert(value, 0)
 				break
 
 			case c.String != nil:
@@ -235,7 +233,7 @@ func (c *ConvertStruct) GetValue(value any) string {
 				break
 
 			case c.FloatMap != nil:
-				ret = c.FloatMap.Convert(fmt.Sprintf("%v", value))
+				ret = c.FloatMap.Convert(value)
 				break
 
 			case c.Blob != nil:
@@ -248,6 +246,7 @@ func (c *ConvertStruct) GetValue(value any) string {
 
 func (c *ConvertStruct) GetConvertType() string {
 	var ret string
+
 	for range Only.Once {
 		ret = apiReflect.GetJsonTagIfNotNil(*c)
 		if c.Map == nil {
@@ -266,29 +265,32 @@ func (c *ConvertStruct) GetConvertType() string {
 			}
 		}
 	}
+
 	return ret
 }
 
 
-func (c *ConvertBitMap) Convert(value string, size uint32) string {
-// func (bm *ConvertBitMap) ToBitMap(value string, array []string, size uint32) string {
+func (c *ConvertBitMap) Convert(value any, size uint32) string {
+	var ret string
+
 	for range Only.Once {
 		if len(*c) == 0 {
 			break
 		}
 
-		if value == "" {
-			value = (*c)[0]
+		ret = fmt.Sprintf("%v", value)
+		if ret == "" {
+			ret = (*c)[0]
 			break
 		}
 
-		iv, err := strconv.ParseUint(value, 10, 64)
+		iv, err := strconv.ParseUint(ret, 10, 64)
 		if err != nil {
 			break
 		}
 
 		if iv == 0 {
-			value = (*c)[0]
+			ret = (*c)[0]
 			break
 		}
 
@@ -303,14 +305,15 @@ func (c *ConvertBitMap) Convert(value string, size uint32) string {
 			}
 		}
 
-		value = strings.Join(elems, ", ")
+		ret = strings.Join(elems, ", ")
 	}
 
-	return value
+	return ret
 }
 
 func (c *ConvertRange) Convert(value string) string {
-// func (r *ConvertRange) ToRange(value string, inMin float64, inMax float64, outMin float64, outMax float64, precision int) string {
+	// var ret string
+
 	for range Only.Once {
 		var err error
 		var fv float64
@@ -341,7 +344,9 @@ func (c *ConvertRange) Convert(value string) string {
 	return value
 }
 
-func (c *ConvertFloatMap) Convert(value string) string {
+func (c *ConvertFloatMap) Convert(value any) string {
+	var val string
+
 	for range Only.Once {
 		if c == nil {
 			break
@@ -355,24 +360,25 @@ func (c *ConvertFloatMap) Convert(value string) string {
 			break
 		}
 
-		if value == "" {
+		val = fmt.Sprintf("%v", value)
+		if val == "" {
 			// value = array.FloatValues[0]
 			break
 		}
 
-		fv, err := strconv.ParseFloat(value, 64)
+		fv, err := strconv.ParseFloat(val, 64)
 		if err != nil {
 			break
 		}
 
-		value = strconv.FormatFloat(fv, 'f', c.Precision, 32)
-		if v, ok := c.Map[value]; ok {
+		val = strconv.FormatFloat(fv, 'f', c.Precision, 32)
+		if v, ok := c.Map[val]; ok {
 			value = v
 			break
 		}
 	}
 
-	return value
+	return val
 }
 
 func (c *ConvertBlob) Convert(value []byte) map[string]string {

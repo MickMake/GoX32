@@ -6,9 +6,9 @@
 	"max": 6,
 	"increment": 1,
 	"points": {
-	  "/outputs/aux/%.2d/pos": { "endpoint": "/outputs/aux/%.2d/pos", "convert": { "alias": "rec-pos-map" } },
-	  "/outputs/aux/%.2d/src": { "endpoint": "/outputs/aux/%.2d/src", "convert": { "alias": "output-map" } },
-	  "/outputs/aux/%.2d/invert": { "endpoint": "/outputs/aux/%.2d/invert", "convert": { "binary": "normal" } }
-  	}
+	  "/outputs/aux/%.2d/pos": { "endpoint": "/outputs/aux/%.2d/pos", "convert": { "alias": "rec-pos-map" }, "info": "" },
+	  "/outputs/aux/%.2d/src": { "endpoint": "/outputs/aux/%.2d/src", "convert": { "alias": "output-map" }, "info": "" },
+	  "/outputs/aux/%.2d/invert": { "endpoint": "/outputs/aux/%.2d/invert", "convert": { "binary": "normal" }, "info": "" }
+	}
   }
 }

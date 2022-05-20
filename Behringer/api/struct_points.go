@@ -81,6 +81,7 @@ func (pm PointsMap) String() string {
 			"Name",
 			"Unit",
 			"Type",
+			"Info",
 		})
 		table.SetBorder(true)
 		for _, endpoint := range pm.SortEndPoints() {
@@ -92,6 +93,7 @@ func (pm PointsMap) String() string {
 				pm[endpoint].Name,
 				pm[endpoint].Unit,
 				convert.GetConvertType(),
+				pm[endpoint].Info,
 			})
 		}
 		table.Render()

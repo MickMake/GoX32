@@ -20,6 +20,30 @@ type UnitValues []UnitValue
 type UnitValueMap map[string]UnitValue
 
 
+func (u UnitValue) String() string {
+	unit := u.Unit
+	if unit == "-" {
+		unit = ""
+	}
+	return fmt.Sprintf("%s%s", u.Value, unit)
+}
+
+func (u UnitValueMap) String() string {
+	var ret string
+	for range Only.Once {
+		if len(u) == 1 {
+			for _, n := range u {
+				ret += fmt.Sprintf("%s", n)
+			}
+			break
+		}
+		for _, n := range u.Sort() {
+			ret += fmt.Sprintf("%s:%s\t", n, u[n])
+		}
+	}
+	return ret
+}
+
 func (u *UnitValueMap) Sort() []string {
 	var ret []string
 	for n := range *u {
@@ -30,36 +54,55 @@ func (u *UnitValueMap) Sort() []string {
 }
 
 
-func (ref *UnitValue) UnitValueFix() UnitValue {
-	if ref.Unit == "W" {
-		fvs, err := DivideByThousand(ref.Value)
-		// fv, err := strconv.ParseFloat(p.Value, 64)
-		// fv = fv / 1000
-		if err == nil {
-			// p.Value = fmt.Sprintf("%.3f", fv)
-			ref.Value = fvs
-			ref.Unit = "kW"
+func (u *UnitValueMap) GetFirst() *UnitValue {
+	var ret UnitValue
+	for range Only.Once {
+		if len(*u) == 1 {
+			for _, ret = range *u {
+				break
+			}
+			break
+		}
+		for _, n := range u.Sort() {
+			if n == "0" {
+				ret = (*u)[n]
+				break
+			}
 		}
 	}
-
-	if ref.Unit == "Wh" {
-		fvs, err := DivideByThousand(ref.Value)
-		// fv, err := strconv.ParseFloat(p.Value, 64)
-		// fv = fv / 1000
-		if err == nil {
-			// p.Value = fmt.Sprintf("%.3f", fv)
-			ref.Value = fvs
-			ref.Unit = "kWh"
-		}
-	}
-
-	ref.ValueFloat, _ = strconv.ParseFloat(ref.Value, 64)
-
-	return *ref
+	return &ret
 }
 
-func (ref *UnitValue) UnitValueToPoint(psId string, point string, name string) *Point {
-	uv := ref.UnitValueFix()
+func (u *UnitValue) UnitValueFix() UnitValue {
+	if u.Unit == "W" {
+		fvs, err := DivideByThousand(u.Value)
+		// fv, err := strconv.ParseFloat(p.Value, 64)
+		// fv = fv / 1000
+		if err == nil {
+			// p.Value = fmt.Sprintf("%.3f", fv)
+			u.Value = fvs
+			u.Unit = "kW"
+		}
+	}
+
+	if u.Unit == "Wh" {
+		fvs, err := DivideByThousand(u.Value)
+		// fv, err := strconv.ParseFloat(p.Value, 64)
+		// fv = fv / 1000
+		if err == nil {
+			// p.Value = fmt.Sprintf("%.3f", fv)
+			u.Value = fvs
+			u.Unit = "kWh"
+		}
+	}
+
+	u.ValueFloat, _ = strconv.ParseFloat(u.Value, 64)
+
+	return *u
+}
+
+func (u *UnitValue) UnitValueToPoint(psId string, point string, name string) *Point {
+	uv := u.UnitValueFix()
 
 	// u := ref.Unit
 	//

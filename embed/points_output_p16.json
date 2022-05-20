@@ -45,18 +45,18 @@
 	"max": 16,
 	"increment": 1,
 	"points": {
-	  "/outputs/p16/%.2d/pos": { "endpoint": "/outputs/p16/%.2d/pos", "convert": { "alias": "rec-pos-map" } },
-	  "/outputs/p16/%.2d/src": { "endpoint": "/outputs/p16/%.2d/src", "convert": { "alias": "output-map" } },
-	  "/outputs/p16/%.2d/invert": { "endpoint": "/outputs/p16/%.2d/invert", "convert": { "binary": "normal" } },
+	  "/outputs/p16/%.2d/pos": { "endpoint": "/outputs/p16/%.2d/pos", "convert": { "alias": "rec-pos-map" }, "info": "" },
+	  "/outputs/p16/%.2d/src": { "endpoint": "/outputs/p16/%.2d/src", "convert": { "alias": "output-map" }, "info": "" },
+	  "/outputs/p16/%.2d/invert": { "endpoint": "/outputs/p16/%.2d/invert", "convert": { "binary": "normal" }, "info": "" },
 
-	  "/outputs/p16/%.2d/iQ/group": { "endpoint": "/outputs/p16/%.2d/iQ/group", "convert": { "alias": "iq-group" } },
-	  "/outputs/p16/%.2d/iQ/speaker": { "endpoint": "/outputs/p16/%.2d/iQ/speaker", "convert": { "alias": "iq-speaker" } },
-	  "/outputs/p16/%.2d/iQ/eq": { "endpoint": "/outputs/p16/%.2d/iQ/eq", "convert": { "alias": "iq-eq" } },
-	  "/outputs/p16/%.2d/iQ/model": { "endpoint": "/outputs/p16/%.2d/iQ/model", "convert": { "alias": "iq-model" } },
+	  "/outputs/p16/%.2d/iQ/group": { "endpoint": "/outputs/p16/%.2d/iQ/group", "convert": { "alias": "iq-group" }, "info": "" },
+	  "/outputs/p16/%.2d/iQ/speaker": { "endpoint": "/outputs/p16/%.2d/iQ/speaker", "convert": { "alias": "iq-speaker" }, "info": "" },
+	  "/outputs/p16/%.2d/iQ/eq": { "endpoint": "/outputs/p16/%.2d/iQ/eq", "convert": { "alias": "iq-eq" }, "info": "" },
+	  "/outputs/p16/%.2d/iQ/model": { "endpoint": "/outputs/p16/%.2d/iQ/model", "convert": { "alias": "iq-model" }, "info": "" },
 
-	  "/-prefs/iQ/%.2d/iQeqset": { "endpoint": "/-prefs/iQ/%.2d/iQeqset", "notes": "TBD" },
-	  "/-prefs/iQ/%.2d/iQmodel": { "endpoint": "/-prefs/iQ/%.2d/iQmodel", "notes": "TBD" },
-	  "/-prefs/iQ/%.2d/iQsound": { "endpoint": "/-prefs/iQ/%.2d/iQsound", "notes": "TBD" }
+	  "/-prefs/iQ/%.2d/iQeqset": { "endpoint": "/-prefs/iQ/%.2d/iQeqset", "info": "TBD" },
+	  "/-prefs/iQ/%.2d/iQmodel": { "endpoint": "/-prefs/iQ/%.2d/iQmodel", "info": "TBD" },
+	  "/-prefs/iQ/%.2d/iQsound": { "endpoint": "/-prefs/iQ/%.2d/iQsound", "info": "TBD" }
 	}
   }
 }

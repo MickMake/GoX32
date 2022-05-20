@@ -1161,7 +1161,7 @@
 		"out_min": -12,
 		"out_max": 12,
 		"precision": 2,
-		"note": "@TBD - this is almost wrong"
+		"info": "@TBD - this is almost wrong"
 	  }
 	},
 	"preamp-trim": {

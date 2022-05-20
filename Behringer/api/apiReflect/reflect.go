@@ -812,6 +812,9 @@ func GetJsonTagIfNotNil(ref interface{}) string {
 			}
 
 			ret = typeOf.Field(id).Tag.Get("json")
+			ret = strings.ReplaceAll(ret, "omitempty", "")
+			ret = strings.TrimPrefix(ret, ",")
+			ret = strings.TrimSuffix(ret, ",")
 			break
 		}
 	}

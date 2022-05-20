@@ -18,7 +18,7 @@ type Point struct {
 	Unit 		string	`json:"unit"`
 	Type        string	`json:"type"`
 	Valid       bool	`json:"valid"`
-	Info        bool	`json:"info"`
+	Info        string	`json:"info"`
 
 	Convert     ConvertStruct `json:"convert"`
 }
@@ -68,8 +68,7 @@ func (p *Point) WhenReset() string {
 }
 
 func (p Point) String() string {
-	j, _ := json.Marshal(p)
-	return string(j)
+	return fmt.Sprintf("endpoint:%s\tid:%s\tname:%s\ttype:%s", p.EndPoint, p.FullId, p.Name, p.Convert.GetConvertType())
 }
 
 func (p Point) Json() string {

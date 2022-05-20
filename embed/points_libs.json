@@ -130,23 +130,23 @@
 	"max": 100,
 	"increment": 1,
 	"points": {
-	  "/-libs/ch/%.3d/pos": { "endpoint": "/-libs/ch/%.3d/pos", "convert": { "integer": { "min":1, "max":100 } } },
-	  "/-libs/ch/%.3d/name": { "endpoint": "/-libs/ch/%.3d/name", "convert": { "string": { "size": 0 } } },
-	  "/-libs/ch/%.3d/type": { "endpoint": "/-libs/ch/%.3d/type", "convert": { "integer": { } } },
-	  "/-libs/ch/%.3d/flags": { "endpoint": "/-libs/ch/%.3d/flags", "convert": { "alias": "libs-ch-flags" } },
-	  "/-libs/ch/%.3d/hasdata": { "endpoint": "/-libs/ch/%.3d/hasdata", "convert": { "binary": "normal" } },
+	  "/-libs/ch/%.3d/pos": { "endpoint": "/-libs/ch/%.3d/pos", "convert": { "integer": { "min":1, "max":100 } }, "info": "" },
+	  "/-libs/ch/%.3d/name": { "endpoint": "/-libs/ch/%.3d/name", "convert": { "string": { "size": 0 } }, "info": "" },
+	  "/-libs/ch/%.3d/type": { "endpoint": "/-libs/ch/%.3d/type", "convert": { "integer": { } }, "info": "" },
+	  "/-libs/ch/%.3d/flags": { "endpoint": "/-libs/ch/%.3d/flags", "convert": { "alias": "libs-ch-flags" }, "info": "" },
+	  "/-libs/ch/%.3d/hasdata": { "endpoint": "/-libs/ch/%.3d/hasdata", "convert": { "binary": "normal" }, "info": "" },
 
-	  "/-libs/fx/%.3d/pos": { "endpoint": "/-libs/fx/%.3d/pos", "convert": { "integer": { "min":1, "max":100 } } },
-	  "/-libs/fx/%.3d/name": { "endpoint": "/-libs/fx/%.3d/name", "convert": { "string": { "size": 0 } } },
-	  "/-libs/fx/%.3d/type": { "endpoint": "/-libs/fx/%.3d/type", "convert": { "alias": "libs-fx-flags1-4" } },
-	  "/-libs/fx/%.3d/flags": { "endpoint": "/-libs/fx/%.3d/flags", "convert": { "integer": { } } },
-	  "/-libs/fx/%.3d/hasdata": { "endpoint": "/-libs/fx/%.3d/hasdata", "convert": { "binary": "normal" } },
+	  "/-libs/fx/%.3d/pos": { "endpoint": "/-libs/fx/%.3d/pos", "convert": { "integer": { "min":1, "max":100 } }, "info": "" },
+	  "/-libs/fx/%.3d/name": { "endpoint": "/-libs/fx/%.3d/name", "convert": { "string": { "size": 0 } }, "info": "" },
+	  "/-libs/fx/%.3d/type": { "endpoint": "/-libs/fx/%.3d/type", "convert": { "alias": "libs-fx-flags1-4" }, "info": "" },
+	  "/-libs/fx/%.3d/flags": { "endpoint": "/-libs/fx/%.3d/flags", "convert": { "integer": { } }, "info": "" },
+	  "/-libs/fx/%.3d/hasdata": { "endpoint": "/-libs/fx/%.3d/hasdata", "convert": { "binary": "normal" }, "info": "" },
 
-	  "/-libs/r/%.3d/pos": { "endpoint": "/-libs/r/%.3d/pos", "convert": { "integer": { "min":1, "max":100 } } },
-	  "/-libs/r/%.3d/name": { "endpoint": "/-libs/r/%.3d/name", "convert": { "string": { "size": 0 } } },
-	  "/-libs/r/%.3d/type": { "endpoint": "/-libs/r/%.3d/type", "convert": { "integer": { } } },
-	  "/-libs/r/%.3d/flags": { "endpoint": "/-libs/r/%.3d/flags", "convert": { "integer": { } } },
-	  "/-libs/r/%.3d/hasdata": { "endpoint": "/-libs/r/%.3d/hasdata", "convert": { "binary": "normal" } }
+	  "/-libs/r/%.3d/pos": { "endpoint": "/-libs/r/%.3d/pos", "convert": { "integer": { "min":1, "max":100 } }, "info": "" },
+	  "/-libs/r/%.3d/name": { "endpoint": "/-libs/r/%.3d/name", "convert": { "string": { "size": 0 } }, "info": "" },
+	  "/-libs/r/%.3d/type": { "endpoint": "/-libs/r/%.3d/type", "convert": { "integer": { } }, "info": "" },
+	  "/-libs/r/%.3d/flags": { "endpoint": "/-libs/r/%.3d/flags", "convert": { "integer": { } }, "info": "" },
+	  "/-libs/r/%.3d/hasdata": { "endpoint": "/-libs/r/%.3d/hasdata", "convert": { "binary": "normal" }, "info": "" }
 	}
   }
 }

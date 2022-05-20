@@ -165,21 +165,21 @@
   },
 
   "points": {
-	"/meters/0": { "endpoint": "/meters/0", "unit": "dB", "convert": { "alias":  "meters0-blob" } },
-	"/meters/1": { "endpoint": "/meters/1", "unit": "dB", "convert": { "alias":  "meters1-blob" } },
-	"/meters/2": { "endpoint": "/meters/2", "unit": "dB", "convert": { "alias":  "meters2-blob" } },
-	"/meters/3": { "endpoint": "/meters/3", "unit": "dB", "convert": { "alias":  "meters3-blob" } },
-	"/meters/4": { "endpoint": "/meters/4", "unit": "dB", "convert": { "alias":  "meters4-blob" } },
-	"/meters/5": { "endpoint": "/meters/5", "unit": "dB", "convert": { "alias":  "meters5-blob" } },
-	"/meters/6": { "endpoint": "/meters/6", "unit": "dB", "convert": { "alias":  "meters6-blob" } },
-	"/meters/7": { "endpoint": "/meters/7", "unit": "dB", "convert": { "alias":  "meters7-blob" } },
-	"/meters/8": { "endpoint": "/meters/8", "unit": "dB", "convert": { "alias":  "meters8-blob" } },
-	"/meters/9": { "endpoint": "/meters/9", "unit": "dB", "convert": { "alias":  "meters9-blob" } },
-	"/meters/10": { "endpoint": "/meters/10", "unit": "dB", "convert": { "alias":  "meters10-blob" } },
-	"/meters/11": { "endpoint": "/meters/11", "unit": "dB", "convert": { "alias":  "meters11-blob" } },
-	"/meters/12": { "endpoint": "/meters/12", "unit": "dB", "convert": { "alias":  "meters12-blob" } },
-	"/meters/13": { "endpoint": "/meters/13", "unit": "dB", "convert": { "alias":  "meters13-blob" } },
-	"/meters/14": { "endpoint": "/meters/14", "unit": "dB", "convert": { "alias":  "meters14-blob" } },
-	"/meters/15": { "endpoint": "/meters/15", "unit": "dB", "convert": { "alias":  "meters15-blob" } }
+	"/meters/0": { "endpoint": "/meters/0", "unit": "dB", "convert": { "alias":  "meters0-blob" }, "info": "" },
+	"/meters/1": { "endpoint": "/meters/1", "unit": "dB", "convert": { "alias":  "meters1-blob" }, "info": "" },
+	"/meters/2": { "endpoint": "/meters/2", "unit": "dB", "convert": { "alias":  "meters2-blob" }, "info": "" },
+	"/meters/3": { "endpoint": "/meters/3", "unit": "dB", "convert": { "alias":  "meters3-blob" }, "info": "" },
+	"/meters/4": { "endpoint": "/meters/4", "unit": "dB", "convert": { "alias":  "meters4-blob" }, "info": "" },
+	"/meters/5": { "endpoint": "/meters/5", "unit": "dB", "convert": { "alias":  "meters5-blob" }, "info": "" },
+	"/meters/6": { "endpoint": "/meters/6", "unit": "dB", "convert": { "alias":  "meters6-blob" }, "info": "" },
+	"/meters/7": { "endpoint": "/meters/7", "unit": "dB", "convert": { "alias":  "meters7-blob" }, "info": "" },
+	"/meters/8": { "endpoint": "/meters/8", "unit": "dB", "convert": { "alias":  "meters8-blob" }, "info": "" },
+	"/meters/9": { "endpoint": "/meters/9", "unit": "dB", "convert": { "alias":  "meters9-blob" }, "info": "" },
+	"/meters/10": { "endpoint": "/meters/10", "unit": "dB", "convert": { "alias":  "meters10-blob" }, "info": "" },
+	"/meters/11": { "endpoint": "/meters/11", "unit": "dB", "convert": { "alias":  "meters11-blob" }, "info": "" },
+	"/meters/12": { "endpoint": "/meters/12", "unit": "dB", "convert": { "alias":  "meters12-blob" }, "info": "" },
+	"/meters/13": { "endpoint": "/meters/13", "unit": "dB", "convert": { "alias":  "meters13-blob" }, "info": "" },
+	"/meters/14": { "endpoint": "/meters/14", "unit": "dB", "convert": { "alias":  "meters14-blob" }, "info": "" },
+	"/meters/15": { "endpoint": "/meters/15", "unit": "dB", "convert": { "alias":  "meters15-blob" }, "info": "" }
   }
 }

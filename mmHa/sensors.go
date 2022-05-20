@@ -179,9 +179,9 @@ func (m *Mqtt) SensorPublishValues(configs []EntityConfig) error {
 			cs[config.StateTopic][config.ValueName] = config.Value
 		}
 
-		for n, c := range cs {
+		for _, c := range cs {
 			j, _ := json.Marshal(c)
-			fmt.Printf("%s (%s) -> %s\n", topic, n, string(j))
+			// fmt.Printf("%s (%s) -> %s\n", topic, n, string(j))
 
 			// log.Fatalln("NEED TO FIX THIS")
 			// m.err = m.PublishValue(n, topic, string(j))

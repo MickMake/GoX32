@@ -7,11 +7,11 @@
 	"increment": 1,
 
 	"points": {
-	  "/dca/%d/on": { "endpoint": "/dca/%d/on", "convert": { "binary": "normal" } },
-	  "/dca/%d/fader": { "endpoint": "/dca/%d/fader", "unit": "dB", "convert": { "function": "log" } },
-	  "/dca/%d/config/color": { "endpoint": "/dca/%d/config/color", "convert": { "alias": "colour-map" } },
-	  "/dca/%d/config/icon": { "endpoint": "/dca/%d/config/icon", "unit": "icon-select" },
-	  "/dca/%d/config/name": { "endpoint": "/dca/%d/config/name", "convert": { "string": { "size": 0 } } }
+	  "/dca/%d/on": { "endpoint": "/dca/%d/on", "convert": { "binary": "normal" }, "info": "" },
+	  "/dca/%d/fader": { "endpoint": "/dca/%d/fader", "unit": "dB", "convert": { "function": "log" }, "info": "" },
+	  "/dca/%d/config/color": { "endpoint": "/dca/%d/config/color", "convert": { "alias": "colour-map" }, "info": "" },
+	  "/dca/%d/config/icon": { "endpoint": "/dca/%d/config/icon", "unit": "icon-select", "info": "" },
+	  "/dca/%d/config/name": { "endpoint": "/dca/%d/config/name", "convert": { "string": { "size": 0 } }, "info": "" }
 	}
   }
 }

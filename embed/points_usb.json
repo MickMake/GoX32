@@ -36,52 +36,51 @@
   },
   "points_array_map": {
 	"min": 1,
-	"max": 200, "notes": "Actually is 999, but that's ridiculous.",
+	"max": 200, "info": "Actually is 999, but that's ridiculous.",
 	"increment": 1,
 	"points": {
-	  "/-usb/dir/%.3d/name": { "endpoint": "/-usb/dir/%.3d/name", "convert": { "string": { "size":0 } } },
-	  "/-usb/dir/%.3d/type": { "endpoint": "/-usb/dir/%.3d/type", "convert": { "string": { "size":0 } } }
+	  "/-usb/dir/%.3d/name": { "endpoint": "/-usb/dir/%.3d/name", "convert": { "string": { "size":0 } }, "info": "" },
+	  "/-usb/dir/%.3d/type": { "endpoint": "/-usb/dir/%.3d/type", "convert": { "string": { "size":0 } }, "info": "" }
 	}
   },
   "points": {
-	"/-prefs/card/USBmode": { "endpoint": "/-prefs/card/USBmode", "convert": { "alias": "usb-card" } },
+	"/-prefs/card/USBmode": { "endpoint": "/-prefs/card/USBmode", "convert": { "alias": "usb-card" }, "info": "" },
 
-	"/-stat/usbmounted": { "endpoint": "/-stat/usbmounted", "convert": { "binary": "normal" } },
+	"/-stat/usbmounted": { "endpoint": "/-stat/usbmounted", "convert": { "binary": "normal" }, "info": "" },
 
-	"/-stat/tape/etime": { "endpoint": "/-stat/tape/etime", "unit": "S" },
-	"/-stat/tape/file": { "endpoint": "/-stat/tape/file", "convert": { "string": { "size":0 } } },
-	"/-stat/tape/rtime": { "endpoint": "/-stat/tape/rtime", "unit": "S" },
-	"/-stat/tape/state": { "endpoint": "/-stat/tape/state", "convert": { "alias": "tape-state" } },
+	"/-stat/tape/etime": { "endpoint": "/-stat/tape/etime", "unit": "S", "info": "" },
+	"/-stat/tape/file": { "endpoint": "/-stat/tape/file", "convert": { "string": { "size":0 } }, "info": "" },
+	"/-stat/tape/rtime": { "endpoint": "/-stat/tape/rtime", "unit": "S", "info": "" },
+	"/-stat/tape/state": { "endpoint": "/-stat/tape/state", "convert": { "alias": "tape-state" }, "info": "" },
 
-	"/-stat/urec/etime": { "endpoint": "/-stat/urec/etime", "notes": "TBD" },
-	"/-stat/urec/state": { "endpoint": "/-stat/urec/state", "notes": "TBD" },
+	"/config/tape/autoplay": { "endpoint": "/config/tape/autoplay", "convert": { "alias": "tape-autoplay" }, "info": "" },
+	"/config/tape/gainL": { "endpoint": "/config/tape/gainL", "unit": "dB", "convert": { "alias": "tape-gain" }, "info": "" },
+	"/config/tape/gainR": { "endpoint": "/config/tape/gainR", "unit": "dB", "convert": { "alias": "tape-gain" }, "info": "" },
 
-	"/config/tape/autoplay": { "endpoint": "/config/tape/autoplay", "convert": { "alias": "tape-autoplay" } },
-	"/config/tape/gainL": { "endpoint": "/config/tape/gainL", "unit": "dB", "convert": { "alias": "tape-gain" } },
-	"/config/tape/gainR": { "endpoint": "/config/tape/gainR", "unit": "dB", "convert": { "alias": "tape-gain" } },
+	"/-action/playtrack": { "endpoint": "/-action/playtrack", "convert": { "map": { "-1":"previous track", "0":"stopped", "1":"next track" } }, "info": "" },
 
-	"/-action/playtrack": { "endpoint": "/-action/playtrack", "convert": { "map": { "-1":"previous track", "0":"stopped", "1":"next track" } } },
+	"/-usb/path": { "endpoint": "/-usb/path", "convert": { "string": { "size":0 } }, "info": "" },
+	"/-usb/title": { "endpoint": "/-usb/title", "convert": { "string": { "size":0 } }, "info": "" },
+	"/-usb/dir/dirpos": { "endpoint": "/-usb/dir/dirpos", "convert": { "integer": { "min":0, "max":999 } }, "info": "" },
+	"/-usb/dir/maxpos": { "endpoint": "/-usb/dir/maxpos", "convert": { "integer": { "min":0, "max":999 } }, "info": "" },
 
-	"/-urec/markermax": { "endpoint": "/-urec/markermax", "notes": "TBD" },
-	"/-urec/markerpos": { "endpoint": "/-urec/markerpos", "notes": "TBD" },
-	"/-urec/sd1info": { "endpoint": "/-urec/sd1info", "notes": "TBD" },
-	"/-urec/sd1state": { "endpoint": "/-urec/sd1state", "notes": "TBD" },
-	"/-urec/sd2info": { "endpoint": "/-urec/sd2info", "notes": "TBD" },
-	"/-urec/sd2state": { "endpoint": "/-urec/sd2state", "notes": "TBD" },
-	"/-urec/sessionlen": { "endpoint": "/-urec/sessionlen", "notes": "TBD" },
-	"/-urec/sessionmax": { "endpoint": "/-urec/sessionmax", "notes": "TBD" },
-	"/-urec/sessionoffs": { "endpoint": "/-urec/sessionoffs", "notes": "TBD" },
-	"/-urec/sessionpos": { "endpoint": "/-urec/sessionpos", "notes": "TBD" },
-	"/-urec/sessionspan": { "endpoint": "/-urec/sessionspan", "notes": "TBD" },
-	"/-urec/srate": { "endpoint": "/-urec/srate", "notes": "TBD" },
-	"/-urec/tracks": { "endpoint": "/-urec/tracks", "notes": "TBD" },
 
-	"/-urec/marker/001/time": { "endpoint": "/-urec/marker/001/time", "notes": "TBD" },
-	"/-urec/session/001/name": { "endpoint": "/-urec/session/001/name", "notes": "TBD" },
-
-	"/-usb/path": { "endpoint": "/-usb/path", "convert": { "string": { "size":0 } } },
-	"/-usb/title": { "endpoint": "/-usb/title", "convert": { "string": { "size":0 } } },
-	"/-usb/dir/dirpos": { "endpoint": "/-usb/dir/dirpos", "convert": { "integer": { "min":0, "max":999 } } },
-	"/-usb/dir/maxpos": { "endpoint": "/-usb/dir/maxpos", "convert": { "integer": { "min":0, "max":999 } } }
+	"/-stat/urec/etime": { "endpoint": "/-stat/urec/etime", "info": "TBD" },
+	"/-stat/urec/state": { "endpoint": "/-stat/urec/state", "info": "TBD" },
+	"/-urec/markermax": { "endpoint": "/-urec/markermax", "info": "TBD" },
+	"/-urec/markerpos": { "endpoint": "/-urec/markerpos", "info": "TBD" },
+	"/-urec/sd1info": { "endpoint": "/-urec/sd1info", "info": "TBD" },
+	"/-urec/sd1state": { "endpoint": "/-urec/sd1state", "info": "TBD" },
+	"/-urec/sd2info": { "endpoint": "/-urec/sd2info", "info": "TBD" },
+	"/-urec/sd2state": { "endpoint": "/-urec/sd2state", "info": "TBD" },
+	"/-urec/sessionlen": { "endpoint": "/-urec/sessionlen", "info": "TBD" },
+	"/-urec/sessionmax": { "endpoint": "/-urec/sessionmax", "info": "TBD" },
+	"/-urec/sessionoffs": { "endpoint": "/-urec/sessionoffs", "info": "TBD" },
+	"/-urec/sessionpos": { "endpoint": "/-urec/sessionpos", "info": "TBD" },
+	"/-urec/sessionspan": { "endpoint": "/-urec/sessionspan", "info": "TBD" },
+	"/-urec/srate": { "endpoint": "/-urec/srate", "info": "TBD" },
+	"/-urec/tracks": { "endpoint": "/-urec/tracks", "info": "TBD" },
+	"/-urec/marker/001/time": { "endpoint": "/-urec/marker/001/time", "info": "TBD" },
+	"/-urec/session/001/name": { "endpoint": "/-urec/session/001/name", "info": "TBD" }
   }
 }

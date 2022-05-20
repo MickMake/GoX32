@@ -6,8 +6,8 @@
 	"max": 2,
 	"increment": 1,
 	"points": {
-	  "/outputs/aes/%.2d/pos": { "endpoint": "/outputs/aes/%.2d/pos", "convert": { "alias": "rec-pos-map" } },
-	  "/outputs/aes/%.2d/src": { "endpoint": "/outputs/aes/%.2d/src", "convert": { "alias": "output-map" } }
+	  "/outputs/aes/%.2d/pos": { "endpoint": "/outputs/aes/%.2d/pos", "convert": { "alias": "rec-pos-map" }, "info": "" },
+	  "/outputs/aes/%.2d/src": { "endpoint": "/outputs/aes/%.2d/src", "convert": { "alias": "output-map" }, "info": "" }
 	}
   }
 }

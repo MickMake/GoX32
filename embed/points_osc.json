@@ -45,13 +45,13 @@
 	}
   },
   "points": {
-	"/-stat/osc/on": { "endpoint": "/-stat/osc/on", "convert": { "binary": "normal" } },
+	"/-stat/osc/on": { "endpoint": "/-stat/osc/on", "convert": { "binary": "normal" }, "info": "" },
 
-	"/config/osc/dest": { "endpoint": "/config/osc/dest", "convert": { "alias": "osc-dest-map" } },
-	"/config/osc/f1": { "endpoint": "/config/osc/f1", "unit": "Hz", "convert": { "alias": "log-scale-101-freq" } },
-	"/config/osc/f2": { "endpoint": "/config/osc/f2", "unit": "Hz", "convert": { "alias": "log-scale-101-freq" } },
-	"/config/osc/fsel": { "endpoint": "/config/osc/fsel", "convert": { "alias": "osc-sel-map" } },
-	"/config/osc/level": { "endpoint": "/config/osc/level", "unit": "dB", "convert": { "function": "log" } },
-	"/config/osc/type": { "endpoint": "/config/osc/type", "convert": { "alias": "osc-type-map" } }
+	"/config/osc/dest": { "endpoint": "/config/osc/dest", "convert": { "alias": "osc-dest-map" }, "info": "" },
+	"/config/osc/f1": { "endpoint": "/config/osc/f1", "unit": "Hz", "convert": { "alias": "log-scale-121" }, "info": "" },
+	"/config/osc/f2": { "endpoint": "/config/osc/f2", "unit": "Hz", "convert": { "alias": "log-scale-121" }, "info": "" },
+	"/config/osc/fsel": { "endpoint": "/config/osc/fsel", "convert": { "alias": "osc-sel-map" }, "info": "" },
+	"/config/osc/level": { "endpoint": "/config/osc/level", "unit": "dB", "convert": { "function": "log" }, "info": "" },
+	"/config/osc/type": { "endpoint": "/config/osc/type", "convert": { "alias": "osc-type-map" }, "info": "" }
   }
 }

@@ -356,11 +356,9 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 
 		// fmt.Println(ca.X32.Points.String())
 
-		ca.Error = ca.X32.StartMeters("/meters/11")
-
-		time.Sleep(time.Second * 60)
-
-		ca.Error = ca.X32.StopMeters("/meters/11")
+		// ca.Error = ca.X32.StartMeters("/meters/11")
+		// time.Sleep(time.Second * 60)
+		// ca.Error = ca.X32.StopMeters("/meters/11")
 
 		time.Sleep(time.Hour * 24)
 
@@ -590,34 +588,28 @@ func MqttMessageHandler(_ mqtt.Client, message mqtt.Message) {
 
 func X32MessageHandler(msg *Behringer.Message) {
 	for range Only.Once {
-		LogPrintDate("X32MessageHandler() - %v\t", msg.Address)
+		// LogPrintDate("X32MessageHandler() - %v\t", msg.Address)
 
-		p2, uv2, e2 := Cmd.X32.Process(msg.Address, msg.Arguments...)
+		point, unitValue, e2 := Cmd.X32.Process(msg.Address, msg.Arguments...)
 		if e2 != nil {
 			break
 		}
-		fmt.Printf("uv2: %v\n", uv2)
-		fmt.Printf("p2: %v\n", p2)
-		if strings.HasPrefix(msg.Address, "/meters") {
-			// foo := make(map[string]api.UnitValue)
-			// _ = json.Unmarshal([]byte(value), &foo)
-			// fmt.Printf("Level: %v\n", uv2["Osc Tone level"])
-		} else {
-			fmt.Printf("- Value: %v %s\t (%v)\n", uv2, p2.Unit, msg.Arguments[0])
-		}
 
-		if len(uv2) == 1 {
+		// Single value.
+		if len(unitValue) == 1 {
+			LogPrintDate("# Single Point:\n\t%s\n\tUnitValue: %s (%v)\n", point, unitValue, msg.Arguments[0])
+
 			ec := mmHa.EntityConfig {
-				Name:        p2.Name,
+				Name:        point.Name,
 				SubName:     "",
-				ParentId:    p2.ParentId,
-				ParentName:  p2.ParentId,
-				UniqueId:    api.CleanString(p2.Id),
-				Units:       p2.Unit,	// msg.GetType(),
+				ParentId:    point.ParentId,
+				ParentName:  point.ParentId,
+				UniqueId:    api.CleanString(point.Id),
+				Units:       point.Unit, // msg.GetType(),
 				ValueName:   "",
 				DeviceClass: "",
 				StateClass:  "measurement",
-				Value:       uv2[api.Single].Value,
+				Value:       unitValue.GetFirst().Value,
 
 				// Icon:                   "",
 				// ValueTemplate:          "",
@@ -641,27 +633,28 @@ func X32MessageHandler(msg *Behringer.Message) {
 			break
 		}
 
+
+		// Multiple values.
+		LogPrintDate("# Multiple Point:\n\t%s\n\tUnitValue: %s\n", point, unitValue)
+
 		var entities []mmHa.EntityConfig
-		// var values []string
-		for i, u := range uv2 {
-			// value := fmt.Sprintf("%v", msg.Arguments[i])
-			// values = append(values, u.Value)
+		for i, u := range unitValue {
 			id := api.JoinStringsForId(i)
 
 			ec := mmHa.EntityConfig {
-				Name:        fmt.Sprintf("%s %s", p2.Name, i),
+				Name:        fmt.Sprintf("%s %s", point.Name, i),
 				SubName:     "",
-				ParentId:    p2.ParentId,
-				ParentName:  p2.ParentId,
-				UniqueId:    api.CleanString(fmt.Sprintf("%s_%s", p2.Id, id)),
+				ParentId:    point.ParentId,
+				ParentName:  point.ParentId,
+				UniqueId:    api.CleanString(fmt.Sprintf("%s_%s", point.Id, id)),
 				Units:       u.Unit,
 				ValueName:   id,
 				DeviceClass: "",
 				StateClass:  "measurement",
 				Value:       u.Value,
 
-				StateTopic:  p2.Name,
-				ValueTemplate:          fmt.Sprintf("{{ value_json.%s }}", id),
+				StateTopic:    point.Name,
+				ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", id),
 
 				// Icon:                   "",
 				// LastReset:              "",
@@ -669,7 +662,6 @@ func X32MessageHandler(msg *Behringer.Message) {
 			}
 			entities = append(entities, ec)
 		}
-		// fmt.Printf("- Values: %s %s\n", strings.Join(values, ", "), p2.Unit)
 
 		if !msg.SeenBefore {
 			Cmd.Error = Cmd.Mqtt.PublishConfigs(entities)
@@ -684,116 +676,5 @@ func X32MessageHandler(msg *Behringer.Message) {
 			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
 			break
 		}
-
-
-		// p := Cmd.X32.Points.Resolve(msg.Address)
-		// if p == nil {
-		// 	fmt.Printf("- Missing Point: %v data: %v\n", p, msg.Arguments)
-		// 	break
-		// }
-		//
-		// p.CorrectUnit(msg.GetType())	// @TODO - Not really required since we're now referencing all endpoints.
-		//
-		// if len(msg.Arguments) == 1 {
-		// 	value := p.Convert.GetValues(msg.Arguments[0])
-		// 	if strings.HasPrefix(msg.Address, "/meters") {
-		// 		foo := make(map[string]string)
-		// 		_ = json.Unmarshal([]byte(value), &foo)
-		// 		fmt.Printf("Level: %s\n", foo["Osc Tone level"])
-		// 	} else {
-		// 		fmt.Printf("- Value: %s %s\t (%v)\n", value, p.Unit, msg.Arguments[0])
-		// 	}
-		//
-		// 	ec := mmHa.EntityConfig {
-		// 		Name:        p.Name,
-		// 		SubName:     "",
-		// 		ParentId:    p.ParentId,
-		// 		ParentName:  p.ParentId,
-		// 		UniqueId:    api.CleanString(p.Id),
-		// 		Units:       p.Unit,	// msg.GetType(),
-		// 		ValueName:   "",
-		// 		DeviceClass: "",
-		// 		StateClass:  "measurement",
-		// 		Value:       value,
-		//
-		// 		// Icon:                   "",
-		// 		// ValueTemplate:          "",
-		// 		// LastReset:              "",
-		// 		// LastResetValueTemplate: "",
-		// 	}
-		//
-		// 	if !msg.SeenBefore {
-		// 		Cmd.Error = Cmd.Mqtt.PublishConfig(ec)
-		// 		if Cmd.Error != nil {
-		// 			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-		// 			break
-		// 		}
-		// 	}
-		//
-		// 	Cmd.Error = Cmd.Mqtt.PublishValue(ec)
-		// 	if Cmd.Error != nil {
-		// 		LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-		// 		break
-		// 	}
-		// 	break
-		// }
-		//
-		// var entities []mmHa.EntityConfig
-		// var values []string
-		// for i := range msg.Arguments {
-		// 	value := fmt.Sprintf("%v", msg.Arguments[i])
-		// 	values = append(values, value)
-		// 	p.Unit = ""		// @TODO - Fix this up!
-		//
-		// 	ec := mmHa.EntityConfig {
-		// 		Name:        fmt.Sprintf("%s %d", p.Name, i),
-		// 		SubName:     "",
-		// 		ParentId:    p.ParentId,
-		// 		ParentName:  p.ParentId,
-		// 		UniqueId:    api.CleanString(fmt.Sprintf("%s_%d", p.Id, i)),
-		// 		Units:       p.Unit,	// msg.GetType(),
-		// 		ValueName:   "",
-		// 		DeviceClass: "",
-		// 		StateClass:  "measurement",
-		// 		Value:       value,
-		//
-		// 		StateTopic:  p.Name,
-		// 		ValueTemplate:          fmt.Sprintf("{{ value_json.value%d }}", i),
-		//
-		// 		// Icon:                   "",
-		// 		// LastReset:              "",
-		// 		// LastResetValueTemplate: "",
-		// 	}
-		// 	entities = append(entities, ec)
-		//
-		// 	// if !msg.SeenBefore {
-		// 	// 	Cmd.Error = Cmd.Mqtt.PublishConfig(ec)
-		// 	// 	if Cmd.Error != nil {
-		// 	// 		LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-		// 	// 		break
-		// 	// 	}
-		// 	// }
-		// 	//
-		// 	// Cmd.Error = Cmd.Mqtt.PublishValue(ec)
-		// 	// if Cmd.Error != nil {
-		// 	// 	LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-		// 	// 	break
-		// 	// }
-		// }
-		// fmt.Printf("- Values: %s %s\n", strings.Join(values, ", "), p.Unit)
-		//
-		// if !msg.SeenBefore {
-		// 	Cmd.Error = Cmd.Mqtt.PublishConfigs(entities)
-		// 	if Cmd.Error != nil {
-		// 		LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-		// 		break
-		// 	}
-		// }
-		//
-		// Cmd.Error = Cmd.Mqtt.SensorPublishValues(entities)
-		// if Cmd.Error != nil {
-		// 	LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-		// 	break
-		// }
 	}
 }

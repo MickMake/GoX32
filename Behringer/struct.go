@@ -299,9 +299,9 @@ func (x *X32) XremoteSender() {
 	}
 }
 
-func (x *X32) Process(point string, value ...any) (*api.Point, map[string]api.UnitValue, error) {
+func (x *X32) Process(point string, value ...any) (*api.Point, api.UnitValueMap, error) {
 	var ret *api.Point
-	values := make(map[string]api.UnitValue)
+	values := make(api.UnitValueMap)
 	var err error
 
 	for range Only.Once {
