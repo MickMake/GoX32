@@ -157,20 +157,6 @@ func (x *X32) Connect() error {
 		fmt.Println("Done")
 
 
-		// m := x.Points["/meters/2"]
-		// foo := m.Convert.Blob.Get(data)
-		// fmt.Printf("FOO: %s\n", foo)
-		//
-		// hey1 := x.Call("/status")
-		// fmt.Printf("%v\n", hey1)
-		//
-		// fmt.Println("")
-		//
-		//
-		// hey := x.Emit("/meters/0", "")
-		// fmt.Printf("%v\n", hey)
-		// fmt.Println("")
-
 		go x.XremoteSender()
 
 		// fmt.Println("Got info from the OSC server:", info.Arguments)
@@ -407,6 +393,11 @@ func (x *X32) GetTopic(msg *gosc.Message) string {
 		fmt.Printf("# GetTopic() - Topic: %s\n", topic)
 	}
 	return topic
+}
+
+func (x *X32) ListEndpoints() error {
+	fmt.Printf("%v", x.Points)
+	return nil
 }
 
 type MessageHandlerFunc func(msg *Message)

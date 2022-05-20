@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/MickMake/GoX32/Only"
 	"time"
@@ -17,7 +18,7 @@ type Point struct {
 	Unit 		string	`json:"unit"`
 	Type        string	`json:"type"`
 	Valid       bool	`json:"valid"`
-	// States      map[string]string `json:"states"`
+	Info        bool	`json:"info"`
 
 	Convert     ConvertStruct `json:"convert"`
 }
@@ -67,7 +68,13 @@ func (p *Point) WhenReset() string {
 }
 
 func (p Point) String() string {
-	return p.Type
+	j, _ := json.Marshal(p)
+	return string(j)
+}
+
+func (p Point) Json() string {
+	j, _ := json.Marshal(p)
+	return string(j)
 }
 
 func (p Point) IsInstant() bool {

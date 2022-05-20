@@ -1,0 +1,87 @@
+{
+  "aliases": {
+	"tape-gain": {
+	  "range": {
+		"out_min": -6,
+		"out_max": 24
+	  }
+	},
+	"tape-autoplay": {
+	  "map": {
+		"0": "SINGLE",
+		"1": "FOLDER"
+	  }
+	},
+	"tape-state": {
+	  "map": {
+		"0": "STOP",
+		"1": "PAUSE",
+		"2": "PLAY",
+		"3": "PAUSE RECORD",
+		"4": "RECORD",
+		"5": "FORWARD",
+		"6": "REWIND"
+	  }
+	},
+	"usb-card": {
+	  "map": {
+		"0": "32 In / 32 Out",
+		"1": "16 In / 16 Out",
+		"2": "32 In / 8 Out",
+		"3": "8 In / 32 Out",
+		"4": "8 In / 8 Out",
+		"5": "2 In / 2 Out"
+	  }
+	}
+  },
+  "points_array_map": {
+	"min": 1,
+	"max": 200, "notes": "Actually is 999, but that's ridiculous.",
+	"increment": 1,
+	"points": {
+	  "/-usb/dir/%.3d/name": { "endpoint": "/-usb/dir/%.3d/name", "convert": { "string": { "size":0 } } },
+	  "/-usb/dir/%.3d/type": { "endpoint": "/-usb/dir/%.3d/type", "convert": { "string": { "size":0 } } }
+	}
+  },
+  "points": {
+	"/-prefs/card/USBmode": { "endpoint": "/-prefs/card/USBmode", "convert": { "alias": "usb-card" } },
+
+	"/-stat/usbmounted": { "endpoint": "/-stat/usbmounted", "convert": { "binary": "normal" } },
+
+	"/-stat/tape/etime": { "endpoint": "/-stat/tape/etime", "unit": "S" },
+	"/-stat/tape/file": { "endpoint": "/-stat/tape/file", "convert": { "string": { "size":0 } } },
+	"/-stat/tape/rtime": { "endpoint": "/-stat/tape/rtime", "unit": "S" },
+	"/-stat/tape/state": { "endpoint": "/-stat/tape/state", "convert": { "alias": "tape-state" } },
+
+	"/-stat/urec/etime": { "endpoint": "/-stat/urec/etime", "notes": "TBD" },
+	"/-stat/urec/state": { "endpoint": "/-stat/urec/state", "notes": "TBD" },
+
+	"/config/tape/autoplay": { "endpoint": "/config/tape/autoplay", "convert": { "alias": "tape-autoplay" } },
+	"/config/tape/gainL": { "endpoint": "/config/tape/gainL", "unit": "dB", "convert": { "alias": "tape-gain" } },
+	"/config/tape/gainR": { "endpoint": "/config/tape/gainR", "unit": "dB", "convert": { "alias": "tape-gain" } },
+
+	"/-action/playtrack": { "endpoint": "/-action/playtrack", "convert": { "map": { "-1":"previous track", "0":"stopped", "1":"next track" } } },
+
+	"/-urec/markermax": { "endpoint": "/-urec/markermax", "notes": "TBD" },
+	"/-urec/markerpos": { "endpoint": "/-urec/markerpos", "notes": "TBD" },
+	"/-urec/sd1info": { "endpoint": "/-urec/sd1info", "notes": "TBD" },
+	"/-urec/sd1state": { "endpoint": "/-urec/sd1state", "notes": "TBD" },
+	"/-urec/sd2info": { "endpoint": "/-urec/sd2info", "notes": "TBD" },
+	"/-urec/sd2state": { "endpoint": "/-urec/sd2state", "notes": "TBD" },
+	"/-urec/sessionlen": { "endpoint": "/-urec/sessionlen", "notes": "TBD" },
+	"/-urec/sessionmax": { "endpoint": "/-urec/sessionmax", "notes": "TBD" },
+	"/-urec/sessionoffs": { "endpoint": "/-urec/sessionoffs", "notes": "TBD" },
+	"/-urec/sessionpos": { "endpoint": "/-urec/sessionpos", "notes": "TBD" },
+	"/-urec/sessionspan": { "endpoint": "/-urec/sessionspan", "notes": "TBD" },
+	"/-urec/srate": { "endpoint": "/-urec/srate", "notes": "TBD" },
+	"/-urec/tracks": { "endpoint": "/-urec/tracks", "notes": "TBD" },
+
+	"/-urec/marker/001/time": { "endpoint": "/-urec/marker/001/time", "notes": "TBD" },
+	"/-urec/session/001/name": { "endpoint": "/-urec/session/001/name", "notes": "TBD" },
+
+	"/-usb/path": { "endpoint": "/-usb/path", "convert": { "string": { "size":0 } } },
+	"/-usb/title": { "endpoint": "/-usb/title", "convert": { "string": { "size":0 } } },
+	"/-usb/dir/dirpos": { "endpoint": "/-usb/dir/dirpos", "convert": { "integer": { "min":0, "max":999 } } },
+	"/-usb/dir/maxpos": { "endpoint": "/-usb/dir/maxpos", "convert": { "integer": { "min":0, "max":999 } } }
+  }
+}

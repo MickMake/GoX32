@@ -1,0 +1,1017 @@
+2022-05-19 21:46:15 Connecting to X32...
+Fetching console info...Done
+Importing points...Done
+2022-05-19 21:46:17 Found X32 device.
+Model:	X32RACK
+HW Version:	V2.07
+FW Version:	4.06
+Name:	osc-server
+
+2022-05-19 21:46:17 Connecting to MQTT HASSIO Service...
+2022/05/19 21:46:17 MQTT: Connected!
+# connectHandler() - Topic: GoX32/set/#
+2022-05-19 21:46:17 X32MessageHandler() - /status	uv2: map[]
+p2: instant
+- Value: map[] 	 (active)
+2022-05-19 21:46:17 X32MessageHandler() - /info	uv2: map[]
+p2: instant
+- Value: map[] 	 (V2.07)
+2022-05-19 21:46:17 X32MessageHandler() - /xinfo	uv2: map[]
+p2: instant
+- Value: map[] 	 (10.0.5.52)
+2022-05-19 21:46:17 X32MessageHandler() - /-show/showfile/show/name	uv2: map[]
+p2: instant
+- Value: map[] 	 (MickMake TV)
+2022-05-19 21:46:17 X32MessageHandler() - /-prefs/lamp	uv2: map[0:{ 50.0 50 0}]
+p2: instant
+- Value: map[0:{ 50.0 50 0}] 	 (0.44444445)
+2022-05-19 21:46:17 X32MessageHandler() - /-prefs/lampon	uv2: map[0:{ ON 0 0}]
+p2: instant
+- Value: map[0:{ ON 0 0}] 	 (1)
+2022-05-19 21:46:17 X32MessageHandler() - /-prefs/lcdcont	uv2: map[0:{ 50.0 50 0}]
+p2: instant
+- Value: map[0:{ 50.0 50 0}] 	 (0.5)
+2022-05-19 21:46:17 X32MessageHandler() - /-prefs/rec_control	uv2: map[0:{ USB 2-Track 0 0}]
+p2: instant
+- Value: map[0:{ USB 2-Track 0 0}] 	 (0)
+2022-05-19 21:46:17 X32MessageHandler() - /-prefs/lamp	uv2: map[0:{ 50.0 50 0}]
+p2: instant
+- Value: map[0:{ 50.0 50 0}] 	 (0.44444445)
+2022-05-19 21:46:17 X32MessageHandler() - /-prefs/selfollowsbank	uv2: map[0:{ OFF 0 0}]
+p2: instant
+- Value: map[0:{ OFF 0 0}] 	 (0)
+2022-05-19 21:46:17 X32MessageHandler() - /-prefs/show_control	uv2: map[0:{ Scenes 0 0}]
+p2: instant
+- Value: map[0:{ Scenes 0 0}] 	 (1)
+2022-05-19 21:46:17 X32MessageHandler() - /-prefs/style	uv2: map[]
+p2: instant
+- Value: map[] 	 (ablesque)
+2022-05-19 21:46:17 X32MessageHandler() - /-prefs/viewrtn	uv2: map[0:{ ON 0 0}]
+p2: instant
+- Value: map[0:{ ON 0 0}] 	 (1)
+2022-05-19 21:46:17 X32MessageHandler() - /-stat/geqpos	uv2: map[0:{ PRE 0 0}]
+p2: instant
+- Value: map[0:{ PRE 0 0}] 	 (0)
+2022-05-19 21:46:17 X32MessageHandler() - /-stat/rtageqpost	uv2: map[0:{ PRE 0 0}]
+p2: instant
+- Value: map[0:{ PRE 0 0}] 	 (0)
+2022-05-19 21:46:17 X32MessageHandler() - /status	uv2: map[]
+p2: instant
+- Value: map[] 	 (active)
+2022-05-19 21:46:17 X32MessageHandler() - /info	uv2: map[]
+p2: instant
+- Value: map[] 	 (V2.07)
+2022-05-19 21:46:17 X32MessageHandler() - /xinfo	uv2: map[]
+p2: instant
+- Value: map[] 	 (10.0.5.52)
+{/-show/showfile/scene/000/ {false MickMake  0}}
+{/-show/showfile/scene/001/ {false MickMakeq  0}}
+{/-show/showfile/scene/002/ {false MickMakeq  0}}
+2022-05-19 21:46:17 X32MessageHandler() - /-prefs/remote/ioenable	uv2: map[0:{ MIDI In/Out, Rx PrgC, Tx PrgC, Rx Fader, Tx Fader, Rx Mute, Tx Mute, Rx Pan, Tx Pan, X/OSC 0 0}]
+p2: instant
+- Value: map[0:{ MIDI In/Out, Rx PrgC, Tx PrgC, Rx Fader, Tx Fader, Rx Mute, Tx Mute, Rx Pan, Tx Pan, X/OSC 0 0}] 	 (4089)
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:17 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -81.0 -81 0}]
+p2: instant
+- Value: map[0:{dB -81.0 -81 0}] dB	 (0.01875)
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -69.0 -69 0}]
+p2: instant
+- Value: map[0:{dB -69.0 -69 0}] dB	 (0.04375)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -60.0 -60 0}]
+p2: instant
+- Value: map[0:{dB -60.0 -60 0}] dB	 (0.0625)
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -57.0 -57 0}]
+p2: instant
+- Value: map[0:{dB -57.0 -57 0}] dB	 (0.08125)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -54.0 -54 0}]
+p2: instant
+- Value: map[0:{dB -54.0 -54 0}] dB	 (0.1)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -50.0 -50 0}]
+p2: instant
+- Value: map[0:{dB -50.0 -50 0}] dB	 (0.125)
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.9 -59.9 0} Monitor R:{dB -59.9 -59.9 0} Osc Tone level:{dB -59.9 -59.9 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.9","Monitor_R":"-59.9","Osc_Tone_level":"-59.9","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -47.0 -47 0}]
+p2: instant
+- Value: map[0:{dB -47.0 -47 0}] dB	 (0.14375)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -44.0 -44 0}]
+p2: instant
+- Value: map[0:{dB -44.0 -44 0}] dB	 (0.1625)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -41.0 -41 0}]
+p2: instant
+- Value: map[0:{dB -41.0 -41 0}] dB	 (0.18125)
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.8 -59.8 0} Monitor R:{dB -59.8 -59.8 0} Osc Tone level:{dB -59.8 -59.8 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.8","Monitor_R":"-59.8","Osc_Tone_level":"-59.8","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -38.0 -38 0}]
+p2: instant
+- Value: map[0:{dB -38.0 -38 0}] dB	 (0.2)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -34.0 -34 0}]
+p2: instant
+- Value: map[0:{dB -34.0 -34 0}] dB	 (0.225)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -29.5 -29.5 0}]
+p2: instant
+- Value: map[0:{dB -29.5 -29.5 0}] dB	 (0.25625)
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.1 -59.1 0} Monitor R:{dB -59.1 -59.1 0} Osc Tone level:{dB -59.1 -59.1 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.1","Monitor_R":"-59.1","Osc_Tone_level":"-59.1","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -26.5 -26.5 0}]
+p2: instant
+- Value: map[0:{dB -26.5 -26.5 0}] dB	 (0.29375)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -24.0 -24 0}]
+p2: instant
+- Value: map[0:{dB -24.0 -24 0}] dB	 (0.325)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -21.0 -21 0}]
+p2: instant
+- Value: map[0:{dB -21.0 -21 0}] dB	 (0.3625)
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -57.6 -57.6 0} Monitor R:{dB -57.6 -57.6 0} Osc Tone level:{dB -57.6 -57.6 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-57.6","Monitor_R":"-57.6","Osc_Tone_level":"-57.6","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -18.5 -18.5 0}]
+p2: instant
+- Value: map[0:{dB -18.5 -18.5 0}] dB	 (0.39375)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -16.0 -16 0}]
+p2: instant
+- Value: map[0:{dB -16.0 -16 0}] dB	 (0.425)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -13.0 -13 0}]
+p2: instant
+- Value: map[0:{dB -13.0 -13 0}] dB	 (0.4625)
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -53.9 -53.9 0} Monitor R:{dB -53.9 -53.9 0} Osc Tone level:{dB -53.8 -53.8 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-53.9","Monitor_R":"-53.9","Osc_Tone_level":"-53.8","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -10.5 -10.5 0}]
+p2: instant
+- Value: map[0:{dB -10.5 -10.5 0}] dB	 (0.49375)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -9.0 -9 0}]
+p2: instant
+- Value: map[0:{dB -9.0 -9 0}] dB	 (0.525)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -8.0 -8 0}]
+p2: instant
+- Value: map[0:{dB -8.0 -8 0}] dB	 (0.55)
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -47.9 -47.9 0} Monitor R:{dB -47.9 -47.9 0} Osc Tone level:{dB -47.6 -47.6 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-47.9","Monitor_R":"-47.9","Osc_Tone_level":"-47.6","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -7.0 -7 0}]
+p2: instant
+- Value: map[0:{dB -7.0 -7 0}] dB	 (0.575)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -6.0 -6 0}]
+p2: instant
+- Value: map[0:{dB -6.0 -6 0}] dB	 (0.6)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -5.0 -5 0}]
+p2: instant
+- Value: map[0:{dB -5.0 -5 0}] dB	 (0.625)
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -38.1 -38.1 0} Monitor R:{dB -38.1 -38.1 0} Osc Tone level:{dB -37.9 -37.9 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-38.1","Monitor_R":"-38.1","Osc_Tone_level":"-37.9","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -4.2 -4.2 0}]
+p2: instant
+- Value: map[0:{dB -4.2 -4.2 0}] dB	 (0.64375)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -3.2 -3.2 0}]
+p2: instant
+- Value: map[0:{dB -3.2 -3.2 0}] dB	 (0.66875)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -2.5 -2.5 0}]
+p2: instant
+- Value: map[0:{dB -2.5 -2.5 0}] dB	 (0.6875)
+2022-05-19 21:46:18 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -24.8 -24.8 0} Monitor R:{dB -24.8 -24.8 0} Osc Tone level:{dB -24.7 -24.7 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-24.8","Monitor_R":"-24.8","Osc_Tone_level":"-24.7","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -1.5 -1.5 0}]
+p2: instant
+- Value: map[0:{dB -1.5 -1.5 0}] dB	 (0.7125)
+2022-05-19 21:46:18 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -0.5 -0.5 0}]
+p2: instant
+- Value: map[0:{dB -0.5 -0.5 0}] dB	 (0.7375)
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 0.2 0.2 0}]
+p2: instant
+- Value: map[0:{dB 0.2 0.2 0}] dB	 (0.75625)
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -13.3 -13.3 0} Monitor R:{dB -13.3 -13.3 0} Osc Tone level:{dB -13.0 -13 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-13.3","Monitor_R":"-13.3","Osc_Tone_level":"-13.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 1.2 1.2 0}]
+p2: instant
+- Value: map[0:{dB 1.2 1.2 0}] dB	 (0.78125)
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 2.2 2.2 0}]
+p2: instant
+- Value: map[0:{dB 2.2 2.2 0}] dB	 (0.80625)
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 3.2 3.2 0}]
+p2: instant
+- Value: map[0:{dB 3.2 3.2 0}] dB	 (0.83125)
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 4.2 4.2 0}]
+p2: instant
+- Value: map[0:{dB 4.2 4.2 0}] dB	 (0.85625)
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 5.0 5 0}]
+p2: instant
+- Value: map[0:{dB 5.0 5 0}] dB	 (0.875)
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 6.0 6 0}]
+p2: instant
+- Value: map[0:{dB 6.0 6 0}] dB	 (0.9)
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 6.8 6.8 0}]
+p2: instant
+- Value: map[0:{dB 6.8 6.8 0}] dB	 (0.91875)
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 7.8 7.8 0}]
+p2: instant
+- Value: map[0:{dB 7.8 7.8 0}] dB	 (0.94375)
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 8.8 8.8 0}]
+p2: instant
+- Value: map[0:{dB 8.8 8.8 0}] dB	 (0.96875)
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 9.5 9.5 0}]
+p2: instant
+- Value: map[0:{dB 9.5 9.5 0}] dB	 (0.9875)
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 10.0 10 0}]
+p2: instant
+- Value: map[0:{dB 10.0 10 0}] dB	 (1)
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 9.8 9.8 0}]
+p2: instant
+- Value: map[0:{dB 9.8 9.8 0}] dB	 (0.99375)
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 9.5 9.5 0}]
+p2: instant
+- Value: map[0:{dB 9.5 9.5 0}] dB	 (0.9875)
+2022-05-19 21:46:19 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 9.0 9 0}]
+p2: instant
+- Value: map[0:{dB 9.0 9 0}] dB	 (0.975)
+2022-05-19 21:46:19 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 8.5 8.5 0}]
+p2: instant
+- Value: map[0:{dB 8.5 8.5 0}] dB	 (0.9625)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 7.5 7.5 0}]
+p2: instant
+- Value: map[0:{dB 7.5 7.5 0}] dB	 (0.9375)
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 6.8 6.8 0}]
+p2: instant
+- Value: map[0:{dB 6.8 6.8 0}] dB	 (0.91875)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 5.8 5.8 0}]
+p2: instant
+- Value: map[0:{dB 5.8 5.8 0}] dB	 (0.89375)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 4.8 4.8 0}]
+p2: instant
+- Value: map[0:{dB 4.8 4.8 0}] dB	 (0.86875)
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 3.2 3.2 0}]
+p2: instant
+- Value: map[0:{dB 3.2 3.2 0}] dB	 (0.83125)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 2.0 2 0}]
+p2: instant
+- Value: map[0:{dB 2.0 2 0}] dB	 (0.8)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 0.5 0.5 0}]
+p2: instant
+- Value: map[0:{dB 0.5 0.5 0}] dB	 (0.7625)
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -1.0 -1 0}]
+p2: instant
+- Value: map[0:{dB -1.0 -1 0}] dB	 (0.725)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -2.8 -2.8 0}]
+p2: instant
+- Value: map[0:{dB -2.8 -2.8 0}] dB	 (0.68125)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -4.5 -4.5 0}]
+p2: instant
+- Value: map[0:{dB -4.5 -4.5 0}] dB	 (0.6375)
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -6.0 -6 0}]
+p2: instant
+- Value: map[0:{dB -6.0 -6 0}] dB	 (0.6)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -7.8 -7.8 0}]
+p2: instant
+- Value: map[0:{dB -7.8 -7.8 0}] dB	 (0.55625)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -9.5 -9.5 0}]
+p2: instant
+- Value: map[0:{dB -9.5 -9.5 0}] dB	 (0.5125)
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -5.4 -5.4 0} Monitor R:{dB -5.4 -5.4 0} Osc Tone level:{dB -5.8 -5.8 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-5.4","Monitor_R":"-5.4","Osc_Tone_level":"-5.8","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -12.5 -12.5 0}]
+p2: instant
+- Value: map[0:{dB -12.5 -12.5 0}] dB	 (0.46875)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -15.5 -15.5 0}]
+p2: instant
+- Value: map[0:{dB -15.5 -15.5 0}] dB	 (0.43125)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -18.5 -18.5 0}]
+p2: instant
+- Value: map[0:{dB -18.5 -18.5 0}] dB	 (0.39375)
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -32.0 -32 0} Monitor R:{dB -32.0 -32 0} Osc Tone level:{dB -32.2 -32.2 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-32.0","Monitor_R":"-32.0","Osc_Tone_level":"-32.2","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -21.5 -21.5 0}]
+p2: instant
+- Value: map[0:{dB -21.5 -21.5 0}] dB	 (0.35625)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -25.0 -25 0}]
+p2: instant
+- Value: map[0:{dB -25.0 -25 0}] dB	 (0.3125)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -28.5 -28.5 0}]
+p2: instant
+- Value: map[0:{dB -28.5 -28.5 0}] dB	 (0.26875)
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -42.0 -42 0} Monitor R:{dB -42.0 -42 0} Osc Tone level:{dB -42.2 -42.2 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-42.0","Monitor_R":"-42.0","Osc_Tone_level":"-42.2","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -33.0 -33 0}]
+p2: instant
+- Value: map[0:{dB -33.0 -33 0}] dB	 (0.23125)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -40.0 -40 0}]
+p2: instant
+- Value: map[0:{dB -40.0 -40 0}] dB	 (0.1875)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -46.0 -46 0}]
+p2: instant
+- Value: map[0:{dB -46.0 -46 0}] dB	 (0.15)
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -50.8 -50.8 0} Monitor R:{dB -50.8 -50.8 0} Osc Tone level:{dB -50.8 -50.8 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-50.8","Monitor_R":"-50.8","Osc_Tone_level":"-50.8","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -53.0 -53 0}]
+p2: instant
+- Value: map[0:{dB -53.0 -53 0}] dB	 (0.10625)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -60.0 -60 0}]
+p2: instant
+- Value: map[0:{dB -60.0 -60 0}] dB	 (0.0625)
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -78.0 -78 0}]
+p2: instant
+- Value: map[0:{dB -78.0 -78 0}] dB	 (0.025)
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -54.1 -54.1 0} Monitor R:{dB -54.1 -54.1 0} Osc Tone level:{dB -54.1 -54.1 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-54.1","Monitor_R":"-54.1","Osc_Tone_level":"-54.1","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -inf -Inf 0}]
+p2: instant
+- Value: map[0:{dB -inf -Inf 0}] dB	 (0)
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -55.3 -55.3 0} Monitor R:{dB -55.3 -55.3 0} Osc Tone level:{dB -55.3 -55.3 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-55.3","Monitor_R":"-55.3","Osc_Tone_level":"-55.3","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -58.0 -58 0} Monitor R:{dB -58.0 -58 0} Osc Tone level:{dB -58.1 -58.1 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-58.0","Monitor_R":"-58.0","Osc_Tone_level":"-58.1","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -58.4 -58.4 0} Monitor R:{dB -58.4 -58.4 0} Osc Tone level:{dB -58.4 -58.4 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-58.4","Monitor_R":"-58.4","Osc_Tone_level":"-58.4","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.2 -59.2 0} Monitor R:{dB -59.2 -59.2 0} Osc Tone level:{dB -59.2 -59.2 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.2","Monitor_R":"-59.2","Osc_Tone_level":"-59.2","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.5 -59.5 0} Monitor R:{dB -59.5 -59.5 0} Osc Tone level:{dB -59.5 -59.5 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.5","Monitor_R":"-59.5","Osc_Tone_level":"-59.5","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.7 -59.7 0} Monitor R:{dB -59.7 -59.7 0} Osc Tone level:{dB -59.7 -59.7 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.7","Monitor_R":"-59.7","Osc_Tone_level":"-59.7","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.8 -59.8 0} Monitor R:{dB -59.8 -59.8 0} Osc Tone level:{dB -59.8 -59.8 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.8","Monitor_R":"-59.8","Osc_Tone_level":"-59.8","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.9 -59.9 0} Monitor R:{dB -59.9 -59.9 0} Osc Tone level:{dB -59.9 -59.9 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.9","Monitor_R":"-59.9","Osc_Tone_level":"-59.9","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.9 -59.9 0} Monitor R:{dB -59.9 -59.9 0} Osc Tone level:{dB -59.9 -59.9 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.9","Monitor_R":"-59.9","Osc_Tone_level":"-59.9","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:20 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -81.0 -81 0}]
+p2: instant
+- Value: map[0:{dB -81.0 -81 0}] dB	 (0.01875)
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -60.0 -60 0}]
+p2: instant
+- Value: map[0:{dB -60.0 -60 0}] dB	 (0.0625)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -54.0 -54 0}]
+p2: instant
+- Value: map[0:{dB -54.0 -54 0}] dB	 (0.1)
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -48.0 -48 0}]
+p2: instant
+- Value: map[0:{dB -48.0 -48 0}] dB	 (0.1375)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -41.0 -41 0}]
+p2: instant
+- Value: map[0:{dB -41.0 -41 0}] dB	 (0.18125)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -34.0 -34 0}]
+p2: instant
+- Value: map[0:{dB -34.0 -34 0}] dB	 (0.225)
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.8 -59.8 0} Monitor R:{dB -59.8 -59.8 0} Osc Tone level:{dB -59.8 -59.8 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.8","Monitor_R":"-59.8","Osc_Tone_level":"-59.8","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -28.5 -28.5 0}]
+p2: instant
+- Value: map[0:{dB -28.5 -28.5 0}] dB	 (0.26875)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -24.5 -24.5 0}]
+p2: instant
+- Value: map[0:{dB -24.5 -24.5 0}] dB	 (0.31875)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -20.5 -20.5 0}]
+p2: instant
+- Value: map[0:{dB -20.5 -20.5 0}] dB	 (0.36875)
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -58.5 -58.5 0} Monitor R:{dB -58.5 -58.5 0} Osc Tone level:{dB -58.5 -58.5 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-58.5","Monitor_R":"-58.5","Osc_Tone_level":"-58.5","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -16.5 -16.5 0}]
+p2: instant
+- Value: map[0:{dB -16.5 -16.5 0}] dB	 (0.41875)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -12.0 -12 0}]
+p2: instant
+- Value: map[0:{dB -12.0 -12 0}] dB	 (0.475)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -9.0 -9 0}]
+p2: instant
+- Value: map[0:{dB -9.0 -9 0}] dB	 (0.525)
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -50.4 -50.4 0} Monitor R:{dB -50.4 -50.4 0} Osc Tone level:{dB -50.1 -50.1 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-50.4","Monitor_R":"-50.4","Osc_Tone_level":"-50.1","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -7.0 -7 0}]
+p2: instant
+- Value: map[0:{dB -7.0 -7 0}] dB	 (0.575)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -5.0 -5 0}]
+p2: instant
+- Value: map[0:{dB -5.0 -5 0}] dB	 (0.625)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -2.8 -2.8 0}]
+p2: instant
+- Value: map[0:{dB -2.8 -2.8 0}] dB	 (0.68125)
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -42.8 -42.8 0} Monitor R:{dB -42.8 -42.8 0} Osc Tone level:{dB -42.5 -42.5 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-42.8","Monitor_R":"-42.8","Osc_Tone_level":"-42.5","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -0.8 -0.8 0}]
+p2: instant
+- Value: map[0:{dB -0.8 -0.8 0}] dB	 (0.73125)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 1.2 1.2 0}]
+p2: instant
+- Value: map[0:{dB 1.2 1.2 0}] dB	 (0.78125)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 3.2 3.2 0}]
+p2: instant
+- Value: map[0:{dB 3.2 3.2 0}] dB	 (0.83125)
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -14.2 -14.2 0} Monitor R:{dB -14.2 -14.2 0} Osc Tone level:{dB -13.7 -13.7 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-14.2","Monitor_R":"-14.2","Osc_Tone_level":"-13.7","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 5.2 5.2 0}]
+p2: instant
+- Value: map[0:{dB 5.2 5.2 0}] dB	 (0.88125)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 7.2 7.2 0}]
+p2: instant
+- Value: map[0:{dB 7.2 7.2 0}] dB	 (0.93125)
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 9.2 9.2 0}]
+p2: instant
+- Value: map[0:{dB 9.2 9.2 0}] dB	 (0.98125)
+2022-05-19 21:46:21 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:21 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 10.0 10 0}]
+p2: instant
+- Value: map[0:{dB 10.0 10 0}] dB	 (1)
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 9.8 9.8 0}]
+p2: instant
+- Value: map[0:{dB 9.8 9.8 0}] dB	 (0.99375)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 9.5 9.5 0}]
+p2: instant
+- Value: map[0:{dB 9.5 9.5 0}] dB	 (0.9875)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 8.2 8.2 0}]
+p2: instant
+- Value: map[0:{dB 8.2 8.2 0}] dB	 (0.95625)
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 6.5 6.5 0}]
+p2: instant
+- Value: map[0:{dB 6.5 6.5 0}] dB	 (0.9125)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 4.5 4.5 0}]
+p2: instant
+- Value: map[0:{dB 4.5 4.5 0}] dB	 (0.8625)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 2.8 2.8 0}]
+p2: instant
+- Value: map[0:{dB 2.8 2.8 0}] dB	 (0.81875)
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB 0.8 0.8 0}]
+p2: instant
+- Value: map[0:{dB 0.8 0.8 0}] dB	 (0.76875)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -1.2 -1.2 0}]
+p2: instant
+- Value: map[0:{dB -1.2 -1.2 0}] dB	 (0.71875)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -3.2 -3.2 0}]
+p2: instant
+- Value: map[0:{dB -3.2 -3.2 0}] dB	 (0.66875)
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -5.5 -5.5 0}]
+p2: instant
+- Value: map[0:{dB -5.5 -5.5 0}] dB	 (0.6125)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -8.0 -8 0}]
+p2: instant
+- Value: map[0:{dB -8.0 -8 0}] dB	 (0.55)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -10.5 -10.5 0}]
+p2: instant
+- Value: map[0:{dB -10.5 -10.5 0}] dB	 (0.49375)
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB 0.0 0 0} Monitor R:{dB 0.0 0 0} Osc Tone level:{dB 0.0 0 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"0.0","Monitor_R":"0.0","Osc_Tone_level":"0.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -15.5 -15.5 0}]
+p2: instant
+- Value: map[0:{dB -15.5 -15.5 0}] dB	 (0.43125)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -19.5 -19.5 0}]
+p2: instant
+- Value: map[0:{dB -19.5 -19.5 0}] dB	 (0.38125)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -24.0 -24 0}]
+p2: instant
+- Value: map[0:{dB -24.0 -24 0}] dB	 (0.325)
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -23.8 -23.8 0} Monitor R:{dB -23.8 -23.8 0} Osc Tone level:{dB -23.8 -23.8 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-23.8","Monitor_R":"-23.8","Osc_Tone_level":"-23.8","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -28.0 -28 0}]
+p2: instant
+- Value: map[0:{dB -28.0 -28 0}] dB	 (0.275)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -35.0 -35 0}]
+p2: instant
+- Value: map[0:{dB -35.0 -35 0}] dB	 (0.21875)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -43.0 -43 0}]
+p2: instant
+- Value: map[0:{dB -43.0 -43 0}] dB	 (0.16875)
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -36.8 -36.8 0} Monitor R:{dB -36.8 -36.8 0} Osc Tone level:{dB -36.8 -36.8 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-36.8","Monitor_R":"-36.8","Osc_Tone_level":"-36.8","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -52.0 -52 0}]
+p2: instant
+- Value: map[0:{dB -52.0 -52 0}] dB	 (0.1125)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -66.0 -66 0}]
+p2: instant
+- Value: map[0:{dB -66.0 -66 0}] dB	 (0.05)
+2022-05-19 21:46:22 X32MessageHandler() - /config/osc/level	uv2: map[0:{dB -inf -Inf 0}]
+p2: instant
+- Value: map[0:{dB -inf -Inf 0}] dB	 (0)
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -45.1 -45.1 0} Monitor R:{dB -45.1 -45.1 0} Osc Tone level:{dB -45.1 -45.1 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-45.1","Monitor_R":"-45.1","Osc_Tone_level":"-45.1","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -50.4 -50.4 0} Monitor R:{dB -50.4 -50.4 0} Osc Tone level:{dB -50.5 -50.5 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-50.4","Monitor_R":"-50.4","Osc_Tone_level":"-50.5","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:22 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -55.1 -55.1 0} Monitor R:{dB -55.1 -55.1 0} Osc Tone level:{dB -55.1 -55.1 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-55.1","Monitor_R":"-55.1","Osc_Tone_level":"-55.1","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -56.9 -56.9 0} Monitor R:{dB -56.9 -56.9 0} Osc Tone level:{dB -56.9 -56.9 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-56.9","Monitor_R":"-56.9","Osc_Tone_level":"-56.9","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -58.0 -58 0} Monitor R:{dB -58.0 -58 0} Osc Tone level:{dB -58.0 -58 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-58.0","Monitor_R":"-58.0","Osc_Tone_level":"-58.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -58.7 -58.7 0} Monitor R:{dB -58.7 -58.7 0} Osc Tone level:{dB -58.7 -58.7 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-58.7","Monitor_R":"-58.7","Osc_Tone_level":"-58.7","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.3 -59.3 0} Monitor R:{dB -59.3 -59.3 0} Osc Tone level:{dB -59.3 -59.3 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.3","Monitor_R":"-59.3","Osc_Tone_level":"-59.3","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.6 -59.6 0} Monitor R:{dB -59.6 -59.6 0} Osc Tone level:{dB -59.6 -59.6 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.6","Monitor_R":"-59.6","Osc_Tone_level":"-59.6","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.7 -59.7 0} Monitor R:{dB -59.7 -59.7 0} Osc Tone level:{dB -59.7 -59.7 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.7","Monitor_R":"-59.7","Osc_Tone_level":"-59.7","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.9 -59.9 0} Monitor R:{dB -59.9 -59.9 0} Osc Tone level:{dB -59.9 -59.9 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.9","Monitor_R":"-59.9","Osc_Tone_level":"-59.9","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.9 -59.9 0} Monitor R:{dB -59.9 -59.9 0} Osc Tone level:{dB -59.9 -59.9 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.9","Monitor_R":"-59.9","Osc_Tone_level":"-59.9","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -59.9 -59.9 0} Monitor R:{dB -59.9 -59.9 0} Osc Tone level:{dB -59.9 -59.9 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-59.9","Monitor_R":"-59.9","Osc_Tone_level":"-59.9","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:23 X32MessageHandler() - /-stat/osc/on	uv2: map[0:{ OFF 0 0}]
+p2: instant
+- Value: map[0:{ OFF 0 0}] 	 (0)
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:24 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:25 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:26 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:27 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:27 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:27 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:27 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:27 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:27 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}
+2022-05-19 21:46:27 X32MessageHandler() - /meters/11	uv2: map[Monitor L:{dB -60.0 -60 0} Monitor R:{dB -60.0 -60 0} Osc Tone level:{dB -60.0 -60 0} Talk A/B Level:{dB -60.0 -60 0} Threshold/GR:{dB -0.0 -0 0} length:{dB 5 5 0}]
+p2: instant
+homeassistant/sensor/GoX32/GoX32-X32RACK-meters_11/state (GoX32-X32RACK-meters_11) -> {"Monitor_L":"-60.0","Monitor_R":"-60.0","Osc_Tone_level":"-60.0","Talk_A_B_Level":"-60.0","Threshold_GR":"-0.0","length":"5"}

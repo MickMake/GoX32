@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"regexp"
 )
 
@@ -40,7 +41,7 @@ func DirectoryRead(dir string, glob string) ([]string, error) {
 			if !re.MatchString(file.Name()) {
 				continue
 			}
-			ret = append(ret, file.Name())
+			ret = append(ret, filepath.Join(dir, file.Name()))
 			// fmt.Println(file.Name(), file.IsDir())
 		}
 	}

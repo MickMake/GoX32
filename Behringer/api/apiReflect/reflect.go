@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoX32/Only"
-	"github.com/davecgh/go-spew/spew"
 	"hash/fnv"
 	"runtime"
 	"strconv"
@@ -15,6 +14,7 @@ import (
 	"reflect"
 	"strings"
 )
+
 
 // GetArea Return an Area name if we are given an Area or EndPoint struct.
 func GetArea(trim string, v interface{}) string {
@@ -633,13 +633,13 @@ func GetTagPointType(ref interface{}) DataStructureMap {
 
 		vo := reflect.ValueOf(ref)
 		to := reflect.TypeOf(ref)
-		spew.Dump(&vo)
-		spew.Dump(&to)
+		// spew.Dump(&vo)
+		// spew.Dump(&to)
 
 		// Iterate over all available fields and read the tag value
 		for i := 0; i < vo.NumField(); i++ {
 			fieldTo := to.Field(i)
-			spew.Dump(&fieldTo)
+			// spew.Dump(&fieldTo)
 
 			// j := fieldTo.Tag.Get("json")
 			// pid := fieldTo.Tag.Get("json")
@@ -792,4 +792,29 @@ func (r *Required) IsRequired(field string) bool {
 }
 func (r *Required) IsNotRequired(field string) bool {
 	return !r.IsRequired(field)
+}
+
+func GetJsonTagIfNotNil(ref interface{}) string {
+	var ret string
+
+	for range Only.Once {
+		s := reflect.ValueOf(ref) // .Elem()
+		typeOf := s.Type()
+		for id := 0; id < s.NumField(); id++ {
+			// name := s.Field(id).String()
+
+			value := fmt.Sprintf("%v", s.Field(id).Interface())
+			if value == "" {
+				continue
+			}
+			if value == "<nil>" {
+				continue
+			}
+
+			ret = typeOf.Field(id).Tag.Get("json")
+			break
+		}
+	}
+
+	return ret
 }

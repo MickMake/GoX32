@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"github.com/MickMake/GoX32/Behringer"
 	"github.com/MickMake/GoX32/Only"
+	"github.com/MickMake/GoX32/embed"
 	"github.com/spf13/cobra"
+	"path/filepath"
 )
 
 
@@ -143,23 +145,10 @@ func cmdX32Func(cmd *cobra.Command, args []string) {
 	}
 }
 
-func cmdX32ListFunc(cmd *cobra.Command, args []string) {
-	// for range Only.Once {
-	// 	switch {
-	// 	case len(args) == 0:
-	// 		fmt.Println("Unknown sub-command.")
-	// 		_ = cmd.Help()
-	//
-	// 	case args[0] == "endpoints":
-	// 		Cmd.Error = Cmd.X32.ListEndpoints("")
-	//
-	// 	case args[0] == "areas":
-	// 		Cmd.X32.ListAreas()
-	//
-	// 	default:
-	// 		Cmd.Error = Cmd.X32.ListEndpoints(args[0])
-	// 	}
-	// }
+func cmdX32ListFunc(_ *cobra.Command, _ []string) {
+	for range Only.Once {
+		Cmd.Error = Cmd.X32.ListEndpoints()
+	}
 }
 
 func cmdX32LoginFunc(_ *cobra.Command, _ []string) {
@@ -185,7 +174,7 @@ func cmdX32LoginFunc(_ *cobra.Command, _ []string) {
 	// }
 }
 
-func cmdX32GetFunc(_ *cobra.Command, args []string) {
+func cmdX32GetFunc(_ *cobra.Command, _ []string) {
 	// for range Only.Once {
 	// 	Cmd.X32.OutputType.SetJson()
 	//
@@ -211,7 +200,7 @@ func cmdX32GetFunc(_ *cobra.Command, args []string) {
 	// }
 }
 
-func cmdX32RawFunc(_ *cobra.Command, args []string) {
+func cmdX32RawFunc(_ *cobra.Command, _ []string) {
 	// for range Only.Once {
 	// 	Cmd.X32.OutputType.SetRaw()
 	//
@@ -237,7 +226,7 @@ func cmdX32RawFunc(_ *cobra.Command, args []string) {
 	// }
 }
 
-func cmdX32SaveFunc(_ *cobra.Command, args []string) {
+func cmdX32SaveFunc(_ *cobra.Command, _ []string) {
 	// for range Only.Once {
 	// 	Cmd.X32.OutputType.SetFile()
 	//
@@ -297,13 +286,14 @@ func SwitchOutput(cmd *cobra.Command) error {
 }
 
 
-func (ca *CommandArgs) X32Args(cmd *cobra.Command, args []string) error {
+func (ca *CommandArgs) X32Args(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
+		pointsPath := filepath.Join(ca.ConfigDir, "points")
 
 		ca.X32 = Behringer.NewX32(Behringer.ArgsX32 {
 			Host:         ca.X32Host,
 			Port:         ca.X32Port,
-			ConfigDir:    ".",	// ca.ConfigDir,	// @TODO - DEBUG
+			ConfigDir:    pointsPath,
 			CacheDir:     ca.CacheDir,
 			CacheTimeout: ca.X32Timeout,
 		})
@@ -321,6 +311,12 @@ func (ca *CommandArgs) X32Args(cmd *cobra.Command, args []string) error {
 				ca.X32.OutputType.SetFile()
 			default:
 				ca.X32.OutputType.SetJson()
+		}
+
+		LogPrintDate("Connecting to X32...\n")
+		ca.Error = embed.SaveFiles(pointsPath, false)
+		if ca.Error != nil {
+			break
 		}
 
 		LogPrintDate("Connecting to X32...\n")

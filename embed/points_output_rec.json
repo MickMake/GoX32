@@ -1,0 +1,13 @@
+{
+  "aliases": {
+  },
+  "points_array_map": {
+	"min": 1,
+	"max": 2,
+	"increment": 1,
+	"points": {
+	  "/outputs/rec/%.2d/pos": { "endpoint": "/outputs/rec/%.2d/pos", "convert": { "alias": "rec-pos-map" } },
+	  "/outputs/rec/%.2d/src": { "endpoint": "/outputs/rec/%.2d/src", "convert": { "alias": "output-map" } }
+	}
+  }
+}

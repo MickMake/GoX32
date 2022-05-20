@@ -1,8 +1,11 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"github.com/MickMake/GoX32/Only"
+	"github.com/olekukonko/tablewriter"
+	"sort"
 	"strings"
 )
 
@@ -15,7 +18,7 @@ const (
 type PointsMap map[string]Point
 
 
-func (pm *PointsMap) String() string {
+func (pm *PointsMap) Json() string {
 	j, _ := json.Marshal(*pm)
 	return string(j)
 }
@@ -62,6 +65,53 @@ func (pm PointsMap) GetDevicePoint(devicePoint string) *Point {
 			break
 		}
 		ret = pm.Get("", s[0])
+	}
+	return ret
+}
+
+func (pm PointsMap) String() string {
+	var ret string
+	for range Only.Once {
+		buf := new(bytes.Buffer)
+
+		table := tablewriter.NewWriter(buf)
+		table.SetHeader([]string{
+			"EndPoint",
+			"Id",
+			"Name",
+			"Unit",
+			"Type",
+		})
+		table.SetBorder(true)
+		for _, endpoint := range pm.SortEndPoints() {
+			convert := pm[endpoint].Convert
+
+			table.Append([]string {
+				pm[endpoint].EndPoint,
+				pm[endpoint].FullId,
+				pm[endpoint].Name,
+				pm[endpoint].Unit,
+				convert.GetConvertType(),
+			})
+		}
+		table.Render()
+		ret += buf.String()
+	}
+	return ret
+}
+
+func (pm *PointsMap) SortEndPoints() []string {
+	ret := make([]string, 0, len(*pm))
+	for range Only.Once {
+		keys := make([]string, 0, len(*pm))
+		for k := range *pm {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+
+		for _, k := range keys {
+			ret = append(ret, k)
+		}
 	}
 	return ret
 }

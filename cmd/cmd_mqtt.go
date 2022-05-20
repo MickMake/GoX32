@@ -333,6 +333,20 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// ca.Error = ca.X32.Call("/-show/showfile/show/return")
 		// fmt.Printf("%v\n", foo)
 
+		// m := x.Points["/meters/2"]
+		// foo := m.Convert.Blob.Get(data)
+		// fmt.Printf("FOO: %s\n", foo)
+		//
+		// hey1 := x.Call("/status")
+		// fmt.Printf("%v\n", hey1)
+		//
+		// fmt.Println("")
+		//
+		//
+		// hey := x.Emit("/meters/0", "")
+		// fmt.Printf("%v\n", hey)
+		// fmt.Println("")
+
 		foo2 := ca.X32.GetScene(0)
 		fmt.Printf("%v\n", foo2)
 		foo2 = ca.X32.GetScene(1)
