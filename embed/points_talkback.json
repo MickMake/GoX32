@@ -58,45 +58,45 @@
 	"max": 80,
 	"increment": 1,
 	"points": {
-	  "/-stat/solosw/%.2d": { "endpoint": "/-stat/solosw/%.2d", "convert": { "binary": "normal" }, "info": "" }
+	  "/-stat/solosw/%.2d": { "endpoint": "/-stat/solosw/%.2d", "convert": { "binary": { "type":"normal" } }, "info": "" }
 	}
   },
   "points": {
-	"/-stat/keysolo": { "endpoint": "/-stat/keysolo", "convert": { "binary": "normal" }, "info": "" },
-	"/-stat/solo": { "endpoint": "/-stat/solo", "convert": { "binary": "normal" }, "info": "" },
+	"/-stat/keysolo": { "endpoint": "/-stat/keysolo", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/-stat/solo": { "endpoint": "/-stat/solo", "convert": { "binary": { "type":"normal" } }, "info": "" },
 
-	"/-action/clearsolo": { "endpoint": "/-action/clearsolo", "convert": { "binary": "normal" }, "info": "" },
+	"/-action/clearsolo": { "endpoint": "/-action/clearsolo", "convert": { "binary": { "type":"normal" } }, "info": "" },
 
-	"/config/solo/busmode": { "endpoint": "/config/solo/busmode", "convert": { "binary": "normal" }, "info": "" },
-	"/config/solo/chmode": { "endpoint": "/config/solo/chmode", "convert": { "binary": "normal" }, "info": "" },
-	"/config/solo/dcamode": { "endpoint": "/config/solo/dcamode", "convert": { "binary": "normal" }, "info": "" },
-	"/config/solo/delay": { "endpoint": "/config/solo/delay", "convert": { "binary": "normal" }, "info": "" },
+	"/config/solo/busmode": { "endpoint": "/config/solo/busmode", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/solo/chmode": { "endpoint": "/config/solo/chmode", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/solo/dcamode": { "endpoint": "/config/solo/dcamode", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/solo/delay": { "endpoint": "/config/solo/delay", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/config/solo/delaytime": { "endpoint": "/config/solo/delaytime", "unit": "mS", "convert": { "alias": "monitor-delay-time" }, "info": "" },
-	"/config/solo/dim": { "endpoint": "/config/solo/dim", "convert": { "binary": "normal" }, "info": "" },
+	"/config/solo/dim": { "endpoint": "/config/solo/dim", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/config/solo/dimatt": { "endpoint": "/config/solo/dimatt", "unit": "dB", "convert": { "alias": "monitor-dim-att" }, "info": "" },
-	"/config/solo/dimpfl": { "endpoint": "/config/solo/dimpfl", "convert": { "binary": "normal" }, "info": "" },
-	"/config/solo/exclusive": { "endpoint": "/config/solo/exclusive", "convert": { "binary": "normal" }, "info": "" },
-	"/config/solo/followsel": { "endpoint": "/config/solo/followsel", "convert": { "binary": "normal" }, "info": "" },
-	"/config/solo/followsolo": { "endpoint": "/config/solo/followsolo", "convert": { "binary": "normal" }, "info": "" },
+	"/config/solo/dimpfl": { "endpoint": "/config/solo/dimpfl", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/solo/exclusive": { "endpoint": "/config/solo/exclusive", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/solo/followsel": { "endpoint": "/config/solo/followsel", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/solo/followsolo": { "endpoint": "/config/solo/followsolo", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/config/solo/level": { "endpoint": "/config/solo/level", "unit": "dB", "convert": { "function": "log" }, "info": "" },
-	"/config/solo/masterctrl": { "endpoint": "/config/solo/masterctrl", "convert": { "binary": "normal" }, "info": "" },
-	"/config/solo/mono": { "endpoint": "/config/solo/mono", "convert": { "binary": "normal" }, "info": "" },
-	"/config/solo/mute": { "endpoint": "/config/solo/mute", "convert": { "binary": "normal" }, "info": "" },
+	"/config/solo/masterctrl": { "endpoint": "/config/solo/masterctrl", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/solo/mono": { "endpoint": "/config/solo/mono", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/solo/mute": { "endpoint": "/config/solo/mute", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/config/solo/source": { "endpoint": "/config/solo/source", "convert": { "alias": "monitor-source-map" }, "info": "" },
 	"/config/solo/sourcetrim": { "endpoint": "/config/solo/sourcetrim", "unit": "dB", "convert": { "alias": "monitor-source-trim" }, "info": "" },
 
-	"/-stat/talk/A": { "endpoint": "/-stat/talk/A", "convert": { "binary": "normal" }, "info": "" },
-	"/-stat/talk/B": { "endpoint": "/-stat/talk/B", "convert": { "binary": "normal" }, "info": "" },
+	"/-stat/talk/A": { "endpoint": "/-stat/talk/A", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/-stat/talk/B": { "endpoint": "/-stat/talk/B", "convert": { "binary": { "type":"normal" } }, "info": "" },
 
 	"/config/talk/A/destmap": { "endpoint": "/config/talk/A/destmap", "convert": { "alias": "talkback-map" }, "info": "" },
-	"/config/talk/A/dim": { "endpoint": "/config/talk/A/dim", "convert": { "binary": "normal" }, "info": "" },
-	"/config/talk/A/latch": { "endpoint": "/config/talk/A/latch", "convert": { "binary": "normal" }, "info": "" },
+	"/config/talk/A/dim": { "endpoint": "/config/talk/A/dim", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/talk/A/latch": { "endpoint": "/config/talk/A/latch", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/config/talk/A/level": { "endpoint": "/config/talk/A/level", "unit": "dB", "convert": { "function": "log" }, "info": "" },
 	"/config/talk/B/destmap": { "endpoint": "/config/talk/B/destmap", "convert": { "alias": "talkback-map" }, "info": "" },
-	"/config/talk/B/dim": { "endpoint": "/config/talk/B/dim", "convert": { "binary": "normal" }, "info": "" },
-	"/config/talk/B/latch": { "endpoint": "/config/talk/B/latch", "convert": { "binary": "normal" }, "info": "" },
+	"/config/talk/B/dim": { "endpoint": "/config/talk/B/dim", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/talk/B/latch": { "endpoint": "/config/talk/B/latch", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/config/talk/B/level": { "endpoint": "/config/talk/B/level", "unit": "dB", "convert": { "function": "log" }, "info": "" },
-	"/config/talk/enable": { "endpoint": "/config/talk/enable", "convert": { "binary": "normal" }, "info": "" },
-	"/config/talk/source": { "endpoint": "/config/talk/source", "convert": { "binary": "normal" }, "info": "" }
+	"/config/talk/enable": { "endpoint": "/config/talk/enable", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/config/talk/source": { "endpoint": "/config/talk/source", "convert": { "binary": { "type":"normal" } }, "info": "" }
   }
 }

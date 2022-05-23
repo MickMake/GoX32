@@ -961,33 +961,33 @@
 	  }
 	},
 	"dyn-auto": {
-	  "map": {
-		"0": "MANUAL",
-		"1": "AUTO"
+	  "binary": {
+		"off": "MANUAL",
+		"on": "AUTO"
 	  }
 	},
 	"dyn-det": {
-	  "map": {
-		"0": "PEAK",
-		"1": "RMS"
+	  "binary": {
+		"off": "PEAK",
+		"on": "RMS"
 	  }
 	},
 	"dyn-env": {
-	  "map": {
-		"0": "LINEAR",
-		"1": "LOG"
+	  "binary": {
+		"off": "LINEAR",
+		"on": "LOG"
 	  }
 	},
 	"dyn-mode": {
-	  "map": {
-		"0": "COMP",
-		"1": "EXP"
+	  "binary": {
+		"off": "COMP",
+		"on": "EXP"
 	  }
 	},
 	"dyn-pos": {
-	  "map": {
-		"0": "SWAPPED",
-		"1": "NORMAL"
+	  "binary": {
+		"off": "PRE",
+		"on": "POST"
 	  }
 	},
 	"dyn-threshold": {
@@ -1033,15 +1033,15 @@
 	  }
 	},
 	"eq-pos": {
-	  "map": {
-		"0": "Pre EQ",
-		"1": "Post EQ"
+	  "binary": {
+		"off": "Pre EQ",
+		"on": "Post EQ"
 	  }
 	},
 	"eq-display-mode": {
-	  "map": {
-		"0": "Bar[graph]",
-		"1": "Spec[trograph]"
+	  "binary": {
+		"off": "Bar[graph]",
+		"on": "Spec[trograph]"
 	  }
 	},
 
@@ -1099,15 +1099,13 @@
 	},
 
 	"toggle": {
-	  "map": {
-		"0": "off",
-		"1": "on"
+	  "binary": {
+		"type": "normal"
 	  }
 	},
 	"toggle-invert": {
-	  "map": {
-		"0": "on",
-		"1": "off"
+	  "binary": {
+		"type": "invert"
 	  }
 	},
 	"colour-map": {
@@ -1123,9 +1121,9 @@
 	  }
 	},
 	"insert-pos": {
-	  "map": {
-		"0": "PRE",
-		"1": "POST"
+	  "binary": {
+		"off": "PRE",
+		"on": "POST"
 	  }
 	},
 	"pan-range": {
@@ -1478,9 +1476,9 @@
 	  }
 	},
 	"mix-st": {
-	  "map": {
-		"0": "MONO",
-		"1": "STEREO"
+	  "binary": {
+		"off": "MONO",
+		"on": "STEREO"
 	  }
 	},
 	"fx-insert-source": {

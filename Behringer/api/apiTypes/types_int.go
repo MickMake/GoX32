@@ -8,7 +8,6 @@ import (
 )
 
 
-// ################################################################################
 type Int32Value struct {
 	Valid		bool
 	Updated		bool
@@ -18,71 +17,71 @@ type Int32Value struct {
 	Max 		int32
 }
 
-func (me *Int32Value) define(min int32, max int32) error {
+func (v *Int32Value) Define(min int32, max int32) error {
 	var err error
 
-	me.Valid = false
-	me.Min = min
-	me.Max = max
+	v.Valid = false
+	v.Min = min
+	v.Max = max
 
 	return err
 }
 
-func (me *Int32Value) get() (int32, error) {
+func (v *Int32Value) get() (int32, error) {
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 
-		me.Updated = false
+		v.Updated = false
 	}
 
-	return me.Value, err
+	return v.Value, err
 }
 
-func (me *Int32Value) set(v int32) error {
+func (v *Int32Value) set(value int32) error {
 	var err error
 
 	for range Only.Once {
 		// Check value is within range.
-		err = me.IsInRange(v)
+		err = v.IsInRange(value)
 		if err != nil {
 			break
 		}
 
 		// If not currently valid, update structure.
-		if !me.Valid {
-			me.Valid = true
-			me.Updated = true
-			me.Value = v
+		if !v.Valid {
+			v.Valid = true
+			v.Updated = true
+			v.Value = value
 			break
 		}
 
 		// If there's no change, exit.
-		if me.Value == v {
+		if v.Value == value {
 			break
 		}
 
-		me.Updated = true
-		me.Value = v
+		v.Updated = true
+		v.Value = value
 	}
 
 	return err
 }
 
-func (me *Int32Value) IsValid() error {
+func (v *Int32Value) IsValid() error {
 	var err error
 
 	for range Only.Once {
-		if me.Valid {
+		if v.Valid {
 			// err = errors.New("Invalid value")
 			break
 		}
 
-		err = me.IsInRange(me.Value)
+		err = v.IsInRange(v.Value)
 		if err != nil {
 			break
 		}
@@ -91,17 +90,17 @@ func (me *Int32Value) IsValid() error {
 	return err
 }
 
-func (me *Int32Value) IsInRange(v int32) error {
+func (v *Int32Value) IsInRange(value int32) error {
 	var err error
 
 	for range Only.Once {
-		if me.Value < me.Min {
-			err = errors.New(fmt.Sprintf("# Value %d LT %d", v, me.Min))
+		if v.Value < v.Min {
+			err = errors.New(fmt.Sprintf("# Value %d LT %d", value, v.Min))
 			break
 		}
 
-		if me.Value > me.Max {
-			err = errors.New(fmt.Sprintf("# Value %d GT %d", v, me.Max))
+		if v.Value > v.Max {
+			err = errors.New(fmt.Sprintf("# Value %d GT %d", value, v.Max))
 			break
 		}
 	}
@@ -109,36 +108,36 @@ func (me *Int32Value) IsInRange(v int32) error {
 	return err
 }
 
-func (me *Int32Value) getString() (string, error) {
+func (v *Int32Value) getString() (string, error) {
 	var s string
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		s = fmt.Sprintf("%d", me.Value)
+		s = fmt.Sprintf("%d", v.Value)
 	}
 
 	return s, err
 }
 
-func (me *Int32Value) getReal() (string, string, error) {
+func (v *Int32Value) getReal() (string, string, error) {
 	var r string	// Real value.
 	var s string	// Stored value.
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		s = strconv.FormatInt(int64(me.Value), 10)
+		s = strconv.FormatInt(int64(v.Value), 10)
 		// s = fmt.Sprintf("%d", me.Value)
 		r = s
 	}
@@ -147,7 +146,6 @@ func (me *Int32Value) getReal() (string, string, error) {
 }
 
 
-// ################################################################################
 type Int64Value struct {
 	Valid	bool
 	Updated	bool
@@ -157,71 +155,71 @@ type Int64Value struct {
 	Max 	int64
 }
 
-func (me *Int64Value) define(min int64, max int64) error {
+func (v *Int64Value) Define(min int64, max int64) error {
 	var err error
 
-	me.Valid = false
-	me.Min = min
-	me.Max = max
+	v.Valid = false
+	v.Min = min
+	v.Max = max
 
 	return err
 }
 
-func (me *Int64Value) get() (int64, error) {
+func (v *Int64Value) get() (int64, error) {
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 
-		me.Updated = false
+		v.Updated = false
 	}
 
-	return me.Value, err
+	return v.Value, err
 }
 
-func (me *Int64Value) set(v int64) error {
+func (v *Int64Value) set(value int64) error {
 	var err error
 
 	for range Only.Once {
 		// Check value is within range.
-		err = me.IsInRange(v)
+		err = v.IsInRange(value)
 		if err != nil {
 			break
 		}
 
 		// If not currently valid, update structure.
-		if !me.Valid {
-			me.Valid = true
-			me.Updated = true
-			me.Value = v
+		if !v.Valid {
+			v.Valid = true
+			v.Updated = true
+			v.Value = value
 			break
 		}
 
 		// If there's no change, exit.
-		if me.Value == v {
+		if v.Value == value {
 			break
 		}
 
-		me.Updated = true
-		me.Value = v
+		v.Updated = true
+		v.Value = value
 	}
 
 	return err
 }
 
-func (me *Int64Value) IsValid() error {
+func (v *Int64Value) IsValid() error {
 	var err error
 
 	for range Only.Once {
-		if me.Valid {
+		if v.Valid {
 			// err = errors.New("Invalid value")
 			break
 		}
 
-		err = me.IsInRange(me.Value)
+		err = v.IsInRange(v.Value)
 		if err != nil {
 			break
 		}
@@ -230,17 +228,17 @@ func (me *Int64Value) IsValid() error {
 	return err
 }
 
-func (me *Int64Value) IsInRange(v int64) error {
+func (v *Int64Value) IsInRange(value int64) error {
 	var err error
 
 	for range Only.Once {
-		if me.Value < me.Min {
-			err = errors.New(fmt.Sprintf("# Value %d LT %d", v, me.Min))
+		if v.Value < v.Min {
+			err = errors.New(fmt.Sprintf("# Value %d LT %d", value, v.Min))
 			break
 		}
 
-		if me.Value > me.Max {
-			err = errors.New(fmt.Sprintf("# Value %d GT %d", v, me.Max))
+		if v.Value > v.Max {
+			err = errors.New(fmt.Sprintf("# Value %d GT %d", value, v.Max))
 			break
 		}
 	}
@@ -248,36 +246,36 @@ func (me *Int64Value) IsInRange(v int64) error {
 	return err
 }
 
-func (me *Int64Value) getString() (string, error) {
+func (v *Int64Value) getString() (string, error) {
 	var s string
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		s = fmt.Sprintf("%d", me.Value)
+		s = fmt.Sprintf("%d", v.Value)
 	}
 
 	return s, err
 }
 
-func (me *Int64Value) getReal() (string, string, error) {
+func (v *Int64Value) getReal() (string, string, error) {
 	var r string	// Real value.
 	var s string	// Stored value.
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		s = strconv.FormatInt(me.Value, 10)
+		s = strconv.FormatInt(v.Value, 10)
 		// s = fmt.Sprintf("%d", me.Value)
 		r = s
 	}

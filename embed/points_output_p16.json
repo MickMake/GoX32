@@ -47,7 +47,7 @@
 	"points": {
 	  "/outputs/p16/%.2d/pos": { "endpoint": "/outputs/p16/%.2d/pos", "convert": { "alias": "rec-pos-map" }, "info": "" },
 	  "/outputs/p16/%.2d/src": { "endpoint": "/outputs/p16/%.2d/src", "convert": { "alias": "output-map" }, "info": "" },
-	  "/outputs/p16/%.2d/invert": { "endpoint": "/outputs/p16/%.2d/invert", "convert": { "binary": "normal" }, "info": "" },
+	  "/outputs/p16/%.2d/invert": { "endpoint": "/outputs/p16/%.2d/invert", "convert": { "binary": { "type":"normal" } }, "info": "" },
 
 	  "/outputs/p16/%.2d/iQ/group": { "endpoint": "/outputs/p16/%.2d/iQ/group", "convert": { "alias": "iq-group" }, "info": "" },
 	  "/outputs/p16/%.2d/iQ/speaker": { "endpoint": "/outputs/p16/%.2d/iQ/speaker", "convert": { "alias": "iq-speaker" }, "info": "" },

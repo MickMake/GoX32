@@ -110,3 +110,19 @@ func (p Point) IsTotal() bool {
 	}
 	return false
 }
+
+func (p *Point) IsSwitch() bool {
+	var ok bool
+	for range Only.Once {
+		if p.Convert.Binary == nil {
+			break
+		}
+		if p.Convert.Binary.IsSwitch {
+			ok = true
+			break
+		}
+	}
+	return ok
+}
+
+

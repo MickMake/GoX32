@@ -7,7 +7,7 @@
 	"increment": 1,
 	"points": {
 	  "/headamp/%.3d/gain": { "endpoint": "/headamp/%.3d/gain", "unit": "dB", "convert": { "alias": "gain-range" }, "info": "" },
-	  "/headamp/%.3d/phantom": { "endpoint": "/headamp/%.3d/phantom", "convert": { "binary": "normal" }, "info": "" }
+	  "/headamp/%.3d/phantom": { "endpoint": "/headamp/%.3d/phantom", "convert": { "binary": { "type":"normal" } }, "info": "" }
 	}
   }
 }

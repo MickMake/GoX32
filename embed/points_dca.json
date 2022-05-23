@@ -7,7 +7,7 @@
 	"increment": 1,
 
 	"points": {
-	  "/dca/%d/on": { "endpoint": "/dca/%d/on", "convert": { "binary": "normal" }, "info": "" },
+	  "/dca/%d/on": { "endpoint": "/dca/%d/on", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	  "/dca/%d/fader": { "endpoint": "/dca/%d/fader", "unit": "dB", "convert": { "function": "log" }, "info": "" },
 	  "/dca/%d/config/color": { "endpoint": "/dca/%d/config/color", "convert": { "alias": "colour-map" }, "info": "" },
 	  "/dca/%d/config/icon": { "endpoint": "/dca/%d/config/icon", "unit": "icon-select", "info": "" },

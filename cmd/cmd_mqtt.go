@@ -348,17 +348,29 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// fmt.Println("")
 
 		foo2 := ca.X32.GetScene(0)
-		fmt.Printf("%v\n", foo2)
+		fmt.Printf("%s\n", foo2)
 		foo2 = ca.X32.GetScene(1)
-		fmt.Printf("%v\n", foo2)
+		fmt.Printf("%s\n", foo2)
 		foo2 = ca.X32.GetScene(2)
-		fmt.Printf("%v\n", foo2)
+		fmt.Printf("%s\n", foo2)
 
 		// fmt.Println(ca.X32.Points.String())
 
 		// ca.Error = ca.X32.StartMeters("/meters/11")
 		// time.Sleep(time.Second * 60)
 		// ca.Error = ca.X32.StopMeters("/meters/11")
+
+
+		fmt.Println("HEY1")
+		time.Sleep(time.Second * 5)
+		fmt.Println("HEY2")
+		ca.X32.Emit("/showdump")
+		time.Sleep(time.Second * 5)
+		fmt.Println("HEY3")
+		ca.X32.Emit("/showdump")
+		time.Sleep(time.Second * 5)
+		fmt.Println("HEY4")
+		ca.X32.Emit("/showdump")
 
 		time.Sleep(time.Hour * 24)
 
@@ -589,27 +601,32 @@ func MqttMessageHandler(_ mqtt.Client, message mqtt.Message) {
 func X32MessageHandler(msg *Behringer.Message) {
 	for range Only.Once {
 		// LogPrintDate("X32MessageHandler() - %v\t", msg.Address)
-
-		point, unitValue, e2 := Cmd.X32.Process(msg.Address, msg.Arguments...)
-		if e2 != nil {
-			break
-		}
+		// point, unitValue, e2 := Cmd.X32.Process(msg.Address, msg.Arguments...)
+		// if e2 != nil {
+		// 	break
+		// }
 
 		// Single value.
-		if len(unitValue) == 1 {
-			LogPrintDate("# Single Point:\n\t%s\n\tUnitValue: %s (%v)\n", point, unitValue, msg.Arguments[0])
+		if len(msg.UnitValueMap) == 1 {
+			LogPrintDate("# Single Point:\n\t%s\n\tUnitValue: %s (%v)\n", msg.Point, msg.UnitValueMap, msg.Arguments[0])
+
+			haType := "sensor"
+			if msg.IsSwitch() {
+				haType = "binary"
+			}
 
 			ec := mmHa.EntityConfig {
-				Name:        point.Name,
+				Name:        msg.Point.Name,
 				SubName:     "",
-				ParentId:    point.ParentId,
-				ParentName:  point.ParentId,
-				UniqueId:    api.CleanString(point.Id),
-				Units:       point.Unit, // msg.GetType(),
+				ParentId:    msg.Point.ParentId,
+				ParentName:  msg.Point.ParentId,
+				UniqueId:    api.CleanString(msg.Point.Id),
+				Units:       msg.Point.Unit, // msg.GetType(),
 				ValueName:   "",
 				DeviceClass: "",
 				StateClass:  "measurement",
-				Value:       unitValue.GetFirst().Value,
+				Value:       msg.UnitValueMap.GetFirst().Value,
+				HaType:      haType,
 
 				// Icon:                   "",
 				// ValueTemplate:          "",
@@ -635,25 +652,31 @@ func X32MessageHandler(msg *Behringer.Message) {
 
 
 		// Multiple values.
-		LogPrintDate("# Multiple Point:\n\t%s\n\tUnitValue: %s\n", point, unitValue)
+		LogPrintDate("# Multiple Point:\n\t%s\n\tUnitValue: %s\n", msg.Point, msg.UnitValueMap)
 
 		var entities []mmHa.EntityConfig
-		for i, u := range unitValue {
+		for i, u := range msg.UnitValueMap {
 			id := api.JoinStringsForId(i)
 
+			haType := "sensor"
+			if msg.Point.IsSwitch() {
+				haType = "binary"
+			}
+
 			ec := mmHa.EntityConfig {
-				Name:        fmt.Sprintf("%s %s", point.Name, i),
+				Name:        fmt.Sprintf("%s %s", msg.Point.Name, i),
 				SubName:     "",
-				ParentId:    point.ParentId,
-				ParentName:  point.ParentId,
-				UniqueId:    api.CleanString(fmt.Sprintf("%s_%s", point.Id, id)),
+				ParentId:    msg.Point.ParentId,
+				ParentName:  msg.Point.ParentId,
+				UniqueId:    api.CleanString(fmt.Sprintf("%s_%s", msg.Point.Id, id)),
 				Units:       u.Unit,
 				ValueName:   id,
 				DeviceClass: "",
 				StateClass:  "measurement",
 				Value:       u.Value,
+				HaType:      haType,
 
-				StateTopic:    point.Name,
+				StateTopic:    msg.Point.Name,
 				ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", id),
 
 				// Icon:                   "",

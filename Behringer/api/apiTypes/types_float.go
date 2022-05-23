@@ -14,7 +14,7 @@ const (
 	InfinityFloat = -90
 )
 
-// ################################################################################
+
 type Float32Value struct {
 	Valid		bool
 	Updated		bool
@@ -24,77 +24,79 @@ type Float32Value struct {
 	Max 		float32
 	Linear		bool
 	Increment	float32
+	Precision   int
+
 	mapRange 	func(float32) (float32, error)
 }
 
-func (me *Float32Value) Define(min float32, max float32, linear bool, inc float32) error {
+func (v *Float32Value) Define(min float32, max float32, linear bool, inc float32) error {
 	var err error
 
-	me.Valid = false
-	me.Min = min
-	me.Max = max
-	me.Linear = linear
-	me.Increment = inc
-	me.mapRange = mapRange32(rangeBounds32{0, 1}, rangeBounds32{me.Min, me.Max})
+	v.Valid = false
+	v.Min = min
+	v.Max = max
+	v.Linear = linear
+	v.Increment = inc
+	v.mapRange = mapRange32(rangeBounds32{0, 1}, rangeBounds32{v.Min, v.Max})
 
 	return err
 }
 
-func (me *Float32Value) get() (float32, error) {
+func (v *Float32Value) get() (float32, error) {
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 
-		me.Updated = false
+		v.Updated = false
 	}
 
-	return me.Value, err
+	return v.Value, err
 }
 
-func (me *Float32Value) set(v float32) error {
+func (v *Float32Value) set(value float32) error {
 	var err error
 
 	for range Only.Once {
 		// Check value is within range.
-		err = me.IsInRange(v)
+		err = v.IsInRange(value)
 		if err != nil {
 			break
 		}
 
 		// If not currently valid, update structure.
-		if !me.Valid {
-			me.Valid = true
-			me.Updated = true
-			me.Value = v
+		if !v.Valid {
+			v.Valid = true
+			v.Updated = true
+			v.Value = value
 			break
 		}
 
 		// If there's no change, exit.
-		if me.Value == v {
+		if v.Value == value {
 			break
 		}
 
-		me.Updated = true
-		me.Value = v
+		v.Updated = true
+		v.Value = value
 	}
 
 	return err
 }
 
-func (me *Float32Value) IsValid() error {
+func (v *Float32Value) IsValid() error {
 	var err error
 
 	for range Only.Once {
-		if me.Valid {
+		if v.Valid {
 			// err = errors.New("Invalid value")
 			break
 		}
 
-		err = me.IsInRange(me.Value)
+		err = v.IsInRange(v.Value)
 		if err != nil {
 			break
 		}
@@ -103,20 +105,20 @@ func (me *Float32Value) IsValid() error {
 	return err
 }
 
-func (me *Float32Value) IsInRange(v float32) error {
+func (v *Float32Value) IsInRange(value float32) error {
 	var err error
 
 	for range Only.Once {
 		// @TODO - Need to figure out how to do mapRange64 properly.
 		// if me.Value < me.Min {
-		if v < 0 {
-			err = errors.New(fmt.Sprintf("# Value %f LT %f", v, me.Min))
+		if value < 0 {
+			err = errors.New(fmt.Sprintf("# Value %f LT %f", value, v.Min))
 			break
 		}
 
 		// if me.Value > me.Max {
-		if v > 1 {
-			err = errors.New(fmt.Sprintf("# Value %f GT %f", v, me.Max))
+		if value > 1 {
+			err = errors.New(fmt.Sprintf("# Value %f GT %f", value, v.Max))
 			break
 		}
 	}
@@ -124,63 +126,63 @@ func (me *Float32Value) IsInRange(v float32) error {
 	return err
 }
 
-func (me *Float32Value) getString() (string, error) {
+func (v *Float32Value) getString() (string, error) {
 	var s string
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		s = strconv.FormatFloat(float64(me.Value), 'f', -1, 32)
+		s = strconv.FormatFloat(float64(v.Value), 'f', -1, 32)
 		// s = fmt.Sprintf("%f", me.Value)
 	}
 
 	return s, err
 }
 
-func (me *Float32Value) getReal() (string, string, error) {
+func (v *Float32Value) getReal() (string, string, error) {
 	var r string	// Real value.
 	var s string	// Stored value.
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		s = strconv.FormatFloat(float64(me.Value), 'f', -1, 32)
+		s = strconv.FormatFloat(float64(v.Value), 'f', -1, 32)
 
-		if me.Linear {
+		if v.Linear {
 			// Convert to linear scale.
-			var v float32
-			v, err = me.mapRange(me.Value)
+			var val float32
+			val, err = v.mapRange(v.Value)
 			if err != nil {
 				break
 			}
 
-			r = strconv.FormatFloat(toFixed(float64(v), 2), 'f', -1, 32)
+			r = strconv.FormatFloat(toFixed(float64(val), 2), 'f', -1, 32)
 			break
 		}
 
 		// Convert to log scale.
 		var d float32
-		if (me.Value >= 0.5) {
-			d = me.Value * 40. - 30.
+		if v.Value >= 0.5 {
+			d = v.Value * 40. - 30.
 
-		} else if (me.Value >= 0.25) {
-			d = me.Value * 80. -50.
+		} else if v.Value >= 0.25 {
+			d = v.Value * 80. -50.
 
-		} else if (me.Value >= 0.0625) {
-			d = me.Value * 160. - 70.
+		} else if v.Value >= 0.0625 {
+			d = v.Value * 160. - 70.
 
-		} else if (me.Value >= 0.0) {
-			d = me.Value * 480. - 90.
+		} else if v.Value >= 0.0 {
+			d = v.Value * 480. - 90.
 		}
 
 		r = strconv.FormatFloat(toFixed(float64(d), 2), 'f', -1, 32)
@@ -190,7 +192,6 @@ func (me *Float32Value) getReal() (string, string, error) {
 }
 
 
-// ################################################################################
 type Float64Value struct {
 	Valid		bool
 	Updated		bool
@@ -200,77 +201,79 @@ type Float64Value struct {
 	Max 		float64
 	Linear		bool
 	Increment	float64
+	Precision   int
+
 	mapRange func(float64) (float64, error)
 }
 
-func (me *Float64Value) define(min float64, max float64, linear bool, inc float64) error {
+func (v *Float64Value) Define(min float64, max float64, linear bool, inc float64) error {
 	var err error
 
-	me.Valid = false
-	me.Min = min
-	me.Max = max
-	me.Linear = linear
-	me.Increment = inc
-	me.mapRange = mapRange64(rangeBounds64{0, 1}, rangeBounds64{me.Min, me.Max})
+	v.Valid = false
+	v.Min = min
+	v.Max = max
+	v.Linear = linear
+	v.Increment = inc
+	v.mapRange = mapRange64(rangeBounds64{0, 1}, rangeBounds64{v.Min, v.Max})
 
 	return err
 }
 
-func (me *Float64Value) get() (float64, error) {
+func (v *Float64Value) get() (float64, error) {
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 
-		me.Updated = false
+		v.Updated = false
 	}
 
-	return me.Value, err
+	return v.Value, err
 }
 
-func (me *Float64Value) set(v float64) error {
+func (v *Float64Value) set(value float64) error {
 	var err error
 
 	for range Only.Once {
 		// Check value is within range.
-		err = me.IsInRange(v)
+		err = v.IsInRange(value)
 		if err != nil {
 			break
 		}
 
 		// If not currently valid, update structure.
-		if !me.Valid {
-			me.Valid = true
-			me.Updated = true
-			me.Value = v
+		if !v.Valid {
+			v.Valid = true
+			v.Updated = true
+			v.Value = value
 			break
 		}
 
 		// If there's no change, exit.
-		if me.Value == v {
+		if v.Value == value {
 			break
 		}
 
-		me.Updated = true
-		me.Value = v
+		v.Updated = true
+		v.Value = value
 	}
 
 	return err
 }
 
-func (me *Float64Value) IsValid() error {
+func (v *Float64Value) IsValid() error {
 	var err error
 
 	for range Only.Once {
-		if me.Valid {
+		if v.Valid {
 			// err = errors.New("# Invalid value")
 			break
 		}
 
-		err = me.IsInRange(me.Value)
+		err = v.IsInRange(v.Value)
 		if err != nil {
 			break
 		}
@@ -279,20 +282,20 @@ func (me *Float64Value) IsValid() error {
 	return err
 }
 
-func (me *Float64Value) IsInRange(v float64) error {
+func (v *Float64Value) IsInRange(value float64) error {
 	var err error
 
 	for range Only.Once {
 		// @TODO - Need to figure out how to do mapRange64 properly.
 		// if me.Value < me.Min {
-		if v < 0 {
-			err = errors.New(fmt.Sprintf("# Value %f LT %f", v, me.Min))
+		if value < 0 {
+			err = errors.New(fmt.Sprintf("# Value %f LT %f", value, v.Min))
 			break
 		}
 
 		// if me.Value > me.Max {
-		if v > 1 {
-			err = errors.New(fmt.Sprintf("# Value %f GT %f", v, me.Max))
+		if value > 1 {
+			err = errors.New(fmt.Sprintf("# Value %f GT %f", value, v.Max))
 			break
 		}
 	}
@@ -300,72 +303,71 @@ func (me *Float64Value) IsInRange(v float64) error {
 	return err
 }
 
-func (me *Float64Value) getString() (string, error) {
+func (v *Float64Value) getString() (string, error) {
 	var s string
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 
-		s = strconv.FormatFloat(me.Value, 'f', -1, 64)
+		s = strconv.FormatFloat(v.Value, 'f', -1, 64)
 		// s = fmt.Sprintf("%f", me.Value)
 	}
 
 	return s, err
 }
 
-func (me *Float64Value) getReal() (string, string, error) {
+func (v *Float64Value) getReal() (string, string, error) {
 	var r string	// Real value.
 	var s string	// Stored value.
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		s = strconv.FormatFloat(float64(me.Value), 'f', -1, 64)
+		s = strconv.FormatFloat(v.Value, 'f', -1, 64)
 
-		if me.Linear {
+		if v.Linear {
 			// Convert to linear scale.
-			var v float64
-			v, err = me.mapRange(me.Value)
+			var val float64
+			val, err = v.mapRange(v.Value)
 			if err != nil {
 				break
 			}
 
-			r = strconv.FormatFloat(toFixed(float64(v), 2), 'f', -1, 32)
+			r = strconv.FormatFloat(toFixed(val, 2), 'f', -1, 32)
 			break
 		}
 
 		// Convert to log scale.
 		var d float64
-		if (me.Value >= 0.5) {
-			d = me.Value * 40. - 30.
+		if v.Value >= 0.5 {
+			d = v.Value * 40. - 30.
 
-		} else if (me.Value >= 0.25) {
-			d = me.Value * 80. -50.
+		} else if v.Value >= 0.25 {
+			d = v.Value * 80. -50.
 
-		} else if (me.Value >= 0.0625) {
-			d = me.Value * 160. - 70.
+		} else if v.Value >= 0.0625 {
+			d = v.Value * 160. - 70.
 
-		} else if (me.Value >= 0.0) {
-			d = me.Value * 480. - 90.
+		} else if v.Value >= 0.0 {
+			d = v.Value * 480. - 90.
 		}
 
-		r = strconv.FormatFloat(toFixed(float64(d), 2), 'f', -1, 32)
+		r = strconv.FormatFloat(toFixed(d, 2), 'f', -1, 32)
 	}
 
 	return r, s, err
 }
 
 
-// ################################################################################
 type rangeBounds32 struct {
 	b1, b2 float32
 }

@@ -45,7 +45,7 @@
 	}
   },
   "points": {
-	"/-stat/osc/on": { "endpoint": "/-stat/osc/on", "convert": { "binary": "normal" }, "info": "" },
+	"/-stat/osc/on": { "endpoint": "/-stat/osc/on", "convert": { "binary": { "type":"normal" } }, "info": "" },
 
 	"/config/osc/dest": { "endpoint": "/config/osc/dest", "convert": { "alias": "osc-dest-map" }, "info": "" },
 	"/config/osc/f1": { "endpoint": "/config/osc/f1", "unit": "Hz", "convert": { "alias": "log-scale-121" }, "info": "" },

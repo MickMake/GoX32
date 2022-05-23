@@ -46,7 +46,7 @@
   "points": {
 	"/-prefs/card/USBmode": { "endpoint": "/-prefs/card/USBmode", "convert": { "alias": "usb-card" }, "info": "" },
 
-	"/-stat/usbmounted": { "endpoint": "/-stat/usbmounted", "convert": { "binary": "normal" }, "info": "" },
+	"/-stat/usbmounted": { "endpoint": "/-stat/usbmounted", "convert": { "binary": { "type":"normal" } }, "info": "" },
 
 	"/-stat/tape/etime": { "endpoint": "/-stat/tape/etime", "unit": "S", "info": "" },
 	"/-stat/tape/file": { "endpoint": "/-stat/tape/file", "convert": { "string": { "size":0 } }, "info": "" },

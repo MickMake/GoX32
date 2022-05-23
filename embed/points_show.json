@@ -337,7 +337,7 @@
 	"points": {
 	  "/-show/showfile/cue/%.3d/numb": { "endpoint": "/-show/showfile/cue/%.3d/numb", "convert": { "alias": "cue-numb" }, "info": "" },
 	  "/-show/showfile/cue/%.3d/name": { "endpoint": "/-show/showfile/cue/%.3d/name", "convert": { "string": { "size": 0 } }, "info": "" },
-	  "/-show/showfile/cue/%.3d/skip": { "endpoint": "/-show/showfile/cue/%.3d/skip", "convert": { "binary": "normal" }, "info": "" },
+	  "/-show/showfile/cue/%.3d/skip": { "endpoint": "/-show/showfile/cue/%.3d/skip", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	  "/-show/showfile/cue/%.3d/scene": { "endpoint": "/-show/showfile/cue/%.3d/scene", "convert": { "integer": { "min":0, "max":0 } }, "info": "" },
 	  "/-show/showfile/cue/%.3d/bit": { "endpoint": "/-show/showfile/cue/%.3d/bit", "convert": { "integer": { "min":0, "max":0 } }, "info": "" },
 	  "/-show/showfile/cue/%.3d/miditype": { "endpoint": "/-show/showfile/cue/%.3d/miditype", "convert": { "alias": "cue-numb" }, "info": "" },
@@ -346,7 +346,7 @@
 	  "/-show/showfile/cue/%.3d/midipara2": { "endpoint": "/-show/showfile/cue/%.3d/midipara2", "convert": { "integer": { "min":0, "max":0 } }, "info": "" },
 
 	  "/-show/showfile/scene/%.3d/name": { "endpoint": "/-show/showfile/scene/%.3d/name", "convert": { "string": { "size": 0 } }, "info": "" },
-	  "/-show/showfile/scene/%.3d/hasdata": { "endpoint": "/-show/showfile/scene/%.3d/hasdata", "convert": { "binary": "normal" }, "info": "" },
+	  "/-show/showfile/scene/%.3d/hasdata": { "endpoint": "/-show/showfile/scene/%.3d/hasdata", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	  "/-show/showfile/scene/%.3d/notes": { "endpoint": "/-show/showfile/scene/%.3d/notes", "convert": { "string": { "size": 0 } }, "info": "" },
 	  "/-show/showfile/scene/%.3d/safes": { "endpoint": "/-show/showfile/scene/%.3d/safes", "convert": { "alias": "scene-safes" }, "info": "" },
 
@@ -355,7 +355,7 @@
 	  "/-show/showfile/snippet/%.3d/channels": { "endpoint": "/-show/showfile/snippet/%.3d/channels", "convert": { "alias": "snippet-channels" }, "info": "" },
 	  "/-show/showfile/snippet/%.3d/auxbuses": { "endpoint": "/-show/showfile/snippet/%.3d/auxbuses", "convert": { "alias": "snippet-auxbuses" }, "info": "" },
 	  "/-show/showfile/snippet/%.3d/maingrps": { "endpoint": "/-show/showfile/snippet/%.3d/maingrps", "convert": { "alias": "snippet-maingrps" }, "info": "" },
-	  "/-show/showfile/snippet/%.3d/hasdata": { "endpoint": "/-show/showfile/snippet/%.3d/hasdata", "convert": { "binary": "normal" }, "info": "" }
+	  "/-show/showfile/snippet/%.3d/hasdata": { "endpoint": "/-show/showfile/snippet/%.3d/hasdata", "convert": { "binary": { "type":"normal" } }, "info": "" }
 	}
   },
   "points": {

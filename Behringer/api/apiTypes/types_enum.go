@@ -8,7 +8,6 @@ import (
 )
 
 
-// ################################################################################
 type EnumValue struct {
 	Valid		bool
 	Updated		bool
@@ -17,60 +16,60 @@ type EnumValue struct {
 	Options		map[string]int32
 }
 
-func (me *EnumValue) define(sa []string) error {
+func (v *EnumValue) Define(sa []string) error {
 	var err error
 
-	me.Valid = false
+	v.Valid = false
 
-	if me.Options == nil {
-		me.Options = make(map[string]int32)
+	if v.Options == nil {
+		v.Options = make(map[string]int32)
 	}
 
 	var i int
 	var s string
 	for i, s = range sa {
 		// s = strings.ToLower(s)
-		me.Options[s] = int32(i)
+		v.Options[s] = int32(i)
 	}
 
 	return err
 }
 
-func (me *EnumValue) get() (int32, error) {
+func (v *EnumValue) get() (int32, error) {
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 
-		me.Updated = false
+		v.Updated = false
 	}
 
-	return me.Value, err
+	return v.Value, err
 }
 
-func (me *EnumValue) set(v int32) error {
+func (v *EnumValue) set(value int32) error {
 	var err error
 
 	for range Only.Once {
 		// Check value is within range.
-		v, err = me.IsInRange(v)
+		value, err = v.IsInRange(value)
 		if err != nil {
 			break
 		}
 
 		// If not currently valid, update structure.
-		if !me.Valid {
-			me.Valid = true
-			me.Updated = true
-			me.Value = v
+		if !v.Valid {
+			v.Valid = true
+			v.Updated = true
+			v.Value = value
 			break
 		}
 
 		// If there's no change, exit.
-		if me.Value == v {
+		if v.Value == value {
 			break
 		}
 
@@ -82,23 +81,23 @@ func (me *EnumValue) set(v int32) error {
 		// 	}
 		// }
 
-		me.Updated = true
-		me.Value = v
+		v.Updated = true
+		v.Value = value
 	}
 
 	return err
 }
 
-func (me *EnumValue) IsValid() error {
+func (v *EnumValue) IsValid() error {
 	var err error
 
 	for range Only.Once {
-		if me.Valid {
+		if v.Valid {
 			// err = errors.New("Invalid value")
 			break
 		}
 
-		_, err = me.IsInRange(me.Value)
+		_, err = v.IsInRange(v.Value)
 		if err != nil {
 			break
 		}
@@ -107,36 +106,36 @@ func (me *EnumValue) IsValid() error {
 	return err
 }
 
-func (me *EnumValue) IsInRange(v int32) (int32, error) {
+func (v *EnumValue) IsInRange(value int32) (int32, error) {
 	var err error
 
 	for range Only.Once {
-		err = errors.New(fmt.Sprintf("# Value %d invalid", v))
-		for _, c := range me.Options {
-			if c == v {
+		err = errors.New(fmt.Sprintf("# Value %d invalid", value))
+		for _, c := range v.Options {
+			if c == value {
 				err = nil
 				break
 			}
 		}
 	}
 
-	return v, err
+	return value, err
 }
 
-func (me *EnumValue) getString() (string, error) {
+func (v *EnumValue) getString() (string, error) {
 	var s string
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		var v int32
-		for s, v = range me.Options {
-			if v == me.Value {
+		var val int32
+		for s, val = range v.Options {
+			if val == v.Value {
 				break
 			}
 		}
@@ -145,26 +144,26 @@ func (me *EnumValue) getString() (string, error) {
 	return s, err
 }
 
-func (me *EnumValue) getReal() (string, string, error) {
+func (v *EnumValue) getReal() (string, string, error) {
 	var r string	// Real value.
 	var s string	// Stored value.
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		var v int32
-		for r, v = range me.Options {
-			if v == me.Value {
+		var val int32
+		for r, val = range v.Options {
+			if val == v.Value {
 				break
 			}
 		}
 
-		s = strconv.FormatInt(int64(me.Value), 10)
+		s = strconv.FormatInt(int64(v.Value), 10)
 	}
 
 	return r, s, err

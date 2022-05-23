@@ -5,7 +5,6 @@ import (
 )
 
 
-// ################################################################################
 type StringValue struct {
 	Valid		bool
 	Updated		bool
@@ -14,70 +13,70 @@ type StringValue struct {
 	Parse		string
 }
 
-func (me *StringValue) define(p string) error {
+func (v *StringValue) Define(p string) error {
 	var err error
 
-	me.Valid = false
-	me.Parse = p
+	v.Valid = false
+	v.Parse = p
 
 	return err
 }
 
-func (me *StringValue) get() (string, error) {
+func (v *StringValue) get() (string, error) {
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 
-		me.Updated = false
+		v.Updated = false
 	}
 
-	return me.Value, err
+	return v.Value, err
 }
 
-func (me *StringValue) set(v string) error {
+func (v *StringValue) set(value string) error {
 	var err error
 
 	for range Only.Once {
 		// Check value is within range.
-		err = me.IsInRange(v)
+		err = v.IsInRange(value)
 		if err != nil {
 			break
 		}
 
 		// If not currently valid, update structure.
-		if !me.Valid {
-			me.Valid = true
-			me.Updated = true
-			me.Value = v
+		if !v.Valid {
+			v.Valid = true
+			v.Updated = true
+			v.Value = value
 			break
 		}
 
 		// If there's no change, exit.
-		if me.Value == v {
+		if v.Value == value {
 			break
 		}
 
-		me.Updated = true
-		me.Value = v
+		v.Updated = true
+		v.Value = value
 	}
 
 	return err
 }
 
-func (me *StringValue) IsValid() error {
+func (v *StringValue) IsValid() error {
 	var err error
 
 	for range Only.Once {
-		if me.Valid {
+		if v.Valid {
 			// err = errors.New("Invalid string value")
 			break
 		}
 
-		err = me.IsInRange(me.Value)
+		err = v.IsInRange(v.Value)
 		if err != nil {
 			break
 		}
@@ -86,7 +85,7 @@ func (me *StringValue) IsValid() error {
 	return err
 }
 
-func (me *StringValue) IsInRange(v string) error {
+func (v *StringValue) IsInRange(value string) error {
 	var err error
 
 	for range Only.Once {
@@ -98,36 +97,36 @@ func (me *StringValue) IsInRange(v string) error {
 	return err
 }
 
-func (me *StringValue) getString() (string, error) {
+func (v *StringValue) getString() (string, error) {
 	var s string
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		s = me.Value
+		s = v.Value
 	}
 
 	return s, err
 }
 
-func (me *StringValue) getReal() (string, string, error) {
+func (v *StringValue) getReal() (string, string, error) {
 	var r string	// Real value.
 	var s string	// Stored value.
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		s = me.Value
+		s = v.Value
 		r = s
 	}
 

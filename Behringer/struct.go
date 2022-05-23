@@ -156,18 +156,7 @@ func (x *X32) Connect() error {
 		}
 		fmt.Println("Done")
 
-
 		go x.XremoteSender()
-
-		// fmt.Println("Got info from the OSC server:", info.Arguments)
-		// time.Sleep(time.Second * 30)
-		// sg.Areas = make(api.Areas)
-		// sg.Areas[api.GetArea(AliSmsService.Area{})] = api.AreaStruct(AliSmsService.Init(sg.ApiRoot))
-		// sg.Areas[api.GetArea(AppService.Area{})] = api.AreaStruct(AppService.Init(sg.ApiRoot))
-		// sg.Areas[api.GetArea(MttvScreenService.Area{})] = api.AreaStruct(MttvScreenService.Init(sg.ApiRoot))
-		// sg.Areas[api.GetArea(PowerPointService.Area{})] = api.AreaStruct(PowerPointService.Init(sg.ApiRoot))
-		// sg.Areas[api.GetArea(WebAppService.Area{})] = api.AreaStruct(WebAppService.Init(sg.ApiRoot))
-		// sg.Areas[api.GetArea(WebIscmAppService.Area{})] = api.AreaStruct(WebIscmAppService.Init(sg.ApiRoot))
 	}
 
 	return x.Error
@@ -413,6 +402,11 @@ func (x *X32) oscMessageHandler(msg *gosc.Message) {
 		m := x.UpdateCache(msg)
 		if x.Debug {
 			fmt.Printf("# oscMessageHandler() - msg: %v\n", msg)
+		}
+
+		m.Point, m.UnitValueMap, m.Error = x.Process(msg.Address, msg.Arguments...)
+		if m.Error != nil {
+			break
 		}
 
 		if x.messageHandler == nil {

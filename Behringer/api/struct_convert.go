@@ -16,7 +16,10 @@ import (
 const (
 	Off = "OFF"
 	On = "ON"
+	DefaultPrecision = 3
+	Single = "0"
 )
+
 
 type ConvertStruct struct {
 	Alias     *ConvertAlias     `json:"alias,omitempty"`
@@ -34,147 +37,79 @@ type ConvertStruct struct {
 	Blob      *ConvertBlob      `json:"blob,omitempty"`
 }
 
-type ConvertAlias string
+type ValuesMap map[string]string
 
-type ConvertIncrement struct {
-	Min 		float64 `json:"min"`
-	Max 		float64 `json:"max"`
-	Increment	float64 `json:"increment"`
-	Precision   int     `json:"precision"`
+func (v *ValuesMap) Add(key string, value string) {
+	for range Only.Once {
+		(*v)[key] = value
+	}
 }
 
-type ConvertRange struct {
-	InMin 		float64 `json:"in_min"`
-	InMax 		float64 `json:"in_max"`
-	OutMin 		float64 `json:"out_min"`
-	OutMax 		float64 `json:"out_max"`
-	Precision   int     `json:"precision"`
+func (v *ValuesMap) Append(values ValuesMap) {
+	for range Only.Once {
+		for key, value := range values {
+			(*v)[key] = value
+		}
+	}
 }
 
-type ConvertMap map[string]string
-
-type ConvertBitMap []string
-
-type ConvertFunction string
-
-type ConvertBinary string
-
-type ConvertString struct {
-	Size int `json:"size"`
-}
-
-type ConvertAsset struct {
-	Url    bool `json:"url"`
-	Icon   bool `json:"icon"`
-	String bool `json:"string"`
-}
-
-type ConvertArray struct {
-	Expected int      `json:"expected"`
-	Names    []string `json:"names"`
-}
-
-type ConvertFloatMap struct {
-	Values      map[string]string `json:"values"`
-	Precision   int               `json:"precision"`
-	Map         map[string]string `json:"-"`
-	DefaultZero string            `json:"-"`
-}
-
-type ConvertInteger struct {
-	Min int `json:"min"`
-	Max int `json:"max"`
-}
-
-type ConvertBlob struct {
-	Order []struct {
-		Data  *ConvertBlobData      `json:"data"`
-		Array *ConvertBlobDataArray `json:"array"`
-	} `json:"order"`
-	Sequence []ConvertBlobData `json:"-"`
-}
-type ConvertBlobOrder []struct {
-	Data  *ConvertBlobData      `json:"data"`
-	Array *ConvertBlobDataArray `json:"array"`
-}
-type ConvertBlobData struct {
-	Convert   *ConvertStruct `json:"convert"`
-	Unit      string         `json:"unit"`
-	Key       string         `json:"key"`
-	Type      string         `json:"type"`
-	BigEndian bool           `json:"big_endian"`
-}
-type ConvertBlobDataArray struct {
-	Data   ConvertBlobData `json:"data"`
-	Count  int             `json:"count"`
-	Offset int             `json:"offset"`
-	Keys   []string        `json:"keys"`
-	// NameFormat string `json:"name_format"`
-}
-type BlobReturn struct {
-}
-
-const Single = "0"
-func (c *ConvertStruct) GetValues(values ...any) map[string]string {
-	ret := make(map[string]string)
+func (c *ConvertStruct) GetValues(values ...any) ValuesMap {
+	ret := make(ValuesMap)
 
 	for range Only.Once {
-		for _, value := range values {
+		// if c.Array != nil {
+		// 	ret = c.Array.Convert(values...)
+		// 	break
+		// }
+
+		for index, value := range values {
 			switch {
 				case c.Alias != nil:
 					break
 
 				case c.Increment != nil:
+					ret.Add(Single, c.Increment.Convert(value))
 					// value = ToLinearDb(value, c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
 					break
 
 				case c.Range != nil:
-					// ret[Single] = ToRange(fmt.Sprintf("%v", value), c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
-					ret[Single] = c.Range.Convert(fmt.Sprintf("%v", value))
+					ret.Add(Single, c.Range.Convert(value))
 					break
 
 				case c.Map != nil:
-					val := fmt.Sprintf("%v", value)
-					if v, ok := (*c.Map)[val]; ok {
-						ret[Single] = v
-					}
+					ret.Add(Single, c.Map.Convert(value))
 					break
 
 				case c.BitMap != nil:
-					ret[Single] = c.BitMap.Convert(value, 0)
+					ret.Add(Single, c.BitMap.Convert(value, 0))
 					break
 
 				case c.Function != nil:
-					if *c.Function == "log" {
-						ret[Single] = ToLogFunc(fmt.Sprintf("%v", value), 1)
-						break
-					}
+					ret.Add(Single, c.Function.Convert(value))
 					break
 
 				case c.Binary != nil:
-					ret[Single] = c.BitMap.Convert(value, 0)
+					ret.Add(Single, c.Binary.Convert(value))
 					break
 
 				case c.String != nil:
+					ret.Add(Single, c.String.Convert(value))
 					break
 
 				case c.Asset != nil:
+					ret.Add(Single, c.Asset.Convert(value))
 					break
 
 				case c.Array != nil:
-					// 	value = strings.Join(*c.Array, ", ")
+					ret.Append(c.Array.Convert(index, value))
 					break
 
 				case c.FloatMap != nil:
-					ret[Single] = c.FloatMap.Convert(value)
+					ret.Add(Single, c.FloatMap.Convert(value))
 					break
 
 				case c.Blob != nil:
-					var val []byte
-					for _, v := range value.([]byte) {
-						val = append(val, v)
-					}
-					ret = c.Blob.Convert(val)
+					ret = c.Blob.Convert(value)
 					break
 			}
 		}
@@ -192,19 +127,16 @@ func (c *ConvertStruct) GetValue(value any) string {
 				break
 
 			case c.Increment != nil:
+				ret = c.Increment.Convert(value)
 				// value = ToLinearDb(value, c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
 				break
 
 			case c.Range != nil:
-				// ret = ToRange(fmt.Sprintf("%v", value), c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
-				ret = c.Range.Convert(fmt.Sprintf("%v", value))
+				ret = c.Range.Convert(value)
 				break
 
 			case c.Map != nil:
-				val := fmt.Sprintf("%v", value)
-				if v, ok := (*c.Map)[val]; ok {
-					ret = v
-				}
+				ret = c.Map.Convert(value)
 				break
 
 			case c.BitMap != nil:
@@ -212,32 +144,30 @@ func (c *ConvertStruct) GetValue(value any) string {
 				break
 
 			case c.Function != nil:
-				if *c.Function == "log" {
-					ret = ToLogFunc(fmt.Sprintf("%v", value), 1)
-					break
-				}
+				ret = c.Function.Convert(value)
 				break
 
 			case c.Binary != nil:
-				ret = c.BitMap.Convert(value, 0)
+				ret = c.Binary.Convert(value)
 				break
 
 			case c.String != nil:
+				ret = c.String.Convert(value)
 				break
 
 			case c.Asset != nil:
-				break
-
-			case c.Array != nil:
-				// 	value = strings.Join(*c.Array, ", ")
+				ret = c.Asset.Convert(value)
 				break
 
 			case c.FloatMap != nil:
 				ret = c.FloatMap.Convert(value)
 				break
 
+			case c.Array != nil:
+			// Can't have an array within a blob.
+
 			case c.Blob != nil:
-				// Can't have a blob on a blob.
+				// Can't have a blob within a blob.
 		}
 	}
 
@@ -270,15 +200,188 @@ func (c *ConvertStruct) GetConvertType() string {
 }
 
 
-func (c *ConvertBitMap) Convert(value any, size uint32) string {
+type ConvertAlias string
+
+func (c *ConvertAlias) Import() ConvertStruct {
+	var ret ConvertStruct
+	// @TODO - Not yet tested.
+
+	for range Only.Once {
+		// ret = c.Get(p.Convert.Alias)
+	}
+
+	return ret
+}
+
+
+type ConvertIncrement struct {
+	Min 		float64 `json:"min"`
+	Max 		float64 `json:"max"`
+	Increment	float64 `json:"increment"`
+	Precision   int     `json:"precision"`
+}
+func (c *ConvertIncrement) Convert(value any) string {
+	var ret string
+	// @TODO - Not yet tested.
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+
+		if (c.Min == 0) && (c.Max == 0) {
+			c.Min = 0
+			c.Max = 1
+		}
+
+		if ret == "" {
+			break
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertIncrement) Import() error {
+	var err error
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		if (c.Min == 0) && (c.Max == 0) {
+			c.Min = 0
+			c.Max = 1
+		}
+
+		if c.Precision == 0 {
+			c.Precision = DefaultPrecision
+		}
+
+		if c.Increment == 0 {
+			c.Increment = 0.1
+		}
+	}
+
+	return err
+}
+
+
+type ConvertRange struct {
+	InMin 		float64 `json:"in_min"`
+	InMax 		float64 `json:"in_max"`
+	OutMin 		float64 `json:"out_min"`
+	OutMax 		float64 `json:"out_max"`
+	Precision   int     `json:"precision"`
+}
+func (c *ConvertRange) Convert(value any) string {
 	var ret string
 
 	for range Only.Once {
+		var err error
+		var fv float64
+
+		ret = fmt.Sprintf("%v", value)
+
+		fv, err = strconv.ParseFloat(ret, 64)
+		if err != nil {
+			break
+		}
+
+		type mapRange 	func(float64) (float64, error)
+
+		var foo mapRange
+		foo = MapRange64(RangeFloat64{c.InMin, c.InMax}, RangeFloat64{c.OutMin, c.OutMax})
+		// Convert to linear scale.
+		fv, err = foo(fv)
+
+		if err != nil {
+			break
+		}
+
+		if c.Precision == 0 {
+			c.Precision = DefaultPrecision
+		}
+
+		ret = strconv.FormatFloat(fv, 'f', c.Precision, 32)
+	}
+
+	return ret
+}
+
+func (c *ConvertRange) Import() error {
+	var err error
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		if (c.InMin == 0) && (c.InMax == 0) {
+			c.InMin = 0
+			c.InMax = 1
+		}
+	}
+
+	return err
+}
+
+
+type ConvertMap map[string]string
+func (c *ConvertMap) Convert(value any) string {
+	var ret string
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+
 		if len(*c) == 0 {
 			break
 		}
 
+		if v, ok := (*c)[ret]; ok {
+			ret = v
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertMap) Import() error {
+	var err error
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		if len(*c) == 0 {
+			err = errors.New("empty map")
+			break
+		}
+	}
+
+	return err
+}
+
+
+type ConvertBitMap []string
+func (c *ConvertBitMap) Convert(value any, size uint32) string {
+	var ret string
+
+	for range Only.Once {
 		ret = fmt.Sprintf("%v", value)
+
+		if len(*c) == 0 {
+			break
+		}
+
 		if ret == "" {
 			ret = (*c)[0]
 			break
@@ -311,43 +414,347 @@ func (c *ConvertBitMap) Convert(value any, size uint32) string {
 	return ret
 }
 
-func (c *ConvertRange) Convert(value string) string {
-	// var ret string
+func (c *ConvertBitMap) Import() error {
+	var err error
 
 	for range Only.Once {
-		var err error
-		var fv float64
-
-		fv, err = strconv.ParseFloat(value, 64)
-		if err != nil {
+		if c == nil {
 			break
 		}
 
-		type mapRange 	func(float64) (float64, error)
-
-		var foo mapRange
-		foo = MapRange64(RangeFloat64{c.InMin, c.InMax}, RangeFloat64{c.OutMin, c.OutMax})
-		// Convert to linear scale.
-		fv, err = foo(fv)
-
-		if err != nil {
+		if len(*c) == 0 {
+			err = errors.New("empty map")
 			break
 		}
-
-		if c.Precision == 0 {
-			c.Precision = 1
-		}
-
-		value = strconv.FormatFloat(fv, 'f', c.Precision, 32)
 	}
 
-	return value
+	return err
 }
 
-func (c *ConvertFloatMap) Convert(value any) string {
-	var val string
+
+type ConvertFunction string
+func (c *ConvertFunction) Convert(value any) string {
+	var ret string
+	// @TODO - Not yet tested.
 
 	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+
+		if len(*c) == 0 {
+			break
+		}
+
+		if *c == "log" {
+			ret = ToLogFunc(fmt.Sprintf("%v", value), 1) // DefaultPrecision)
+			break
+		}
+
+		if ret == "" {
+			break
+		}
+	}
+
+	return ret
+}
+func ToLogFunc(value any, precision int) string {
+	var ret string
+
+	for range Only.Once {
+		// s = strconv.FormatFloat(float64(fv), 'f', -1, 32)
+		ret = fmt.Sprintf("%v", value)
+		fv, err := strconv.ParseFloat(ret, 64)
+		if err != nil {
+			ret = "-inf"
+			break
+		}
+
+		fv = toFixed(fv, 4)
+
+		if fv == 0 {
+			ret = "-inf"
+			break
+		}
+
+		// Convert to log scale.
+		var d float64
+		if fv >= 0.5 {
+			d = float64(fv * 40.0 - 30.0)
+
+		} else if fv >= 0.25 {
+			d = float64(fv * 80.0 - 50.0)
+
+		} else if fv >= 0.0625 {
+			d = float64(fv * 160.0 - 70.0)
+
+		} else if fv >= 0.0 {
+			d = float64(fv * 480.0 - 90.0)
+		}
+
+		// def float_to_db(f):
+		//    if (f >= 0.5):
+		//        db = f * 40. - 30. # max dB value: +10
+		//    elif (f >= 0.25):
+		//        db = f * 80. - 50.
+		//    elif (f >= 0.0625):
+		//        db = f * 160. - 70.
+		//    elif (f >= 0.0):
+		//        db = f * 480. - 90. # min db value: -90
+		//    return db
+
+		if precision == 0 {
+			precision = DefaultPrecision
+		}
+
+		ret = strconv.FormatFloat(float64(d), 'f', precision, 32)
+	}
+
+	return ret
+}
+
+func (c *ConvertFunction) Import() error {
+	var err error
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		if *c == "" {
+			err = errors.New("empty function")
+			break
+		}
+	}
+
+	return err
+}
+
+
+type ConvertBinary struct {
+	On       string `json:"on"`
+	Off      string `json:"off"`
+	Type     string `json:"type"`
+	IsSwitch bool   `json:"-"`
+}
+func (c *ConvertBinary) Convert(value any) string {
+	var ret string
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+
+		if ret == "" {
+			break
+		}
+
+		if ret == "0" {
+			ret = c.Off
+			break
+		}
+
+		if ret == "1" {
+			ret = c.On
+			break
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertBinary) Import() error {
+	var err error
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		switch {
+			case (c.On == "") && (c.Off != ""):
+				err = errors.New("missing On binary value")
+
+			case (c.On != "") && (c.Off == ""):
+				err = errors.New("missing Off binary value")
+
+			case (c.On != "") && (c.Off == "") && (c.Type == ""):
+				fallthrough
+			case c.Type == "":
+				fallthrough
+			case c.Type == "normal":
+				c.On = On
+				c.Off = Off
+				// ret = &ConvertMap{ "0":Off, "1":On }
+
+			case c.Type == "swap":
+				fallthrough
+			case c.Type == "swapped":
+				fallthrough
+			case c.Type == "invert":
+				fallthrough
+			case c.Type == "inverted":
+				c.On = Off
+				c.Off = On
+				// ret = &ConvertMap{ "0":On, "1":Off }
+		}
+
+		if (strings.ToUpper(c.On) == On) && (strings.ToUpper(c.Off) == Off) {
+			c.IsSwitch = true
+		}
+		if (strings.ToUpper(c.On) == Off) && (strings.ToUpper(c.Off) == On) {
+			c.IsSwitch = true
+		}
+	}
+
+	return err
+}
+
+
+type ConvertString struct {
+	Size int `json:"size"`
+}
+func (c *ConvertString) Convert(value any) string {
+	var ret string
+	// @TODO - Not yet tested.
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+
+		if c.Size == 0 {
+			// break
+		}
+
+		if ret == "" {
+			break
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertString) Import() error {
+	var err error
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+	}
+
+	return err
+}
+
+
+type ConvertAsset struct {
+	Url    bool `json:"url"`
+	Icon   bool `json:"icon"`
+	String bool `json:"string"`
+}
+func (c *ConvertAsset) Convert(value any) string {
+	var ret string
+	// @TODO - Not yet tested.
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+
+		if ret == "" {
+			break
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertAsset) Import() error {
+	var err error
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+	}
+
+	return err
+}
+
+
+type ConvertArray struct {
+	Expected int      `json:"expected"`
+	Names    []string `json:"names"`
+}
+func (c *ConvertArray) Convert(index int, value any) ValuesMap {
+	ret := make(ValuesMap)
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		name := fmt.Sprintf("%d", index)
+		if c.Names != nil {
+			if index < len(c.Names) {
+				name = c.Names[index]
+			}
+		}
+
+		// if c.Expected == 0 {
+		// 	break
+		// }
+
+		ret[name] = fmt.Sprintf("%v", value)
+	}
+
+	return ret
+}
+
+func (c *ConvertArray) Import() error {
+	var err error
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		// if c.Expected == 0 {
+		// 	err = errors.New("empty array")
+		// 	break
+		// }
+
+		if len(c.Names) == 0 {
+			err = errors.New("empty array")
+			break
+		}
+	}
+
+	return err
+}
+
+
+type ConvertFloatMap struct {
+	Values      map[string]string `json:"values"`
+	Precision   int               `json:"precision"`
+	Map         map[string]string `json:"-"`
+	DefaultZero string            `json:"-"`
+}
+func (c *ConvertFloatMap) Convert(value any) string {
+	var ret string
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
 		if c == nil {
 			break
 		}
@@ -360,28 +767,119 @@ func (c *ConvertFloatMap) Convert(value any) string {
 			break
 		}
 
-		val = fmt.Sprintf("%v", value)
-		if val == "" {
+		if ret == "" {
 			// value = array.FloatValues[0]
 			break
 		}
 
-		fv, err := strconv.ParseFloat(val, 64)
+		fv, err := strconv.ParseFloat(ret, 64)
 		if err != nil {
 			break
 		}
 
-		val = strconv.FormatFloat(fv, 'f', c.Precision, 32)
-		if v, ok := c.Map[val]; ok {
-			value = v
+		if c.Precision == 0 {
+			c.Precision = DefaultPrecision
+		}
+
+		ret = strconv.FormatFloat(fv, 'f', c.Precision, 32)
+		if v, ok := c.Map[ret]; ok {
+			ret = v
 			break
 		}
 	}
 
-	return val
+	return ret
 }
 
-func (c *ConvertBlob) Convert(value []byte) map[string]string {
+func (c *ConvertFloatMap) Import() error {
+	var err error
+	// @TODO - Not yet tested.
+
+	for range Only.Once {
+		if c == nil {
+			err = errors.New("nil structure")
+			break
+		}
+
+		c.Map = make(map[string]string)
+		if c.Precision == 0 {
+			c.Precision = 4
+		}
+		minFv := 1.0
+		for k, v := range c.Values {
+			var fv float64
+			fv, err = strconv.ParseFloat(k, 64)
+			if err != nil {
+				break
+			}
+			if fv < minFv {
+				minFv = fv
+			}
+			k = strconv.FormatFloat(fv, 'f', c.Precision, 32)
+			c.Map[k] = v
+		}
+		c.DefaultZero = strconv.FormatFloat(minFv, 'f', c.Precision, 32)
+	}
+
+	return err
+}
+
+
+type ConvertInteger struct {
+	Min int `json:"min"`
+	Max int `json:"max"`
+}
+func (c *ConvertInteger) Convert(value any) string {
+	var ret string
+	// @TODO - Not yet tested.
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+
+		if (c.Min == 0) && (c.Max == 0) {
+			c.Min = 0
+			c.Max = 1
+		}
+
+		if ret == "" {
+			break
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertInteger) Import() error {
+	var err error
+	// @TODO - Not yet tested.
+
+	for range Only.Once {
+		if c == nil {
+			err = errors.New("nil structure")
+			break
+		}
+
+		if err != nil {
+			break
+		}
+	}
+
+	return err
+}
+
+
+type ConvertBlob struct {
+	Order []struct {
+		Data  *ConvertBlobData      `json:"data"`
+		Array *ConvertBlobDataArray `json:"array"`
+	} `json:"order"`
+	Sequence []ConvertBlobData `json:"-"`
+}
+func (c *ConvertBlob) Convert(value any) map[string]string {
 	ret := make(map[string]string)
 
 	for range Only.Once {
@@ -393,7 +891,11 @@ func (c *ConvertBlob) Convert(value []byte) map[string]string {
 			break
 		}
 
-		r := bytes.NewReader(value)
+		var val []byte
+		for _, v := range value.([]byte) {
+			val = append(val, v)
+		}
+		r := bytes.NewReader(val)
 
 		var i int
 		for i = 0; (r.Len() > 0) && (i < len(c.Sequence)); i++ {
@@ -428,6 +930,96 @@ func (c *ConvertBlob) Convert(value []byte) map[string]string {
 	return ret
 }
 
+func (c *ConvertBlob) Import(aliases Aliases) error {
+	var err error
+
+	for range Only.Once {
+		if c == nil {
+			err = errors.New("nil structure")
+			break
+		}
+
+		for _, b := range c.Order {
+			switch {
+				case b.Data != nil:
+					if b.Data.Convert != nil {
+						if b.Data.Convert.Alias != nil {
+							foo := aliases.Get(b.Data.Convert.Alias)
+							b.Data.Convert = &foo
+						}
+					}
+					if b.Data.Key == "" {
+						b.Data.Key = "%d"
+					}
+					c.Sequence = append(c.Sequence, *b.Data)
+
+				case b.Array != nil:
+					if b.Array.Data.Convert != nil {
+						if b.Array.Data.Convert.Alias != nil {
+							foo := aliases.Get(b.Array.Data.Convert.Alias)
+							b.Array.Data.Convert = &foo
+						}
+					}
+
+					if b.Array.Keys != nil {
+						for _, v := range b.Array.Keys {
+							if b.Array.Data.Key == "" {
+								if len(b.Array.Keys) > 0 {
+									b.Array.Data.Key = "%s"
+								} else {
+									b.Array.Data.Key = "%d"
+								}
+							}
+							c.Sequence = append(c.Sequence, ConvertBlobData {
+								Convert:   b.Array.Data.Convert,
+								Unit:      b.Array.Data.Unit,
+								Key:       fmt.Sprintf("%s", v),
+								Type:      b.Array.Data.Type,
+								BigEndian: b.Array.Data.BigEndian,
+							})
+						}
+						continue
+					}
+
+					for i := 0; i < b.Array.Count; i++ {
+						if b.Array.Data.Key == "" {
+							if len(b.Array.Keys) > 0 {
+								b.Array.Data.Key = "%s"
+							} else {
+								b.Array.Data.Key = "%d"
+							}
+						}
+						c.Sequence = append(c.Sequence, ConvertBlobData {
+							Convert:   b.Array.Data.Convert,
+							Unit:      b.Array.Data.Unit,
+							Key:       fmt.Sprintf(b.Array.Data.Key, i + b.Array.Offset),	// , b.Array.Data.Unit, v),
+							Type:      b.Array.Data.Type,
+							BigEndian: b.Array.Data.BigEndian,
+						})
+					}
+					continue
+			}
+		}
+		c.Order = ConvertBlobOrder{}
+	}
+
+	return err
+}
+
+
+type ConvertBlobOrder []struct {
+	Data  *ConvertBlobData      `json:"data"`
+	Array *ConvertBlobDataArray `json:"array"`
+}
+
+
+type ConvertBlobData struct {
+	Convert   *ConvertStruct `json:"convert"`
+	Unit      string         `json:"unit"`
+	Key       string         `json:"key"`
+	Type      string         `json:"type"`
+	BigEndian bool           `json:"big_endian"`
+}
 func (c *ConvertBlobData) ReaderValue(reader *bytes.Reader) (string, error) {
 	var ret string
 	var err error
@@ -479,7 +1071,7 @@ func (c *ConvertBlobData) ReaderString(reader *bytes.Reader) string {
 		var err error
 		ret, err = c.ReaderValue(reader)
 		if err != nil {
-			ret = fmt.Sprintf(`"%s": "Error with value (big_endian:%v) of type %s - %s"`,
+			ret = fmt.Sprintf(`"%s": "Error with value (big_endian:%t) of type %s - %s"`,
 				c.Key, c.BigEndian, c.Type, err)
 		}
 	}
@@ -487,6 +1079,14 @@ func (c *ConvertBlobData) ReaderString(reader *bytes.Reader) string {
 	return ret
 }
 
+
+type ConvertBlobDataArray struct {
+	Data   ConvertBlobData `json:"data"`
+	Count  int             `json:"count"`
+	Offset int             `json:"offset"`
+	Keys   []string        `json:"keys"`
+	// NameFormat string `json:"name_format"`
+}
 func (c *ConvertBlobDataArray) ReaderStrings(reader *bytes.Reader) []string {
 	var ret []string
 
@@ -517,87 +1117,6 @@ func (c *ConvertBlobDataArray) ReaderStrings(reader *bytes.Reader) []string {
 	}
 
 	return ret
-}
-
-func ToLogFunc(value string, precision int) string {
-	for range Only.Once {
-		// s = strconv.FormatFloat(float64(fv), 'f', -1, 32)
-		fv, err := strconv.ParseFloat(value, 64)
-		if err != nil {
-			value = "-inf"
-			break
-		}
-
-		if fv == 0 {
-			value = "-inf"
-			break
-		}
-
-		// Convert to log scale.
-		var d float64
-		if fv >= 0.5 {
-			d = float64(fv * 40.0 - 30.0)
-
-		} else if fv >= 0.25 {
-			d = float64(fv * 80.0 - 50.0)
-
-		} else if fv >= 0.0625 {
-			d = float64(fv * 160.0 - 70.0)
-
-		} else if fv >= 0.0 {
-			d = float64(fv * 480.0 - 90.0)
-		}
-
-		// def float_to_db(f):
-		//    if (f >= 0.5):
-		//        db = f * 40. - 30. # max dB value: +10
-		//    elif (f >= 0.25):
-		//        db = f * 80. - 50.
-		//    elif (f >= 0.0625):
-		//        db = f * 160. - 70.
-		//    elif (f >= 0.0):
-		//        db = f * 480. - 90. # min db value: -90
-		//    return db
-
-		if precision == 0 {
-			precision = 1
-		}
-
-		value = strconv.FormatFloat(d, 'f', precision, 32)
-	}
-
-	return value
-}
-
-func ToLinear(value string, inMin string, inMax string, outMin string, outMax string) string {
-	for range Only.Once {
-		var err error
-		var fv float64
-		var inMinFloat float64
-		var inMaxFloat float64
-		var outMinFloat float64
-		var outMaxFloat float64
-
-		fv, err = strconv.ParseFloat(value, 64)
-		if err != nil {
-			break
-		}
-
-		type mapRange 	func(float64) (float64, error)
-
-		var foo mapRange
-		foo = MapRange64(RangeFloat64{inMinFloat, inMaxFloat}, RangeFloat64{outMinFloat, outMaxFloat})
-		// Convert to linear scale.
-		fv, err = foo(fv)
-
-		if err != nil {
-			break
-		}
-
-		value = strconv.FormatFloat(fv, 'f', -1, 32)
-	}
-
-	return value
 }
 
 

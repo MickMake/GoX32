@@ -634,7 +634,7 @@ func (ct *CmdType) DefineBit(n string, d string, units string, min int32, max in
 	ct.Type = TypeBit
 	ct.TypeString = StrBit
 
-	err = ct.BitValue.define(min, max)
+	err = ct.BitValue.Define(min, max)
 
 	return err
 }
@@ -654,7 +654,7 @@ func (ct *CmdType) DefineBool(n string, d string, off string, on string) error {
 	ct.Type = TypeBool
 	ct.TypeString = StrBool
 
-	err = ct.BoolValue.define(off, on)
+	err = ct.BoolValue.Define(off, on)
 
 	return err
 }
@@ -675,7 +675,7 @@ func (ct *CmdType) DefineEnum(n string, d string, units string, sa []string) err
 	ct.Type = TypeEnum
 	ct.TypeString = StrEnum
 
-	err = ct.EnumValue.define(sa)
+	err = ct.EnumValue.Define(sa)
 
 	return err
 }
@@ -696,7 +696,7 @@ func (ct *CmdType) DefineFloat32(n string, d string, units string, min float32, 
 	ct.Type = TypeFloat32
 	ct.TypeString = StrFloat32
 
-	err = ct.Float32Value.define(min, max, linear, inc)
+	err = ct.Float32Value.Define(min, max, linear, inc)
 
 	return err
 }
@@ -717,7 +717,7 @@ func (ct *CmdType) DefineFloat64(n string, d string, units string, min float64, 
 	ct.Type = TypeFloat64
 	ct.TypeString = StrFloat64
 
-	err = ct.Float64Value.define(min, max, linear, inc)
+	err = ct.Float64Value.Define(min, max, linear, inc)
 
 	return err
 }
@@ -738,7 +738,7 @@ func (ct *CmdType) DefineInt32(n string, d string, units string, min int32, max 
 	ct.Type = TypeInt32
 	ct.TypeString = StrInt32
 
-	err = ct.Int32Value.define(min, max)
+	err = ct.Int32Value.Define(min, max)
 
 	return err
 }
@@ -759,7 +759,7 @@ func (ct *CmdType) DefineInt64(n string, d string, units string, min int64, max 
 	ct.Type = TypeInt64
 	ct.TypeString = StrInt64
 
-	err = ct.Int64Value.define(min, max)
+	err = ct.Int64Value.Define(min, max)
 
 	return err
 }
@@ -779,7 +779,7 @@ func (ct *CmdType) DefineString(n string, d string, p string) error {
 	ct.Type = TypeString
 	ct.TypeString = StrString
 
-	err = ct.StringValue.define(p)
+	err = ct.StringValue.Define(p)
 
 	return err
 }

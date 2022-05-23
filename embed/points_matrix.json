@@ -6,19 +6,19 @@
 	"max": 6,
 	"increment": 1,
 	"points": {
-	  "/mtx/%.2d/preamp/invert": { "endpoint": "/mtx/%.2d/preamp/invert", "convert": { "binary": "normal" }, "info": "" },
+	  "/mtx/%.2d/preamp/invert": { "endpoint": "/mtx/%.2d/preamp/invert", "convert": { "binary": { "type":"normal" } }, "info": "" },
 
 	  "/mtx/%.2d/config/color": { "endpoint": "/mtx/%.2d/config/color", "convert": { "alias": "colour-map" }, "info": "" },
 	  "/mtx/%.2d/config/icon": { "endpoint": "/mtx/%.2d/config/icon", "unit": "icon-select", "info": "" },
 	  "/mtx/%.2d/config/name": { "endpoint": "/mtx/%.2d/config/name", "convert": { "string": { "size": 0 } }, "info": "" },
-	  "/mtx/%.2d/config/preamp/invert": { "endpoint": "/mtx/%.2d/config/preamp/invert", "convert": { "binary": "normal" }, "info": "" },
+	  "/mtx/%.2d/config/preamp/invert": { "endpoint": "/mtx/%.2d/config/preamp/invert", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	  
 	  "/mtx/%.2d/dyn/attack": { "endpoint": "/mtx/%.2d/dyn/attack", "unit": "mS", "convert": { "alias": "dyn-attack" }, "info": "" },
 	  "/mtx/%.2d/dyn/auto": { "endpoint": "/mtx/%.2d/dyn/auto", "convert": { "map": {  "0": "MANUAL", "1": "AUTO"  } }, "info": "" },
 	  "/mtx/%.2d/dyn/det": { "endpoint": "/mtx/%.2d/dyn/det", "convert": { "map": {  "0": "PEAK", "1": "RMS"  } }, "info": "" },
 	  "/mtx/%.2d/dyn/env": { "endpoint": "/mtx/%.2d/dyn/env", "convert": { "map": {  "0": "LINEAR", "1": "LOG"  } }, "info": "" },
 	  "/mtx/%.2d/dyn/filter/f": { "endpoint": "/mtx/%.2d/dyn/filter/f", "unit": "Hz", "convert": { "alias": "log-scale-201" }, "info": "" },
-	  "/mtx/%.2d/dyn/filter/on": { "endpoint": "/mtx/%.2d/dyn/filter/on", "convert": { "binary": "normal" }, "info": "" },
+	  "/mtx/%.2d/dyn/filter/on": { "endpoint": "/mtx/%.2d/dyn/filter/on", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	  "/mtx/%.2d/dyn/filter/type": { "endpoint": "/mtx/%.2d/dyn/filter/type", "convert": { "alias": "filter-type-map" }, "info": "" },
 	  "/mtx/%.2d/dyn/hold": { "endpoint": "/mtx/%.2d/dyn/hold", "unit": "mS", "convert": { "alias": "log-scale-101-hold" }, "info": "" },
 	  "/mtx/%.2d/dyn/keysrc": { "endpoint": "/mtx/%.2d/dyn/keysrc", "convert": { "alias": "source-map" }, "info": "" },
@@ -26,13 +26,13 @@
 	  "/mtx/%.2d/dyn/mgain": { "endpoint": "/mtx/%.2d/dyn/mgain", "unit": "dB", "convert": { "alias": "dyn-gain" }, "info": "" },
 	  "/mtx/%.2d/dyn/mix": { "endpoint": "/mtx/%.2d/dyn/mix", "unit": "%", "convert": { "alias": "dyn-mix" }, "info": "" },
 	  "/mtx/%.2d/dyn/mode": { "endpoint": "/mtx/%.2d/dyn/mode", "convert": { "map": {  "0": "COMP", "1": "EXP"  } }, "info": "" },
-	  "/mtx/%.2d/dyn/on": { "endpoint": "/mtx/%.2d/dyn/on", "convert": { "binary": "normal" }, "info": "" },
+	  "/mtx/%.2d/dyn/on": { "endpoint": "/mtx/%.2d/dyn/on", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	  "/mtx/%.2d/dyn/pos": { "endpoint": "/mtx/%.2d/dyn/pos", "convert": { "map": {  "0": "NORMAL", "1": "SWAPPED"  } }, "info": "" },
 	  "/mtx/%.2d/dyn/ratio": { "endpoint": "/mtx/%.2d/dyn/ratio", "convert": { "alias": "dyn-ratio" }, "info": "" },
 	  "/mtx/%.2d/dyn/release": { "endpoint": "/mtx/%.2d/dyn/release", "unit": "mS", "convert": { "alias": "log-scale-101-release" }, "info": "" },
 	  "/mtx/%.2d/dyn/thr": { "endpoint": "/mtx/%.2d/dyn/thr", "unit": "dB", "convert": { "alias": "dyn-threshold" }, "info": "" },
   
-	  "/mtx/%.2d/eq/on": { "endpoint": "/mtx/%.2d/eq/on", "convert": { "binary": "normal" }, "info": "" },
+	  "/mtx/%.2d/eq/on": { "endpoint": "/mtx/%.2d/eq/on", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	  "/mtx/%.2d/eq/1/f": { "endpoint": "/mtx/%.2d/eq/1/f", "unit": "Hz", "convert": { "alias": "log-scale-201" }, "info": "" },
 	  "/mtx/%.2d/eq/1/g": { "endpoint": "/mtx/%.2d/eq/1/g", "unit": "dB", "convert": { "alias": "eq-gain" }, "info": "" },
 	  "/mtx/%.2d/eq/1/q": { "endpoint": "/mtx/%.2d/eq/1/q", "unit": "Hz", "convert": { "alias": "log-scale-72" }, "info": "" },
@@ -58,12 +58,12 @@
 	  "/mtx/%.2d/eq/6/q": { "endpoint": "/mtx/%.2d/eq/6/q", "unit": "Hz", "convert": { "alias": "log-scale-72" }, "info": "" },
 	  "/mtx/%.2d/eq/6/type": { "endpoint": "/mtx/%.2d/eq/6/type", "convert": { "alias": "eq-type-map" }, "info": "" },
 	  
-	  "/mtx/%.2d/insert/on": { "endpoint": "/mtx/%.2d/insert/on", "convert": { "binary": "normal" }, "info": "" },
+	  "/mtx/%.2d/insert/on": { "endpoint": "/mtx/%.2d/insert/on", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	  "/mtx/%.2d/insert/pos": { "endpoint": "/mtx/%.2d/insert/pos", "convert": { "alias": "insert-pos" }, "info": "" },
 	  "/mtx/%.2d/insert/sel": { "endpoint": "/mtx/%.2d/insert/sel",  "convert": { "alias": "insert-source-map" }, "info": "" },
 	  
 	  "/mtx/%.2d/mix/fader": { "endpoint": "/mtx/%.2d/mix/fader", "unit": "dB", "convert": { "function": "log" }, "info": "" },
-	  "/mtx/%.2d/mix/on": { "endpoint": "/mtx/%.2d/mix/on", "convert": { "binary": "invert" }, "info": "" }
+	  "/mtx/%.2d/mix/on": { "endpoint": "/mtx/%.2d/mix/on", "convert": { "binary": { "type": "invert" } }, "info": "" }
 	}
   }
 }

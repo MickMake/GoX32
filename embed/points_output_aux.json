@@ -8,7 +8,7 @@
 	"points": {
 	  "/outputs/aux/%.2d/pos": { "endpoint": "/outputs/aux/%.2d/pos", "convert": { "alias": "rec-pos-map" }, "info": "" },
 	  "/outputs/aux/%.2d/src": { "endpoint": "/outputs/aux/%.2d/src", "convert": { "alias": "output-map" }, "info": "" },
-	  "/outputs/aux/%.2d/invert": { "endpoint": "/outputs/aux/%.2d/invert", "convert": { "binary": "normal" }, "info": "" }
+	  "/outputs/aux/%.2d/invert": { "endpoint": "/outputs/aux/%.2d/invert", "convert": { "binary": { "type":"normal" } }, "info": "" }
 	}
   }
 }

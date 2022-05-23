@@ -289,7 +289,6 @@ type EntityConfig struct {
 	StateClass  string
 	StateTopic  string
 	Icon        string
-	// Connections []string
 
 	Value         string
 	ValueTemplate string
@@ -297,7 +296,7 @@ type EntityConfig struct {
 	LastReset              string
 	LastResetValueTemplate string
 
-	haType string
+	HaType string
 }
 
 var SensorLabels = Labels{"int", "int32", "int64", "float", "float32", "float64", "sensor", "string"}
@@ -332,12 +331,12 @@ func (config *EntityConfig) IsBinarySensor() bool {
 	var ok bool
 
 	for range Only.Once {
-		if BinarySensorLabels.ValueExists(config.Units) {
-			ok = true
-			// config.Units = ""
-			break
-		}
-		if BinarySensorLabels.ValueExists(config.haType) {
+		// if BinarySensorLabels.ValueExists(config.Units) {
+		// 	ok = true
+		// 	// config.Units = ""
+		// 	break
+		// }
+		if BinarySensorLabels.ValueExists(config.HaType) {
 			ok = true
 			// config.Units = ""
 			break
@@ -351,11 +350,11 @@ func (config *EntityConfig) IsSwitch() bool {
 	var ok bool
 
 	for range Only.Once {
-		if config.Units == LabelSwitch {
-			ok = true
-			break
-		}
-		if config.haType == LabelSwitch {
+		// if config.Units == LabelSwitch {
+		// 	ok = true
+		// 	break
+		// }
+		if config.HaType == LabelSwitch {
 			ok = true
 			break
 		}
@@ -368,11 +367,11 @@ func (config *EntityConfig) IsLight() bool {
 	var ok bool
 
 	for range Only.Once {
-		if config.Units == "light" {
-			ok = true
-			break
-		}
-		if config.haType == "light" {
+		// if config.Units == "light" {
+		// 	ok = true
+		// 	break
+		// }
+		if config.HaType == "light" {
 			ok = true
 			break
 		}

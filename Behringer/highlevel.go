@@ -149,6 +149,16 @@ type Scene struct {
 }
 type Scenes []Scene
 
+func (s Scene) String() string {
+	return fmt.Sprintf("Type:\t%T\nScene Name:\t%s\nMQTT Topic:\t%s\nHas Data:\t%t\nSafes:\t%s\nNotes:\t%s",
+		s,
+		s.Data.Name,
+		s.Topic,
+		s.Data.HasData,
+		s.Data.Safes,
+		s.Data.Notes,
+	)
+}
 func (x *X32) GetScene(i int) Scene {
 	var ret Scene
 

@@ -21,66 +21,66 @@ type BoolValue struct {
 	OnString	string
 }
 
-func (me *BoolValue) define(off string, on string) error {
+func (v *BoolValue) Define(off string, on string) error {
 	var err error
 
-	me.Valid = false
-	me.OffString = off
-	me.OnString = on
+	v.Valid = false
+	v.OffString = off
+	v.OnString = on
 
 	return err
 }
 
-func (me *BoolValue) get() (bool, error) {
+func (v *BoolValue) get() (bool, error) {
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 
-		me.Updated = false
+		v.Updated = false
 	}
 
-	return me.Value, err
+	return v.Value, err
 }
 
-func (me *BoolValue) set(v bool) error {
+func (v *BoolValue) set(value bool) error {
 	var err error
 
 	for range Only.Once {
 		// Check value is within range.
-		err = me.IsInRange(v)
+		err = v.IsInRange(value)
 		if err != nil {
 			break
 		}
 
 		// If not currently valid, update structure.
-		if !me.Valid {
-			me.Valid = true
-			me.Updated = true
-			me.Value = v
+		if !v.Valid {
+			v.Valid = true
+			v.Updated = true
+			v.Value = value
 			break
 		}
 
 		// If there's no change, exit.
-		if me.Value == v {
+		if v.Value == value {
 			break
 		}
 
-		me.Updated = true
-		me.Value = v
+		v.Updated = true
+		v.Value = value
 	}
 
 	return err
 }
 
-func (me *BoolValue) IsValid() error {
+func (v *BoolValue) IsValid() error {
 	var err error
 
 	for range Only.Once {
-		if me.Valid {
+		if v.Valid {
 			// err = errors.New("Invalid boolean value")
 			break
 		}
@@ -95,7 +95,7 @@ func (me *BoolValue) IsValid() error {
 	return err
 }
 
-func (me *BoolValue) IsInRange(v bool) error {
+func (v *BoolValue) IsInRange(value bool) error {
 	var err error
 
 	for range Only.Once {
@@ -107,46 +107,46 @@ func (me *BoolValue) IsInRange(v bool) error {
 	return err
 }
 
-func (me *BoolValue) getString() (string, error) {
+func (v *BoolValue) getString() (string, error) {
 	var s string
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		if me.Value {
-			s = me.OnString
+		if v.Value {
+			s = v.OnString
 		} else {
-			s = me.OffString
+			s = v.OffString
 		}
 	}
 
 	return s, err
 }
 
-func (me *BoolValue) getReal() (string, string, error) {
+func (v *BoolValue) getReal() (string, string, error) {
 	var r string	// Real value.
 	var s string	// Stored value.
 	var err error
 
 	for range Only.Once {
-		err = me.IsValid()
+		err = v.IsValid()
 		if err != nil {
 			break
 		}
 		// me.Updated = false
 
-		if me.Value {
-			r = me.OnString
+		if v.Value {
+			r = v.OnString
 		} else {
-			r = me.OffString
+			r = v.OffString
 		}
 
-		s = strconv.FormatBool(me.Value)
+		s = strconv.FormatBool(v.Value)
 	}
 
 	return r, s, err

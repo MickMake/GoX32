@@ -3,6 +3,7 @@ package Behringer
 import (
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoX32/Behringer/api"
 	"github.com/MickMake/GoX32/Behringer/api/output"
 	"github.com/MickMake/GoX32/Only"
 	"github.com/loffa/gosc"
@@ -195,12 +196,15 @@ func (m *MessageMap) SeenBefore(address string) bool {
 
 
 type Message struct {
-	*gosc.Message `json:"Message"`
+	*gosc.Message          `json:"Message"`
 	SeenBefore   bool      `json:"seen_before"`
 	LastSeen     time.Time `json:"last_seen"`
 	Counter      int       `json:"counter"`
 	Type         string    `json:"type"`
 	Error        error     `json:"-"`
+
+	UnitValueMap api.UnitValueMap
+	Point        *api.Point
 }
 
 func (m *Message) DetermineType() string {
@@ -288,4 +292,11 @@ func (m *Message) GetFloatValue() float64 {
 		}
 	}
 	return ret
+}
+
+func (m *Message) IsSwitch() bool {
+	if m.Point == nil {
+		return false
+	}
+	return m.Point.IsSwitch()
 }
