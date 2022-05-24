@@ -10,8 +10,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"sort"
-	"strconv"
 	"time"
 )
 
@@ -288,43 +286,48 @@ func (x *X32) XremoteSender() {
 	}
 }
 
-func (x *X32) Process(point string, value ...any) (*api.Point, api.UnitValueMap, error) {
-	var ret *api.Point
-	values := make(api.UnitValueMap)
-	var err error
+// func (x *X32) Process(point string, value ...any) Message {		// (*api.Point, api.UnitValueMap, error) {
+// 	// var ret *api.Point
+// 	// values := make(api.UnitValueMap)
+// 	// var err error
+// 	var msg Message
+//
+// 	for range Only.Once {
+// 		msg.Point = x.Points.Resolve(point)
+// 		if msg.Point == nil {
+// 			msg.Error = errors.New(fmt.Sprintf("Missing Point: %v data: %v\n", point, value))
+// 			break
+// 		}
+//
+// 		// gv := msg.Point.Convert.GetValues(value...)
+// 		// keys := make([]string, 0, len(gv))
+// 		// for k := range gv {
+// 		// 	keys = append(keys, k)
+// 		// }
+// 		// sort.Strings(keys)
+// 		//
+// 		// for _, k := range keys {
+// 		// 	v2 := gv[k]
+// 		// 	vf, _ := strconv.ParseFloat(v2, 64)
+// 		// 	vi, _ := strconv.ParseInt(v2, 10, 64)
+// 		// 	vb = fmt.Sprintf("%t", )
+// 		//
+// 		// 	values[k] = api.UnitValue {
+// 		// 		Unit:        ret.Unit,
+// 		// 		ValueString: v2,
+// 		// 		ValueFloat:  vf,
+// 		// 		ValueInt:    vi,
+// 		// 		ValueBool:   vb,
+// 		// 	}
+// 		// }
+// 	}
+//
+// 	return msg
+// 	// return ret, values, err
+// }
 
-	for range Only.Once {
-		ret = x.Points.Resolve(point)
-		if ret == nil {
-			err = errors.New(fmt.Sprintf("Missing Point: %v data: %v\n", point, value))
-			break
-		}
-
-		foo := ret.Convert.GetValues(value...)
-		keys := make([]string, 0, len(foo))
-		for k := range foo {
-			keys = append(keys, k)
-		}
-		sort.Strings(keys)
-
-		for _, k := range keys {
-			v2 := foo[k]
-			vf, _ := strconv.ParseFloat(v2, 64)
-
-			values[k] = api.UnitValue {
-				Unit:       ret.Unit,
-				Value:      v2,
-				ValueFloat: vf,
-				ValueInt:   0,
-			}
-		}
-	}
-
-	return ret, values, err
-}
-
-func (x *X32) Get(address string, wait bool) Message {
-	var msg Message
+func (x *X32) Get(address string, wait bool) *Message {
+	var msg *Message
 
 	for range Only.Once {
 		if !wait {
@@ -352,11 +355,11 @@ func (x *X32) Emit(address string, args ...any) error {
 	return x.Error
 }
 
-func (x *X32) Call(address string, args ...any) Message {
-	var msg Message
+func (x *X32) Call(address string, args ...any) *Message {
+	var msg *Message
 
 	for range Only.Once {
-		msg = Message {
+		msg = &Message {
 			Message:    nil,
 			SeenBefore: false,
 			LastSeen:   time.Now(),
@@ -367,14 +370,54 @@ func (x *X32) Call(address string, args ...any) Message {
 		if x.Debug {
 			fmt.Printf("# Call() - msg: %v\n", msg)
 		}
+
 		msg.Message, x.Error = x.Client.CallMessage(address, args...)
 		if x.Debug {
 			fmt.Printf("# Call() - msg.Message: %v\n", msg.Message)
+		}
+
+		msg = x.UpdateCache(msg)
+		if msg.Error != nil {
+			break
+		}
+
+		msg.Point = x.Points.Resolve(address)
+		if msg.Point == nil {
+			msg.Error = errors.New(fmt.Sprintf("Missing Point: %v data: %v\n", address, args))
+			break
+		}
+
+		x.Error = msg.Process()
+		if x.Error != nil {
+			break
 		}
 	}
 
 	return msg
 }
+
+// func (x *X32) CallProcess(address string, args ...any) *Message {	// (*api.Point, api.UnitValueMap, error) {
+// 	// var ret *api.Point
+// 	// values := make(api.UnitValueMap)
+// 	// var err error
+// 	var msg *Message
+//
+// 	for range Only.Once {
+// 		msg = x.Call(address, args...)
+// 		if msg.Error != nil {
+// 			x.Error = msg.Error
+// 			break
+// 		}
+//
+// 		x.Error = msg.Process()
+// 		if x.Error != nil {
+// 			break
+// 		}
+// 	}
+//
+// 	return msg
+// 	// return ret, values, err
+// }
 
 func (x *X32) GetTopic(msg *gosc.Message) string {
 	topic := fmt.Sprintf("%s%s", x.Prefix, msg.Address)
@@ -399,13 +442,19 @@ func (x *X32) SetMessageHandler(fn MessageHandlerFunc) error {
 
 func (x *X32) oscMessageHandler(msg *gosc.Message) {
 	for range Only.Once {
-		m := x.UpdateCache(msg)
+		m := x.UpdateCache(&Message{ Message: msg })
 		if x.Debug {
 			fmt.Printf("# oscMessageHandler() - msg: %v\n", msg)
 		}
 
-		m.Point, m.UnitValueMap, m.Error = x.Process(msg.Address, msg.Arguments...)
-		if m.Error != nil {
+		m.Point = x.Points.Resolve(msg.Address)
+		if m.Point == nil {
+			x.Error = errors.New(fmt.Sprintf("Missing Point: %v data: %v\n", msg.Address, msg.Arguments))
+			break
+		}
+
+		x.Error = m.Process()
+		if x.Error != nil {
 			break
 		}
 
@@ -415,6 +464,20 @@ func (x *X32) oscMessageHandler(msg *gosc.Message) {
 		x.messageHandler(m)
 	}
 }
+
+// func (x *X32) MultipleMessageHandler(msg *gosc.Message) {
+// 	for range Only.Once {
+// 		m := x.UpdateCache(msg)
+// 		if x.Debug {
+// 			fmt.Printf("# oscMessageHandler() - msg: %v\n", msg)
+// 		}
+//
+// 		m.Point, m.UnitValueMap, m.Error = x.Process(msg.Address, msg.Arguments...)
+// 		if m.Error != nil {
+// 			break
+// 		}
+// 	}
+// }
 
 func (x *X32) Output(endpoint api.EndPoint, table *output.Table, graphFilter string) error {
 	for range Only.Once {

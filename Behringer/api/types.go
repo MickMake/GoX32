@@ -11,10 +11,12 @@ import (
 
 
 type UnitValue struct {
-	Unit  string `json:"unit"`
-	Value string `json:"value"`
-	ValueFloat float64 `json:"value_float,omitempty"`
-	ValueInt int64 `json:"value_int,omitempty"`
+	Unit        string  `json:"unit"`
+	Value       any     `json:"value"`
+	ValueString string  `json:"value_string,omitempty"`
+	ValueFloat  float64 `json:"value_float,omitempty"`
+	ValueInt   int64   `json:"value_int,omitempty"`
+	ValueBool  bool    `json:"value_bool,omitempty"`
 }
 type UnitValues []UnitValue
 type UnitValueMap map[string]UnitValue
@@ -25,7 +27,7 @@ func (u UnitValue) String() string {
 	if unit == "-" {
 		unit = ""
 	}
-	return fmt.Sprintf("%s%s", u.Value, unit)
+	return fmt.Sprintf("%s%s", u.ValueString, unit)
 }
 
 func (u UnitValueMap) String() string {
@@ -53,6 +55,37 @@ func (u *UnitValueMap) Sort() []string {
 	return ret
 }
 
+func (u *UnitValueMap) Add2(key string, value string) {
+	for range Only.Once {
+		(*u)[key] = UnitValue {
+			Unit:        "",
+			ValueString: value,
+			ValueFloat:  0,
+			ValueInt:    0,
+			ValueBool:   false,
+		}
+	}
+}
+
+func (u *UnitValueMap) Add(key string, value any, unit string) {
+	for range Only.Once {
+		uv := UnitValue {
+			Unit:        unit,
+			Value:       value,
+		}
+		uv.UnitValueFix()
+		(*u)[key] = uv
+	}
+}
+
+func (u *UnitValueMap) Append(values UnitValueMap) {
+	for range Only.Once {
+		for key, value := range values {
+			(*u)[key] = value
+		}
+	}
+}
+
 
 func (u *UnitValueMap) GetFirst() *UnitValue {
 	var ret UnitValue
@@ -73,31 +106,67 @@ func (u *UnitValueMap) GetFirst() *UnitValue {
 	return &ret
 }
 
+func (u *UnitValueMap) GetFirstValue() string {
+	return u.GetFirst().ValueString
+}
+
+func (u *UnitValueMap) GetValueBool() bool {
+	return u.GetFirst().ValueBool
+}
+
+func (u *UnitValueMap) GetValueInt() int64 {
+	return u.GetFirst().ValueInt
+}
+
+func (u *UnitValueMap) GetValueFloat() float64 {
+	return u.GetFirst().ValueFloat
+}
+
 func (u *UnitValue) UnitValueFix() UnitValue {
-	if u.Unit == "W" {
-		fvs, err := DivideByThousand(u.Value)
-		// fv, err := strconv.ParseFloat(p.Value, 64)
-		// fv = fv / 1000
+	for range Only.Once {
+		u.ValueString = fmt.Sprintf("%v", u.Value)
+
+		if u.Unit == "W" {
+			fvs, err := DivideByThousand(u.ValueString)
+			if err == nil {
+				u.ValueString = fvs
+				u.Unit = "kW"
+			}
+		}
+
+		if u.Unit == "Wh" {
+			fvs, err := DivideByThousand(u.ValueString)
+			if err == nil {
+				u.ValueString = fvs
+				u.Unit = "kWh"
+			}
+		}
+
+		var err error
+		var vf float64
+		vf, err = strconv.ParseFloat(u.ValueString, 64)
 		if err == nil {
-			// p.Value = fmt.Sprintf("%.3f", fv)
-			u.Value = fvs
-			u.Unit = "kW"
+			u.ValueFloat = vf
+		}
+
+		var vi int64
+		vi, err = strconv.ParseInt(u.ValueString, 10, 64)
+		if err == nil {
+			u.ValueInt = vi
+		}
+
+		switch strings.ToUpper(u.ValueString) {
+			case On:
+				fallthrough
+			case "TRUE":
+				fallthrough
+			case "YES":
+				u.ValueBool = true
+
+			default:
+				u.ValueBool = false
 		}
 	}
-
-	if u.Unit == "Wh" {
-		fvs, err := DivideByThousand(u.Value)
-		// fv, err := strconv.ParseFloat(p.Value, 64)
-		// fv = fv / 1000
-		if err == nil {
-			// p.Value = fmt.Sprintf("%.3f", fv)
-			u.Value = fvs
-			u.Unit = "kWh"
-		}
-	}
-
-	u.ValueFloat, _ = strconv.ParseFloat(u.Value, 64)
-
 	return *u
 }
 

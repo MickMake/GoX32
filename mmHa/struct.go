@@ -186,6 +186,32 @@ func (m *Mqtt) PublishValue(config EntityConfig) error {
 	return m.err
 }
 
+func (m *Mqtt) PublishValues(config []EntityConfig) error {
+	for range Only.Once {
+		m.err = m.SensorPublishValues(config)
+		if m.err != nil {
+			break
+		}
+
+		m.err = m.BinarySensorPublishValues(config)
+		if m.err != nil {
+			break
+		}
+
+		// m.err = m.SwitchPublishValues(config)
+		// if m.err != nil {
+		// 	break
+		// }
+		//
+		// m.err = m.LightsPublishValues(config)
+		// if m.err != nil {
+		// 	break
+		// }
+	}
+	return m.err
+}
+
+
 type Fields map[string]string
 func (m *Mqtt) PublishConfigs(configs []EntityConfig) error {
 	for range Only.Once {
@@ -236,6 +262,21 @@ func (mq *MqttState) Json() string {
 	var ret string
 	for range Only.Once {
 		j, err := json.Marshal(*mq)
+		if err != nil {
+			ret = fmt.Sprintf("{ \"error\": \"%s\"", err)
+			break
+		}
+		ret = string(j)
+	}
+	return ret
+}
+
+
+type ValueMap map[string]string
+func (vm *ValueMap) Json() string {
+	var ret string
+	for range Only.Once {
+		j, err := json.Marshal(*vm)
 		if err != nil {
 			ret = fmt.Sprintf("{ \"error\": \"%s\"", err)
 			break
@@ -399,7 +440,7 @@ func (config *EntityConfig) FixConfig() {
 			case "light":
 				config.DeviceClass = SetDefault(config.DeviceClass, "")
 				config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", config.ValueName))
 
 			case "MW":
 				fallthrough
@@ -408,8 +449,8 @@ func (config *EntityConfig) FixConfig() {
 			case "W":
 				config.DeviceClass = SetDefault(config.DeviceClass, "power")
 				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
-				// config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
+				// config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 				// - Used with merged values.
 
 			case "MWh":
@@ -419,27 +460,27 @@ func (config *EntityConfig) FixConfig() {
 			case "Wh":
 				config.DeviceClass = SetDefault(config.DeviceClass, "energy")
 				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			case "kvar":
 				config.DeviceClass = SetDefault(config.DeviceClass, "reactive_power")
 				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			case "Hz":
 				config.DeviceClass = SetDefault(config.DeviceClass, "frequency")
 				config.Icon = SetDefault(config.Icon, "mdi:sine-wave")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			case "V":
 				config.DeviceClass = SetDefault(config.DeviceClass, "voltage")
 				config.Icon = SetDefault(config.Icon, "mdi:current-dc")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			case "A":
 				config.DeviceClass = SetDefault(config.DeviceClass, "current")
 				config.Icon = SetDefault(config.Icon, "mdi:current-ac")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			case "°C":
 				fallthrough
@@ -449,42 +490,37 @@ func (config *EntityConfig) FixConfig() {
 				config.DeviceClass = SetDefault(config.DeviceClass, "temperature")
 				config.Units = "°C"
 				config.Icon = SetDefault(config.Icon, "mdi:thermometer")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			case "battery":
 				config.DeviceClass = SetDefault(config.DeviceClass, "battery")
 				config.Icon = SetDefault(config.Icon, "mdi:home-battery-outline")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			case "%":
 				config.DeviceClass = SetDefault(config.DeviceClass, "percent")
 				config.Icon = SetDefault(config.Icon, "")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			case "dB":
 				config.DeviceClass = SetDefault(config.DeviceClass, "signal_strength")
 				config.Icon = SetDefault(config.Icon, "mdi:volume-high")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			case "mS":
 				config.DeviceClass = SetDefault(config.DeviceClass, "time")
 				config.Icon = SetDefault(config.Icon, "mdi:clock")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			default:
 				config.DeviceClass = SetDefault(config.DeviceClass, "")
 				config.Icon = SetDefault(config.Icon, "")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", config.ValueName))
 		}
 
-		if config.LastReset != "" {
-			break
-		}
-
-		pt := api.GetDevicePoint(config.UniqueId)
-		if !pt.Valid {
-			break
-		}
+		// if config.ValueTemplate == "" {
+		// 	config.ValueTemplate = fmt.Sprintf("{{ value_json.%s }}", config.UniqueId)
+		// }
 
 		if config.StateClass == "instant" {
 			config.StateClass = "measurement"
@@ -493,6 +529,15 @@ func (config *EntityConfig) FixConfig() {
 
 		if config.StateClass == "" {
 			config.StateClass = "measurement"
+			break
+		}
+
+		if config.LastReset != "" {
+			break
+		}
+
+		pt := api.GetDevicePoint(config.UniqueId)
+		if !pt.Valid {
 			break
 		}
 

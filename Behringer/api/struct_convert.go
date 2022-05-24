@@ -37,24 +37,24 @@ type ConvertStruct struct {
 	Blob      *ConvertBlob      `json:"blob,omitempty"`
 }
 
-type ValuesMap map[string]string
+// type ValuesMap UnitValueMap		// map[string]UnitValue	// string
+//
+// func (v *ValuesMap) Add(key string, value string) {
+// 	for range Only.Once {
+// 		(*v)[key] = value
+// 	}
+// }
+//
+// func (v *ValuesMap) Append(values ValuesMap) {
+// 	for range Only.Once {
+// 		for key, value := range values {
+// 			(*v)[key] = value
+// 		}
+// 	}
+// }
 
-func (v *ValuesMap) Add(key string, value string) {
-	for range Only.Once {
-		(*v)[key] = value
-	}
-}
-
-func (v *ValuesMap) Append(values ValuesMap) {
-	for range Only.Once {
-		for key, value := range values {
-			(*v)[key] = value
-		}
-	}
-}
-
-func (c *ConvertStruct) GetValues(values ...any) ValuesMap {
-	ret := make(ValuesMap)
+func (c *ConvertStruct) GetValues(values ...any) UnitValueMap {
+	ret := make(UnitValueMap)
 
 	for range Only.Once {
 		// if c.Array != nil {
@@ -68,36 +68,36 @@ func (c *ConvertStruct) GetValues(values ...any) ValuesMap {
 					break
 
 				case c.Increment != nil:
-					ret.Add(Single, c.Increment.Convert(value))
+					ret.Add(Single, c.Increment.Convert(value), "")
 					// value = ToLinearDb(value, c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
 					break
 
 				case c.Range != nil:
-					ret.Add(Single, c.Range.Convert(value))
+					ret.Add(Single, c.Range.Convert(value), "")
 					break
 
 				case c.Map != nil:
-					ret.Add(Single, c.Map.Convert(value))
+					ret.Add(Single, c.Map.Convert(value), "")
 					break
 
 				case c.BitMap != nil:
-					ret.Add(Single, c.BitMap.Convert(value, 0))
+					ret.Add(Single, c.BitMap.Convert(value, 0), "")
 					break
 
 				case c.Function != nil:
-					ret.Add(Single, c.Function.Convert(value))
+					ret.Add(Single, c.Function.Convert(value), "")
 					break
 
 				case c.Binary != nil:
-					ret.Add(Single, c.Binary.Convert(value))
+					ret.Add(Single, c.Binary.Convert(value), "")
 					break
 
 				case c.String != nil:
-					ret.Add(Single, c.String.Convert(value))
+					ret.Add(Single, c.String.Convert(value), "")
 					break
 
 				case c.Asset != nil:
-					ret.Add(Single, c.Asset.Convert(value))
+					ret.Add(Single, c.Asset.Convert(value), "")
 					break
 
 				case c.Array != nil:
@@ -105,7 +105,7 @@ func (c *ConvertStruct) GetValues(values ...any) ValuesMap {
 					break
 
 				case c.FloatMap != nil:
-					ret.Add(Single, c.FloatMap.Convert(value))
+					ret.Add(Single, c.FloatMap.Convert(value), "")
 					break
 
 				case c.Blob != nil:
@@ -289,6 +289,11 @@ func (c *ConvertRange) Convert(value any) string {
 		fv, err = strconv.ParseFloat(ret, 64)
 		if err != nil {
 			break
+		}
+
+		if (c.InMin == 0) && (c.InMax == 0) {
+			c.InMin = 0
+			c.InMax = 1
 		}
 
 		type mapRange 	func(float64) (float64, error)
@@ -695,8 +700,8 @@ type ConvertArray struct {
 	Expected int      `json:"expected"`
 	Names    []string `json:"names"`
 }
-func (c *ConvertArray) Convert(index int, value any) ValuesMap {
-	ret := make(ValuesMap)
+func (c *ConvertArray) Convert(index int, value any) UnitValueMap {
+	ret := make(UnitValueMap)
 
 	for range Only.Once {
 		if c == nil {
@@ -714,7 +719,7 @@ func (c *ConvertArray) Convert(index int, value any) ValuesMap {
 		// 	break
 		// }
 
-		ret[name] = fmt.Sprintf("%v", value)
+		ret.Add(name, value, "")
 	}
 
 	return ret
@@ -879,8 +884,8 @@ type ConvertBlob struct {
 	} `json:"order"`
 	Sequence []ConvertBlobData `json:"-"`
 }
-func (c *ConvertBlob) Convert(value any) map[string]string {
-	ret := make(map[string]string)
+func (c *ConvertBlob) Convert(value any) UnitValueMap {		// map[string]UnitValue {	// string {
+	ret := make(UnitValueMap)	// map[string]UnitValue)	// string)
 
 	for range Only.Once {
 		if c == nil {
@@ -899,14 +904,19 @@ func (c *ConvertBlob) Convert(value any) map[string]string {
 
 		var i int
 		for i = 0; (r.Len() > 0) && (i < len(c.Sequence)); i++ {
+			// unitValue := ret[c.Sequence[i].Key]
+			// v := c.Sequence[i].ReaderString(r)
+			// unitValue.Set(v)
+
 			v := c.Sequence[i].ReaderString(r)
-			ret[c.Sequence[i].Key] = v
+			ret.Add(c.Sequence[i].Key, v, "")
 		}
 
 		i = len(c.Sequence) - i
 		if i > 0 {
 			fmt.Printf("Expected %d more array elements.\n", i)
-			ret["expected_count"] = fmt.Sprintf("%d", i)
+			// ret["expected_count"] = fmt.Sprintf("%d", i)
+			ret.Add("expected_count", i, "")
 		}
 
 		if r.Len() > 0 {
@@ -917,13 +927,15 @@ func (c *ConvertBlob) Convert(value any) map[string]string {
 				if err != nil {
 					fmt.Printf("Error: %s\n", err)
 					// ret = append(ret, fmt.Sprintf(`"error": "%s"`, err))
-					ret["error"] = fmt.Sprintf("%s", err)
+					// ret["error"].Set() = fmt.Sprintf("%s", err)
+					ret.Add("error", err, "")
 					break
 				}
 				remBytes += fmt.Sprintf("%.2X,", v)
 			}
 			fmt.Printf("Remaining bytes[%d]: %s\n", len(remBytes) / 3, remBytes)
-			ret["remaining_bytes"] = fmt.Sprintf("%s", remBytes)
+			// ret["remaining_bytes"] = fmt.Sprintf("%s", remBytes)
+			ret.Add("remaining_bytes", remBytes, "")
 		}
 	}
 

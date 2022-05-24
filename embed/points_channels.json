@@ -23,7 +23,6 @@
       "/ch/%.2d/gate/on": { "endpoint": "/ch/%.2d/gate/on", "convert": { "binary": { "type":"normal" } }, "info": "" },
       "/ch/%.2d/gate/mode": { "endpoint": "/ch/%.2d/gate/mode", "convert": { "alias": "gate-mode-map" }, "info": "" },
       "/ch/%.2d/gate/thr": { "endpoint": "/ch/%.2d/gate/thr", "unit": "dB", "convert": { "alias": "gate-threshold" }, "info": "" },
-  
       "/ch/%.2d/gate/attack": { "endpoint": "/ch/%.2d/gate/attack", "unit": "mS", "convert": { "alias": "gate-attack" }, "info": "" },
       "/ch/%.2d/gate/filter/f": { "endpoint": "/ch/%.2d/gate/filter/f", "unit": "Hz", "convert": { "alias": "log-scale-201" }, "info": "" },
       "/ch/%.2d/gate/filter/on": { "endpoint": "/ch/%.2d/gate/filter/on", "convert": { "binary": { "type":"normal" } }, "info": "" },

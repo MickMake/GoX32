@@ -76,6 +76,7 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 		device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
 		if config.StateTopic != "" {
 			config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.StateTopic)
+			// config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
 		} else {
 			config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
 			// config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
@@ -86,7 +87,6 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 			Device:                 device,
 			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.Name),
 			StateTopic:             JoinStringsForTopic(m.sensorPrefix, config.StateTopic, "state"),
-			// StateTopic:             m.GetSensorStateTopic(name, config.SubName),m.EntityPrefix, m.Device.FullName, config.SubName
 			StateClass:             config.StateClass,
 			UniqueId:               uid,
 			UnitOfMeasurement:      config.Units,
@@ -136,12 +136,17 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 		}
 
 		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
-		payload := MqttState {
-			LastReset: m.GetLastReset(JoinStringsForId(config.ParentId, config.Name)),
-			Value:     config.Value,
-		}
+		cs := make(ValueMap)
+		cs["last_reset"] = m.GetLastReset(JoinStringsForId(config.ParentId, config.Name))
+		cs[config.ValueName] = config.Value
+
+		// payload := MqttState {
+		// 	LastReset: m.GetLastReset(JoinStringsForId(config.ParentId, config.Name)),
+		// 	Value:     config.Value,
+		// }
+
 		st = JoinStringsForTopic(m.sensorPrefix, st, "state")
-		t := m.client.Publish(st, 0, true, payload.Json())
+		t := m.client.Publish(st, 0, true, cs.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
 		}
@@ -159,6 +164,10 @@ func (m *Mqtt) SensorPublishValues(configs []EntityConfig) error {
 		cs := make(map[string]Fields)
 		topic := ""
 		for i, config := range configs {
+			if !config.IsSensor() {
+				continue
+			}
+
 			if config.StateTopic != "" {
 				config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.StateTopic)
 			} else {
@@ -189,7 +198,6 @@ func (m *Mqtt) SensorPublishValues(configs []EntityConfig) error {
 			if !t.WaitTimeout(m.Timeout) {
 				m.err = t.Error()
 			}
-
 		}
 	}
 	return m.err

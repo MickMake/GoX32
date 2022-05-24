@@ -101,28 +101,28 @@ func (dm *DataMap) StructToPoints(endpoint string, ref interface{}) {
 					case "int":
 						uv.Unit = "integer"
 						uv.ValueInt = valueTo.(int64)
-						uv.Value = strconv.FormatInt(uv.ValueInt, 10)
+						uv.ValueString = strconv.FormatInt(uv.ValueInt, 10)
 					case "int32":
 						uv.Unit = "integer"
 						uv.ValueInt = valueTo.(int64)
-						uv.Value = strconv.FormatInt(uv.ValueInt, 10)
+						uv.ValueString = strconv.FormatInt(uv.ValueInt, 10)
 					case "int64":
 						uv.Unit = "integer"
 						uv.ValueInt = valueTo.(int64)
-						uv.Value = strconv.FormatInt(uv.ValueInt, 10)
+						uv.ValueString = strconv.FormatInt(uv.ValueInt, 10)
 
 					case "float32":
 						uv.Unit = "float"
 						uv.ValueFloat = float64(valueTo.(float32))
-						uv.Value = Float64ToString(uv.ValueFloat)
+						uv.ValueString = Float64ToString(uv.ValueFloat)
 					case "float64":
 						uv.Unit = "float"
 						uv.ValueFloat = valueTo.(float64)
-						uv.Value = Float64ToString(uv.ValueFloat)
+						uv.ValueString = Float64ToString(uv.ValueFloat)
 
 					case "string":
 						uv.Unit = "string"
-						uv.Value = valueTo.(string)
+						uv.ValueString = valueTo.(string)
 
 					case "UnitValue":
 						fallthrough
@@ -132,7 +132,7 @@ func (dm *DataMap) StructToPoints(endpoint string, ref interface{}) {
 
 					case "bool":
 						uv.Unit = "binary"
-						uv.Value = fmt.Sprintf("%v", valueTo)
+						uv.ValueString = fmt.Sprintf("%v", valueTo)
 
 					default:
 						ignore = true
@@ -164,13 +164,13 @@ func (dm *DataMap) StructToPoints(endpoint string, ref interface{}) {
 				Type:      fieldTo.Tag.Get("PointType"),
 				Valid:     true,
 			}
-			dm.AddEntry(p, now, uv.Value)
+			dm.AddEntry(p, now, uv.ValueString)
 
 			alias := fieldTo.Tag.Get("PointAlias")
 			if alias != "" {
 				p.FullId = NameDevicePoint(device, alias)
 				p.Id = alias
-				dm.AddEntry(p, now, uv.Value)
+				dm.AddEntry(p, now, uv.ValueString)
 			}
 
 			// spew.Dump(&foo)
@@ -309,7 +309,7 @@ func (dm *DataMap) AddEntry(point Point, date DateTime, value string) {
 			EndPoint:   point.EndPoint,
 			Point:      &point,
 			Date:       date,
-			Value:      ref.Value,
+			Value:      ref.ValueString,
 			ValueFloat: ref.ValueFloat,
 		})
 	}
@@ -382,7 +382,7 @@ func (dm *DataMap) AddEntryFromRef(refPoint Point, point Point, date DateTime, v
 		dm.Add(point.Id, DataEntry {
 			Date:       date,
 			Point:      p,
-			Value:      ref.Value,
+			Value:      ref.ValueString,
 			ValueFloat: ref.ValueFloat,
 		})
 	}
@@ -427,7 +427,7 @@ func (dm *DataMap) AddUnitValue(endpoint string, psId string, point string, name
 		dm.Add(point, DataEntry {
 			Date:       date,
 			Point:      p,
-			Value:      ref.Value,
+			Value:      ref.ValueString,
 			ValueFloat: ref.ValueFloat,
 		})
 	}
@@ -450,15 +450,15 @@ func (dm *DataMap) AddFloat(psId string, point string, name string, date DateTim
 		dm.Add(point, DataEntry {
 			Date:       date,
 			Point:      p,
-			Value:      ref.Value,
+			Value:      ref.ValueString,
 			ValueFloat: ref.ValueFloat,
 		})
 	}
 
 	de := CreateDataEntryUnitValue(date, psId, point, name, UnitValue {
-		Unit:       "float",
-		Value:      fmt.Sprintf("%f", value),
-		ValueFloat: 0,
+		Unit:        "float",
+		ValueString: fmt.Sprintf("%f", value),
+		ValueFloat:  0,
 	})
 	dm.Add(point, de)
 }
@@ -469,9 +469,9 @@ func (dm *DataMap) AddString(psId string, point string, name string, date DateTi
 
 func (dm *DataMap) AddInt(psId string, point string, name string, date DateTime, value int64) {
 	de := CreateDataEntryUnitValue(date, psId, point, name, UnitValue {
-		Unit:       "int",
-		Value:      fmt.Sprintf("%d", value),
-		ValueFloat: float64(value),
+		Unit:        "int",
+		ValueString: fmt.Sprintf("%d", value),
+		ValueFloat:  float64(value),
 	})
 	dm.Add(point, de)
 }
@@ -526,7 +526,7 @@ func (de *DataEntry) CreateFloat(psId string, point string, name string, value f
 
 	de2 := de.CreateAlias(psId, point, name)
 	uv := CreateUnitValue(Float64ToString(value), de2.Point.Unit)
-	de2.Value = uv.Value
+	de2.Value = uv.ValueString
 	de2.ValueFloat = uv.ValueFloat
 
 	return de2
@@ -649,7 +649,7 @@ func CreateDataEntryUnitValue(date DateTime, psId string, point string, name str
 
 	return DataEntry {
 		Date:       date,
-		Value:      value.Value,
+		Value:      value.ValueString,
 		ValueFloat: value.ValueFloat,
 		Point:      p,
 		Index:      0,
@@ -676,8 +676,8 @@ func CreatePoint(psId string, point string, name string, unit string) *Point {
 
 func CreateUnitValue(value string, unit string) UnitValue {
 	ret := UnitValue {
-		Unit:       unit,
-		Value:      value,
+		Unit:        unit,
+		ValueString: value,
 	}
 	return ret.UnitValueFix()
 }

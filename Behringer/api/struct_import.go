@@ -584,10 +584,12 @@ func JoinStringsForId(args ...string) string {
 			// a = strings.TrimPrefix(a, `_`)
 			// a = strings.TrimSuffix(a, `-`)
 			// a = strings.TrimSuffix(a, `_`)
+			a = strings.ToLower(a)
 			newargs = append(newargs, a)
 		}
 
 		ret =  strings.Join(newargs, "-")
 	}
+
 	return ret
 }

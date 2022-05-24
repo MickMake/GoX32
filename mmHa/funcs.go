@@ -1,6 +1,7 @@
 package mmHa
 
 import (
+	"github.com/MickMake/GoX32/Only"
 	"regexp"
 	"strings"
 )
@@ -11,24 +12,35 @@ func JoinStrings(args ...string) string {
 }
 
 func JoinStringsForId(args ...string) string {
-	var newargs []string
-	var re = regexp.MustCompile(`(/| |:|\.)+`)
-	var re2 = regexp.MustCompile(`^(-|_)+`)
-	for _, a := range args {
-		if a == "" {
-			continue
+	var ret string
+
+	for range Only.Once {
+		var newargs []string
+		var re = regexp.MustCompile(`(/| |:|\.)+`)
+		var re2 = regexp.MustCompile(`^(-|_)+`)
+		var re3 = regexp.MustCompile(`(-|_)+$`)
+
+		for _, a := range args {
+			if a == "" {
+				continue
+			}
+
+			a = strings.TrimSpace(a)
+			a = re.ReplaceAllString(a, `_`)
+			a = re2.ReplaceAllString(a, ``)
+			a = re3.ReplaceAllString(a, ``)
+			// a = strings.TrimPrefix(a, `-`)
+			// a = strings.TrimPrefix(a, `_`)
+			// a = strings.TrimSuffix(a, `-`)
+			// a = strings.TrimSuffix(a, `_`)
+			a = strings.ToLower(a)
+			newargs = append(newargs, a)
 		}
-		a = strings.TrimSpace(a)
-		a = re.ReplaceAllString(a, `_`)
-		a = re2.ReplaceAllString(a, ``)
-		a = strings.TrimPrefix(a, `-`)
-		a = strings.TrimPrefix(a, `_`)
-		a = strings.TrimSuffix(a, `-`)
-		a = strings.TrimSuffix(a, `_`)
-		newargs = append(newargs, a)
+
+		ret =  strings.Join(newargs, "-")
 	}
-	// return strings.ReplaceAll(strings.TrimSpace(strings.Join(args, ".")), ".", "_")
-	return strings.Join(newargs, "-")
+
+	return ret
 }
 
 // func (c *Config) JoinStringsForId() string {

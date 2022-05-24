@@ -7,29 +7,22 @@ import (
 )
 
 
-type Channel struct {
-	Topic       string  `json:"-"`
-
-	Data struct {
-		Name     string  `json:"name"`
-		Colour   string  `json:"colour"`
-		Icon     string  `json:"icon"`
-		Mute     bool    `json:"mute"`
-		Solo     bool    `json:"solo"`
-		Source   string  `json:"source"`
-		Gain     float64 `json:"gain"`
-		Trim     float64 `json:"trim"`
-		Phantom  bool    `json:"phantom"`
-		Phantom2 bool    `json:"phantom2"`
-		Selected bool    `json:"selected"`
-
-		Fader float64 `json:"fader"`
-		Level float64 `json:"level"`
-	}
+type ChData struct {
+	Name     string  `json:"name"`
+	Colour   string  `json:"colour"`
+	Icon     string  `json:"icon"`
+	Mute     bool    `json:"mute"`
+	Solo     bool    `json:"solo"`
+	Source   string  `json:"source"`
+	Gain     float64 `json:"gain"`
+	Trim     float64 `json:"trim"`
+	Phantom  bool    `json:"phantom"`
+	Phantom2 bool    `json:"phantom2"`
+	Selected bool    `json:"selected"`
+	Fader    float64 `json:"fader"`
 }
-type Channels []Channel	// We're keeping a 1:1 mapping of array -> channel numbers.
 
-func (c *Channel) Json() string {
+func (c *ChData) Json() string {
 	var ret string
 
 	for range Only.Once {
@@ -43,165 +36,21 @@ func (c *Channel) Json() string {
 	return ret
 }
 
-func (x *X32) GetChannel(i int) Channel {
-	var ret Channel
 
-	for range Only.Once {
-		// channels start from index 1
-		ret.Topic = fmt.Sprintf("/ch/%.2d/", i + 1)
+func (c ChData) String() string {
+	var ret string
 
-		msg := x.Call(ret.Topic + "config/name")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Name = msg.GetStringValue()
-
-		msg = x.Call(ret.Topic + "config/color")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Colour = msg.GetStringValue()
-
-		msg = x.Call(ret.Topic + "config/source")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Source = msg.GetStringValue()
-
-		msg = x.Call(ret.Topic + "config/icon")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Icon = msg.GetStringValue()
-
-		msg = x.Call(ret.Topic + "preamp/trim")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Trim = msg.GetFloatValue()
-
-		// msg = x.Call(ret.Topic + "pramp/hpon")
-		// if msg.Error != nil {
-		// 	break
-		// }
-		// ret.Phantom2 = msg.GetBoolValue()
-
-		msg = x.Call(ret.Topic + "mix/on")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Mute = !msg.GetBoolValue()		// Mix ON == Mute OFF
-
-		msg = x.Call(ret.Topic + "mix/fader")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Fader = msg.GetFloatValue()
-
-		msg = x.Call(ret.Topic + "mix/01/level")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Level = msg.GetFloatValue()
-
-
-		// headamps start from index 0
-		// base = fmt.Sprintf("/headamp/%.3d/", i)
-
-		msg = x.Call(fmt.Sprintf("/headamp/%.3d/gain", i))
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Gain = msg.GetFloatValue()
-
-		msg = x.Call(fmt.Sprintf("/headamp/%.3d/phantom", i))
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Mute = msg.GetBoolValue()
-	}
-
-	return ret
-}
-
-func (x *X32) GetChannels() Channels {
-	var ret Channels
-
-	for range Only.Once {
-		for c := 0; c < 32; c++ {
-			ret = append(ret, x.GetChannel(c))
-		}
-	}
-
-	return ret
-}
-
-
-type Scene struct {
-	Topic string `json:"-"`
-
-	Data struct {
-		HasData bool   `json:"has_data"`
-		Name    string `json:"name"`
-		Notes   string `json:"notes"`
-		Safes   string `json:"safes"`
-	}
-}
-type Scenes []Scene
-
-func (s Scene) String() string {
-	return fmt.Sprintf("Type:\t%T\nScene Name:\t%s\nMQTT Topic:\t%s\nHas Data:\t%t\nSafes:\t%s\nNotes:\t%s",
-		s,
-		s.Data.Name,
-		s.Topic,
-		s.Data.HasData,
-		s.Data.Safes,
-		s.Data.Notes,
-	)
-}
-func (x *X32) GetScene(i int) Scene {
-	var ret Scene
-
-	for range Only.Once {
-		// channels start from index 1
-		ret.Topic = fmt.Sprintf("/-show/showfile/scene/%.3d/", i)
-
-		msg := x.Call(ret.Topic + "name")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Name = msg.GetStringValue()
-
-		msg = x.Call(ret.Topic + "hasdata")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.HasData = msg.GetBoolValue()
-
-		msg = x.Call(ret.Topic + "notes")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Notes = msg.GetStringValue()
-
-		msg = x.Call(ret.Topic + "safes")
-		if msg.Error != nil {
-			break
-		}
-		ret.Data.Safes = msg.GetStringValue()
-	}
-
-	return ret
-}
-
-func (x *X32) GetScenes() Scenes {
-	var ret Scenes
-
-	for range Only.Once {
-		for c := 0; c < 32; c++ {
-			ret = append(ret, x.GetScene(c))
-		}
-	}
+	ret += fmt.Sprintf("Name:\t%s\n", c.Name)
+	ret += fmt.Sprintf("Colour:\t%s\n", c.Colour)
+	ret += fmt.Sprintf("Icon:\t%s\n", c.Icon)
+	ret += fmt.Sprintf("Source:\t%s\n", c.Source)
+	ret += fmt.Sprintf("Gain:\t%f\n", c.Gain)
+	ret += fmt.Sprintf("Mute:\t%t\n", c.Mute)
+	ret += fmt.Sprintf("Fader:\t%f\n", c.Fader)
+	ret += fmt.Sprintf("Solo:\t%t\n", c.Solo)
+	ret += fmt.Sprintf("Trim:\t%f\n", c.Trim)
+	ret += fmt.Sprintf("Phantom:\t%t\n", c.Phantom)
+	ret += fmt.Sprintf("Selected:\t%t\n", c.Selected)
 
 	return ret
 }
@@ -209,6 +58,8 @@ func (x *X32) GetScenes() Scenes {
 
 func (x *X32) GetAllInfo() error {
 	for range Only.Once {
+		// return nil
+
 		x.Error = x.EmitStatus()
 		if x.Error != nil {
 			break
@@ -242,29 +93,29 @@ func (x *X32) GetAllInfo() error {
 
 const CmdStatus = "/status"
 func (x *X32) EmitStatus() error  { return x.Emit(CmdStatus) }
-func (x *X32) GetStatus() Message { return x.Call(CmdStatus) }
+func (x *X32) GetStatus() *Message { return x.Call(CmdStatus) }
 
 const CmdInfo = "/info"
 func (x *X32) EmitInfo() error  { return x.Emit(CmdInfo) }
-func (x *X32) GetInfo() Message { return x.Call(CmdInfo) }
+func (x *X32) GetInfo() *Message { return x.Call(CmdInfo) }
 
 const CmdXinfo = "/xinfo"
 func (x *X32) EmitXinfo() error  { return x.Emit(CmdXinfo) }
-func (x *X32) GetXinfo() Message { return x.Call(CmdXinfo) }
+func (x *X32) GetXinfo() *Message { return x.Call(CmdXinfo) }
 
 const CmdShowDump = "/showdump"
 func (x *X32) EmitShowDump() error  { return x.Emit(CmdShowDump) }
-func (x *X32) GetShowDump() Message { return x.Call(CmdShowDump) }
+func (x *X32) GetShowDump() *Message { return x.Call(CmdShowDump) }
 
 const CmdNode = "/node"
 func (x *X32) EmitNode() error  { return x.Emit(CmdNode) }
-func (x *X32) GetNode() Message { return x.Call(CmdNode) }
+func (x *X32) GetNode() *Message { return x.Call(CmdNode) }
 
 const CmdId = "/-prefs/??????"
 func (x *X32) EmitId() error  { return x.Emit(CmdId) }
-func (x *X32) GetId() Message { return x.Call(CmdId) }
+func (x *X32) GetId() *Message { return x.Call(CmdId) }
 
-func (x *X32) GetDeskName() Message { return x.Call("/-prefs/name") }
+func (x *X32) GetDeskName() *Message { return x.Call("/-prefs/name") }
 
 
 // func (x *X32) GetPointNamesFromTemplate(template string) api.TemplatePoints {

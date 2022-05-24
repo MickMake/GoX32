@@ -10,8 +10,6 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
-	"strconv"
-	"strings"
 	"time"
 )
 
@@ -123,36 +121,46 @@ func (x *X32) CacheWrite() error {
 }
 
 
-func (x *X32) UpdateCache(msg *gosc.Message) *Message {
+func (x *X32) UpdateCache(msg *Message) *Message {
 	for range Only.Once {
 		if x.cache == nil {
 			x.cache = make(MessageMap)
 		}
+
+		now := time.Now()
+
 		if !x.MessageExists(msg.Address) {
-			x.cache[msg.Address] = &Message{
-				Message:    msg,
-				SeenBefore: false,
-				Counter:    1,
-				LastSeen:   time.Now(),
-			}
+			msg.LastSeen = now
+			msg.Counter = 1
+			msg.SeenBefore = false
+			x.cache[msg.Address] = msg
+
+			// x.cache[msg.Address] = &Message {
+			// 	Message:    msg.Message,
+			// 	SeenBefore: false,
+			// 	Counter:    1,
+			// 	LastSeen:   time.Now(),
+			// }
 			break
 		}
+
+		msg.Counter = x.cache[msg.Address].Counter
+		msg.Counter += 1
+		msg.LastSeen = now
 
 		then := x.cache[msg.Address].LastSeen
 		then = then.Add(x.cacheTimeout)
-		now := time.Now()
 		if then.Before(now) {
-			x.cache[msg.Address].Counter++
-			x.cache[msg.Address].SeenBefore = false
-			x.cache[msg.Address].Message = msg
-			x.cache[msg.Address].LastSeen = time.Now()
-			break
+			msg.SeenBefore = false
+		} else {
+			msg.SeenBefore = true
 		}
 
-		x.cache[msg.Address].Counter++
-		x.cache[msg.Address].SeenBefore = true
-		x.cache[msg.Address].Message = msg
-		x.cache[msg.Address].LastSeen = time.Now()
+		// x.cache[msg.Address].Counter++
+		// x.cache[msg.Address].SeenBefore = true
+		// x.cache[msg.Address].Message = msg.Message
+		// x.cache[msg.Address].LastSeen = now
+		x.cache[msg.Address] = msg
 	}
 
 	return x.cache[msg.Address]
@@ -196,12 +204,14 @@ func (m *MessageMap) SeenBefore(address string) bool {
 
 
 type Message struct {
-	*gosc.Message          `json:"Message"`
+	Name         string    `json:"name"`
 	SeenBefore   bool      `json:"seen_before"`
 	LastSeen     time.Time `json:"last_seen"`
 	Counter      int       `json:"counter"`
 	Type         string    `json:"type"`
 	Error        error     `json:"-"`
+
+	*gosc.Message          `json:"Message"`
 
 	UnitValueMap api.UnitValueMap
 	Point        *api.Point
@@ -254,44 +264,58 @@ func (m *Message) GetType() string {
 	return ret
 }
 
-func (m *Message) GetStringValue() string {
-	var ret string
-	for range Only.Once {
-		for _, a := range m.Arguments {
-			ret += fmt.Sprintf("%v ", a)
-		}
-		ret = strings.TrimSpace(ret)
-	}
-	return ret
-}
 
-func (m *Message) GetBoolValue() bool {
-	var ok bool
+func (m *Message) Process() error {
 	for range Only.Once {
-		for _, a := range m.Arguments {
-			if a == "ON" {
-				ok = true
-			} else {
-				ok = false
-			}
+		if m.Point == nil {
+			m.Error = errors.New(fmt.Sprintf("Missing Point: %v data: %v\n", m.Address, m.Arguments))
 			break
 		}
+		m.UnitValueMap = m.Point.Convert.GetValues(m.Arguments...)
+		for k, v := range m.UnitValueMap {
+			m.UnitValueMap[k] = v.UnitValueFix()
+		}
+
+		// keys := make([]string, 0, len(gv))
+		// for k := range gv {
+		// 	keys = append(keys, k)
+		// }
+		// sort.Strings(keys)
+		//
+		// for _, k := range keys {
+		// 	value := gv[k]
+		// 	value.UnitValueFix()
+		// 	vf, _ := strconv.ParseFloat(v2, 64)
+		// 	vi, _ := strconv.ParseInt(v2, 10, 64)
+		// 	vb = fmt.Sprintf("%t", )
+		//
+		// 	m.UnitValueMap[k] = api.UnitValue {
+		// 		Unit:        ret.Unit,
+		// 		ValueString: v2,
+		// 		ValueFloat:  vf,
+		// 		ValueInt:    vi,
+		// 		ValueBool:   vb,
+		// 	}
+		// }
 	}
-	return ok
+
+	return m.Error
 }
 
-func (m *Message) GetFloatValue() float64 {
-	var ret float64
-	for range Only.Once {
-		var err error
-		for _, a := range m.Arguments {
-			ret, err = strconv.ParseFloat(fmt.Sprintf("%v", a), 64)
-			if err == nil {
-				break
-			}
-		}
-	}
-	return ret
+func (m *Message) GetValueString() string {
+	return m.UnitValueMap.GetFirst().ValueString
+}
+
+func (m *Message) GetValueBool() bool {
+	return m.UnitValueMap.GetFirst().ValueBool
+}
+
+func (m *Message) GetValueInt() int64 {
+	return m.UnitValueMap.GetFirst().ValueInt
+}
+
+func (m *Message) GetValueFloat() float64 {
+	return m.UnitValueMap.GetFirst().ValueFloat
 }
 
 func (m *Message) IsSwitch() bool {
@@ -300,3 +324,43 @@ func (m *Message) IsSwitch() bool {
 	}
 	return m.Point.IsSwitch()
 }
+
+// func (m *Message) GetValue() string {
+// 	var ret string
+// 	for range Only.Once {
+// 		for _, a := range m.Arguments {
+// 			ret += fmt.Sprintf("%v ", a)
+// 		}
+// 		ret = strings.TrimSpace(ret)
+// 	}
+// 	return ret
+// }
+//
+// func (m *Message) GetValueFloat() float64 {
+// 	var ret float64
+// 	for range Only.Once {
+// 		var err error
+// 		for _, a := range m.Arguments {
+// 			ret, err = strconv.ParseFloat(fmt.Sprintf("%v", a), 64)
+// 			if err == nil {
+// 				break
+// 			}
+// 		}
+// 	}
+// 	return ret
+// }
+//
+// func (m *Message) GetValueBool() bool {
+// 	var ok bool
+// 	for range Only.Once {
+// 		for _, a := range m.Arguments {
+// 			if a == "ON" {
+// 				ok = true
+// 			} else {
+// 				ok = false
+// 			}
+// 			break
+// 		}
+// 	}
+// 	return ok
+// }

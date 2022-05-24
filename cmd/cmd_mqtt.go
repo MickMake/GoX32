@@ -260,6 +260,156 @@ func (ca *CommandArgs) MqttCron() error {
 	return ca.Error
 }
 
+
+// Publish example:
+// topic: GoX32/set/ch/01/mix/fader
+// message: [{"type":"string","value":"0.8"}]
+
+type dataField struct {
+	Type  string `json:"type"`
+	Value any    `json:"value"`
+}
+type mqttPayload []*dataField
+
+func MqttMessageHandler(_ mqtt.Client, message mqtt.Message) {
+	for range Only.Once {
+		prefixParts := strings.Split(Cmd.Mqtt.EntityPrefix, "/")
+		LogPrintDate("MqttMessageHandler() - Topic: %v\n", prefixParts)
+
+		parts := strings.Split(message.Topic(), "/")
+		parts = parts[len(prefixParts)+1:]
+		res := make(mqttPayload, 0, 2)
+		Cmd.Error = json.Unmarshal(message.Payload(), &res)
+		if Cmd.Error != nil {
+			LogPrintDate("MQTT: Invalid message payload: %s\n", Cmd.Error)
+			break
+		}
+
+		values := make([]any, 0, len(res))
+		for _, p := range res {
+			switch p.Type {
+				case reflect.TypeOf(float32(0)).String():
+					values = append(values, float32(p.Value.(float64)))
+				case reflect.TypeOf("").String():
+					values = append(values, p.Value.(string))
+			}
+		}
+
+		address := "/" + strings.Join(parts, "/")
+		LogPrintDate("Address: %v\n", address)
+		Cmd.Error = Cmd.X32.Client.EmitMessage(address, values...)
+		if Cmd.Error != nil {
+			LogPrintDate("Could not send OSC message: %s\n", Cmd.Error)
+			break
+		}
+	}
+}
+
+func X32MessageHandler(msg *Behringer.Message) {
+	for range Only.Once {
+		// LogPrintDate("X32MessageHandler() - %v\t", msg.Address)
+		// point, unitValue, e2 := Cmd.X32.Process(msg.Address, msg.Arguments...)
+		// if e2 != nil {
+		// 	break
+		// }
+
+		// Single value.
+		if len(msg.UnitValueMap) == 1 {
+			LogPrintDate("# Single Point:\n\t%s\n\tUnitValue: %s (%v)\n", msg.Point, msg.UnitValueMap, msg.Arguments[0])
+
+			haType := "sensor"
+			if msg.IsSwitch() {
+				haType = "binary"
+			}
+
+			ec := mmHa.EntityConfig {
+				Name:        msg.Point.Name,
+				SubName:     "",
+				ParentId:    msg.Point.ParentId,
+				ParentName:  msg.Point.ParentId,
+				UniqueId:    api.CleanString(msg.Point.Id),
+				Units:       msg.Point.Unit, // msg.GetType(),
+				ValueName:   msg.Point.Id,
+				DeviceClass: "",
+				StateClass:  "measurement",
+				Value:       msg.UnitValueMap.GetFirst().ValueString,
+				HaType:      haType,
+
+				// Icon:                   "",
+				// ValueTemplate:          "",
+				// LastReset:              "",
+				// LastResetValueTemplate: "",
+			}
+
+			if !msg.SeenBefore {
+				Cmd.Error = Cmd.Mqtt.PublishConfig(ec)
+				if Cmd.Error != nil {
+					LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+					break
+				}
+			}
+
+			Cmd.Error = Cmd.Mqtt.PublishValue(ec)
+			if Cmd.Error != nil {
+				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+				break
+			}
+			break
+		}
+
+
+		// Multiple values.
+		LogPrintDate("# Multiple Point:\n\t%s\n\tUnitValue: %s\n", msg.Point, msg.UnitValueMap)
+
+		var entities []mmHa.EntityConfig
+		for i, u := range msg.UnitValueMap {
+			id := api.JoinStringsForId(i)
+
+			haType := "sensor"
+			if msg.Point.IsSwitch() {
+				haType = "binary"
+			}
+
+			ec := mmHa.EntityConfig {
+				Name:        fmt.Sprintf("%s %s", msg.Point.Name, i),
+				SubName:     "",
+				ParentId:    msg.Point.ParentId,
+				ParentName:  msg.Point.ParentId,
+				UniqueId:    api.CleanString(fmt.Sprintf("%s_%s", msg.Point.Id, id)),
+				Units:       u.Unit,
+				ValueName:   id,
+				DeviceClass: "",
+				StateClass:  "measurement",
+				Value:       u.ValueString,
+				HaType:      haType,
+
+				StateTopic:    msg.Point.Name,
+				ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", id),
+
+				// Icon:                   "",
+				// LastReset:              "",
+				// LastResetValueTemplate: "",
+			}
+			entities = append(entities, ec)
+		}
+
+		if !msg.SeenBefore {
+			Cmd.Error = Cmd.Mqtt.PublishConfigs(entities)
+			if Cmd.Error != nil {
+				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+				break
+			}
+		}
+
+		Cmd.Error = Cmd.Mqtt.SensorPublishValues(entities)
+		if Cmd.Error != nil {
+			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+			break
+		}
+	}
+}
+
+
 func (ca *CommandArgs) Update1(newDay bool) error {
 	for range Only.Once {
 
@@ -361,104 +511,117 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// ca.Error = ca.X32.StopMeters("/meters/11")
 
 
-		fmt.Println("HEY1")
-		time.Sleep(time.Second * 5)
-		fmt.Println("HEY2")
-		ca.X32.Emit("/showdump")
-		time.Sleep(time.Second * 5)
-		fmt.Println("HEY3")
-		ca.X32.Emit("/showdump")
-		time.Sleep(time.Second * 5)
-		fmt.Println("HEY4")
-		ca.X32.Emit("/showdump")
+		// fmt.Println("HEY1")
+		// time.Sleep(time.Second * 5)
+		// fmt.Println("HEY2")
+		// ca.X32.Emit("/showdump")
+		// time.Sleep(time.Second * 5)
+		// fmt.Println("HEY3")
+		// ca.X32.Emit("/showdump")
+		// time.Sleep(time.Second * 5)
+		// fmt.Println("HEY4")
+		// ca.X32.Emit("/showdump")
+
+		// ca.PublishChannel(7)
+
+		// time.Sleep(time.Second * 5)
+		// ca.PublishChannels()
+		// time.Sleep(time.Second * 5)
+		// ca.PublishMatrices()
+		// time.Sleep(time.Second * 5)
+		// ca.PublishBusses()
+		// time.Sleep(time.Second * 5)
+		// ca.PublishAuxes()
+
+		ca.GetInitial()
 
 		time.Sleep(time.Hour * 24)
 
 		ca.PublishChannels()
 
-	// 	// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-	// 	ep := Cmd.X32.QueryDevice(Cmd.Mqtt.PsId)
-	// 	if ep.IsError() {
-	// 		Cmd.Error = ep.GetError()
-	// 		break
-	// 	}
-	// 	data := ep.GetData()
-	//
-	// 	if newDay {
-	// 		LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.Entries))
-	// 		for _, o := range data.Order {
-	// 			r := data.Entries[o]
-	//
-	// 			fmt.Printf("C")
-	// 			re := mmHa.EntityConfig {
-	// 				Name:        r.Point.Id, // PointName,
-	// 				SubName:     "",
-	// 				ParentId:    r.EndPoint,
-	// 				ParentName:  "",
-	// 				UniqueId:    r.Point.Id,
-	// 				FullId:      r.Point.FullId,
-	// 				Units:       r.Point.Unit,
-	// 				ValueName:   r.Point.Name,
-	// 				DeviceClass: "",
-	// 				StateClass:  r.Point.Type,
-	// 				Value:       r.Value,
-	//
-	// 				// Icon:                   "",
-	// 				// ValueTemplate:          "",
-	// 				// LastReset:              "",
-	// 				// LastResetValueTemplate: "",
-	// 			}
-	//
-	// 			// if re.LastResetValueTemplate != "" {
-	// 			// 	fmt.Printf("HEY\n")
-	// 			// }
-	//
-	// 			Cmd.Error = Cmd.Mqtt.BinarySensorPublishConfig(re)
-	// 			if Cmd.Error != nil {
-	// 				break
-	// 			}
-	//
-	// 			Cmd.Error = Cmd.Mqtt.SensorPublishConfig(re)
-	// 			if Cmd.Error != nil {
-	// 				break
-	// 			}
-	// 		}
-	// 		fmt.Println()
-	// 	}
-	//
-	// 	LogPrintDate("Updating %d entries to HASSIO.\n", len(data.Entries))
-	// 	for _, o := range data.Order {
-	// 		r := data.Entries[o]
-	//
-	// 		fmt.Printf("U")
-	// 		re := mmHa.EntityConfig {
-	// 			Name:        r.Point.Id, // PointName,
-	// 			SubName:     "",
-	// 			ParentId:    r.EndPoint,
-	// 			ParentName:  "",
-	// 			UniqueId:    r.Point.Id,
-	// 			// UniqueId:    r.Id,
-	// 			FullId: r.Point.FullId,
-	// 			// FullName:    r.Point.Name,
-	// 			Units:       r.Point.Unit,
-	// 			ValueName:   r.Point.Name,
-	// 			// ValueName:   r.Id,
-	// 			DeviceClass: "",
-	// 			StateClass:  r.Point.Type,
-	// 			Value:       r.Value,
-	// 		}
-	//
-	// 		Cmd.Error = Cmd.Mqtt.BinarySensorPublishValue(re)
-	// 		if Cmd.Error != nil {
-	// 			break
-	// 		}
-	//
-	// 		Cmd.Error = Cmd.Mqtt.SensorPublishValue(re)
-	// 		if Cmd.Error != nil {
-	// 			break
-	// 		}
-	// 	}
-	// 	fmt.Println()
+		// 	// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
+		// 	ep := Cmd.X32.QueryDevice(Cmd.Mqtt.PsId)
+		// 	if ep.IsError() {
+		// 		Cmd.Error = ep.GetError()
+		// 		break
+		// 	}
+		// 	data := ep.GetData()
+		//
+		// 	if newDay {
+		// 		LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.Entries))
+		// 		for _, o := range data.Order {
+		// 			r := data.Entries[o]
+		//
+		// 			fmt.Printf("C")
+		// 			re := mmHa.EntityConfig {
+		// 				Name:        r.Point.Id, // PointName,
+		// 				SubName:     "",
+		// 				ParentId:    r.EndPoint,
+		// 				ParentName:  "",
+		// 				UniqueId:    r.Point.Id,
+		// 				FullId:      r.Point.FullId,
+		// 				Units:       r.Point.Unit,
+		// 				ValueName:   r.Point.Name,
+		// 				DeviceClass: "",
+		// 				StateClass:  r.Point.Type,
+		// 				Value:       r.Value,
+		//
+		// 				// Icon:                   "",
+		// 				// ValueTemplate:          "",
+		// 				// LastReset:              "",
+		// 				// LastResetValueTemplate: "",
+		// 			}
+		//
+		// 			// if re.LastResetValueTemplate != "" {
+		// 			// 	fmt.Printf("HEY\n")
+		// 			// }
+		//
+		// 			Cmd.Error = Cmd.Mqtt.BinarySensorPublishConfig(re)
+		// 			if Cmd.Error != nil {
+		// 				break
+		// 			}
+		//
+		// 			Cmd.Error = Cmd.Mqtt.SensorPublishConfig(re)
+		// 			if Cmd.Error != nil {
+		// 				break
+		// 			}
+		// 		}
+		// 		fmt.Println()
+		// 	}
+		//
+		// 	LogPrintDate("Updating %d entries to HASSIO.\n", len(data.Entries))
+		// 	for _, o := range data.Order {
+		// 		r := data.Entries[o]
+		//
+		// 		fmt.Printf("U")
+		// 		re := mmHa.EntityConfig {
+		// 			Name:        r.Point.Id, // PointName,
+		// 			SubName:     "",
+		// 			ParentId:    r.EndPoint,
+		// 			ParentName:  "",
+		// 			UniqueId:    r.Point.Id,
+		// 			// UniqueId:    r.Id,
+		// 			FullId: r.Point.FullId,
+		// 			// FullName:    r.Point.Name,
+		// 			Units:       r.Point.Unit,
+		// 			ValueName:   r.Point.Name,
+		// 			// ValueName:   r.Id,
+		// 			DeviceClass: "",
+		// 			StateClass:  r.Point.Type,
+		// 			Value:       r.Value,
+		// 		}
+		//
+		// 		Cmd.Error = Cmd.Mqtt.BinarySensorPublishValue(re)
+		// 		if Cmd.Error != nil {
+		// 			break
+		// 		}
+		//
+		// 		Cmd.Error = Cmd.Mqtt.SensorPublishValue(re)
+		// 		if Cmd.Error != nil {
+		// 			break
+		// 		}
+		// 	}
+		// 	fmt.Println()
 	}
 
 	if Cmd.Error != nil {
@@ -467,68 +630,262 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 	return Cmd.Error
 }
 
-func (ca *CommandArgs) PublishChannel(channel int) {
+
+func (ca *CommandArgs) GetInitial() {
 	for range Only.Once {
-		LogPrintDate("PublishChannel(%v)\n", channel)
-
-		c := ca.X32.GetChannel(channel)
-		fmt.Printf("\n%s\n", c.Json())
-		dm := api.NewDataMap()
-		dm.StructToPoints("ch0", c.Data)
-		fmt.Printf("dm:\n%v\n", dm)
-		fmt.Println("")
-		// name := mmHa.JoinStringsForId(c.Topic)
-
 		var entities []mmHa.EntityConfig
-		for _, o := range dm.Order {
-			r := dm.Entries[o]
 
-			entities = append(entities, mmHa.EntityConfig {
-				Name:        mmHa.JoinStrings(c.Topic, r.Point.Id),	// r.Point.Id,
+		for _, c := range ca.X32.ChannelCount() {
+			for _, r := range ca.X32.GetChannel(c) {
+				haType := "sensor"
+				if r.Point.IsSwitch() {
+					haType = "binary"
+				}
+
+				entity := mmHa.EntityConfig {
+					Name:        r.Point.Name,
+					SubName:     "",
+					ParentId:    r.Point.ParentId,
+					ParentName:  r.Point.ParentId,
+					UniqueId:    r.Point.Id,
+					Units:       r.Point.Unit,
+					ValueName:   r.Point.Id,
+					DeviceClass: "",
+					StateClass:  "measurement",
+					Value:       r.GetValueString(),
+					HaType:      haType,
+
+					StateTopic:    r.Point.Name,
+					// ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
+
+					// Icon:                   "",
+					// LastReset:              "",
+					// LastResetValueTemplate: "",
+				}
+				entities = append(entities, entity)
+			}
+		}
+
+		for _, c := range ca.X32.BusCount() {
+			for _, r := range ca.X32.GetBus(c) {
+				haType := "sensor"
+				if r.Point.IsSwitch() {
+					haType = "binary"
+				}
+
+				entity := mmHa.EntityConfig {
+					Name:        r.Point.Name,
+					SubName:     "",
+					ParentId:    r.Point.ParentId,
+					ParentName:  r.Point.ParentId,
+					UniqueId:    r.Point.Id,
+					Units:       r.Point.Unit,
+					ValueName:   r.Point.Id,
+					DeviceClass: "",
+					StateClass:  "measurement",
+					Value:       r.GetValueString(),
+					HaType:      haType,
+
+					StateTopic:    r.Point.Name,
+					// ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
+
+					// Icon:                   "",
+					// LastReset:              "",
+					// LastResetValueTemplate: "",
+				}
+				entities = append(entities, entity)
+			}
+		}
+
+		for _, c := range ca.X32.MatrixCount() {
+			for _, r := range ca.X32.GetMatrix(c) {
+				haType := "sensor"
+				if r.Point.IsSwitch() {
+					haType = "binary"
+				}
+
+				entity := mmHa.EntityConfig {
+					Name:        r.Point.Name,
+					SubName:     "",
+					ParentId:    r.Point.ParentId,
+					ParentName:  r.Point.ParentId,
+					UniqueId:    r.Point.Id,
+					Units:       r.Point.Unit,
+					ValueName:   r.Point.Id,
+					DeviceClass: "",
+					StateClass:  "measurement",
+					Value:       r.GetValueString(),
+					HaType:      haType,
+
+					StateTopic:    r.Point.Name,
+					// ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
+
+					// Icon:                   "",
+					// LastReset:              "",
+					// LastResetValueTemplate: "",
+				}
+				entities = append(entities, entity)
+			}
+		}
+
+		for _, c := range ca.X32.AuxCount() {
+			for _, r := range ca.X32.GetAux(c) {
+				haType := "sensor"
+				if r.Point.IsSwitch() {
+					haType = "binary"
+				}
+
+				entity := mmHa.EntityConfig {
+					Name:        r.Point.Name,
+					SubName:     "",
+					ParentId:    r.Point.ParentId,
+					ParentName:  r.Point.ParentId,
+					UniqueId:    r.Point.Id,
+					Units:       r.Point.Unit,
+					ValueName:   r.Point.Id,
+					DeviceClass: "",
+					StateClass:  "measurement",
+					Value:       r.GetValueString(),
+					HaType:      haType,
+
+					StateTopic:    r.Point.Name,
+					// ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
+
+					// Icon:                   "",
+					// LastReset:              "",
+					// LastResetValueTemplate: "",
+				}
+				entities = append(entities, entity)
+			}
+		}
+
+		for _, entity := range entities {
+			Cmd.Error = Cmd.Mqtt.PublishConfig(entity)
+			if Cmd.Error != nil {
+				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+				break
+			}
+
+			Cmd.Error = Cmd.Mqtt.PublishValue(entity)
+			if Cmd.Error != nil {
+				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+				break
+			}
+
+			time.Sleep(time.Millisecond * 10)
+		}
+		fmt.Sprintf("")
+	}
+}
+
+
+func (ca *CommandArgs) PublishChannels() {
+	for range Only.Once {
+		for _, c := range ca.X32.ChannelCount() {
+			ca.PublishChannel(c)
+		}
+	}
+}
+
+func (ca *CommandArgs) PublishChannel(id int) {
+	for range Only.Once {
+		LogPrintDate("PublishChannel(%v)\n", id)
+
+		c := ca.X32.GetChannel(id)
+		name := fmt.Sprintf("Virtual Channel %.2d", id + 1)
+		topic := api.JoinStringsForId(name)
+		var entities []mmHa.EntityConfig
+		for _, r := range c {
+
+			haType := "sensor"
+			if r.Point.IsSwitch() {
+				haType = "binary"
+			}
+
+			ec := mmHa.EntityConfig {
+				Name:        name + " " + r.Name,
 				SubName:     "",
-				ParentId:    ca.X32.Info.Model,	// r.EndPoint,
-				ParentName:  ca.X32.Info.Model,	// "",
-				UniqueId:    mmHa.JoinStringsForId(c.Topic, r.Point.Id),	// r.Point.Id,
-				// FullId:      mmHa.JoinStringsForId(c.Topic, r.Point.Id),	// r.Point.FullId,
+				ParentId:    r.Point.ParentId,
+				ParentName:  r.Point.ParentId,
+				UniqueId:    mmHa.JoinStringsForId(topic, r.Point.Id),
 				Units:       r.Point.Unit,
-				ValueName:   r.Point.Name,
+				ValueName:   r.Point.Id,
 				DeviceClass: "",
-				StateClass:  "measurement",	// r.Point.Type,
-				StateTopic:  mmHa.JoinStringsForId(c.Topic),
-				Value:       r.Value,
-				ValueTemplate:          fmt.Sprintf("{{ value_json.%s }}", r.Point.Name),
+				StateClass:  "measurement",
+				Value:       r.GetValueString(),
+				HaType:      haType,
 
-				// ParentId:    Cmd.X32.Info.Model,
-				// ParentName:  Cmd.X32.Info.Model,
-				// UniqueId:    fmt.Sprintf("%s %d", msg.Address, i),
-				// FullId:      fmt.Sprintf("%s %d", msg.Address, i),
-				// Units:       msg.GetType(),
-				// ValueName:   fmt.Sprintf("%v", v),
-				// DeviceClass: "",
-				// StateClass:  "r.Point.Type",
-				// StateTopic:  name,
-				// Value:       fmt.Sprintf("%v", v),
-				// ValueTemplate:          fmt.Sprintf("{{ value_json.value%d }}", i),
+				StateTopic:    topic,
+				ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
 
 				// Icon:                   "",
 				// LastReset:              "",
 				// LastResetValueTemplate: "",
-			})
-			fmt.Println()
+			}
 
-			// if !msg.SeenBefore {
-			// 	Cmd.Error = Cmd.Mqtt.PublishConfig(ec)
-			// 	if Cmd.Error != nil {
-			// 		LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-			// 		break
-			// 	}
-			// }
-			//
-			// Cmd.Error = Cmd.Mqtt.PublishValue(ec)
-			// if Cmd.Error != nil {
-			// 	LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-			// 	break
-			// }
+			entities = append(entities, ec)
+		}
+
+		Cmd.Error = Cmd.Mqtt.PublishConfigs(entities)
+		if Cmd.Error != nil {
+			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+			break
+		}
+
+		Cmd.Error = Cmd.Mqtt.PublishValues(entities)
+		if Cmd.Error != nil {
+			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+			break
+		}
+	}
+}
+
+
+func (ca *CommandArgs) PublishMatrices() {
+	for range Only.Once {
+		for _, c := range ca.X32.MatrixCount() {
+			ca.PublishMatrix(c)
+		}
+	}
+}
+
+func (ca *CommandArgs) PublishMatrix(id int) {
+	for range Only.Once {
+		LogPrintDate("PublishMatrix(%v)\n", id)
+
+		c := ca.X32.GetMatrix(id)
+		name := fmt.Sprintf("Virtual Matrix %.2d", id + 1)
+		topic := api.JoinStringsForId(name)
+		var entities []mmHa.EntityConfig
+		for _, r := range c {
+
+			haType := "sensor"
+			if r.Point.IsSwitch() {
+				haType = "binary"
+			}
+
+			ec := mmHa.EntityConfig {
+				Name:        name + " " + r.Name,
+				SubName:     "",
+				ParentId:    r.Point.ParentId,
+				ParentName:  r.Point.ParentId,
+				UniqueId:    mmHa.JoinStringsForId(topic, r.Point.Id),
+				Units:       r.Point.Unit,
+				ValueName:   r.Point.Id,
+				DeviceClass: "",
+				StateClass:  "measurement",
+				Value:       r.GetValueString(),
+				HaType:      haType,
+
+				StateTopic:    topic,
+				ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
+
+				// Icon:                   "",
+				// LastReset:              "",
+				// LastResetValueTemplate: "",
+			}
+
+			entities = append(entities, ec)
 		}
 
 		Cmd.Error = Cmd.Mqtt.PublishConfigs(entities)
@@ -545,153 +902,120 @@ func (ca *CommandArgs) PublishChannel(channel int) {
 	}
 }
 
-func (ca *CommandArgs) PublishChannels() {
+
+func (ca *CommandArgs) PublishBusses() {
 	for range Only.Once {
-		for c := 0; c <= 32; c++ {
-			ca.PublishChannel(c)
+		for _, c := range ca.X32.BusCount() {
+			ca.PublishBus(c)
 		}
 	}
 }
 
-
-// Publish example:
-// topic: GoX32/set/ch/01/mix/fader
-// message: [{"type":"string","value":"0.8"}]
-
-type dataField struct {
-	Type  string `json:"type"`
-	Value any    `json:"value"`
-}
-type mqttPayload []*dataField
-
-func MqttMessageHandler(_ mqtt.Client, message mqtt.Message) {
+func (ca *CommandArgs) PublishBus(id int) {
 	for range Only.Once {
-		prefixParts := strings.Split(Cmd.Mqtt.EntityPrefix, "/")
-		LogPrintDate("MqttMessageHandler() - Topic: %v\n", prefixParts)
+		LogPrintDate("PublishBus(%v)\n", id)
 
-		parts := strings.Split(message.Topic(), "/")
-		parts = parts[len(prefixParts)+1:]
-		res := make(mqttPayload, 0, 2)
-		Cmd.Error = json.Unmarshal(message.Payload(), &res)
-		if Cmd.Error != nil {
-			LogPrintDate("MQTT: Invalid message payload: %s\n", Cmd.Error)
-			break
-		}
-
-		values := make([]any, 0, len(res))
-		for _, p := range res {
-			switch p.Type {
-				case reflect.TypeOf(float32(0)).String():
-					values = append(values, float32(p.Value.(float64)))
-				case reflect.TypeOf("").String():
-					values = append(values, p.Value.(string))
-			}
-		}
-
-		address := "/" + strings.Join(parts, "/")
-		LogPrintDate("Address: %v\n", address)
-		Cmd.Error = Cmd.X32.Client.EmitMessage(address, values...)
-		if Cmd.Error != nil {
-			LogPrintDate("Could not send OSC message: %s\n", Cmd.Error)
-			break
-		}
-	}
-}
-
-func X32MessageHandler(msg *Behringer.Message) {
-	for range Only.Once {
-		// LogPrintDate("X32MessageHandler() - %v\t", msg.Address)
-		// point, unitValue, e2 := Cmd.X32.Process(msg.Address, msg.Arguments...)
-		// if e2 != nil {
-		// 	break
-		// }
-
-		// Single value.
-		if len(msg.UnitValueMap) == 1 {
-			LogPrintDate("# Single Point:\n\t%s\n\tUnitValue: %s (%v)\n", msg.Point, msg.UnitValueMap, msg.Arguments[0])
-
-			haType := "sensor"
-			if msg.IsSwitch() {
-				haType = "binary"
-			}
-
-			ec := mmHa.EntityConfig {
-				Name:        msg.Point.Name,
-				SubName:     "",
-				ParentId:    msg.Point.ParentId,
-				ParentName:  msg.Point.ParentId,
-				UniqueId:    api.CleanString(msg.Point.Id),
-				Units:       msg.Point.Unit, // msg.GetType(),
-				ValueName:   "",
-				DeviceClass: "",
-				StateClass:  "measurement",
-				Value:       msg.UnitValueMap.GetFirst().Value,
-				HaType:      haType,
-
-				// Icon:                   "",
-				// ValueTemplate:          "",
-				// LastReset:              "",
-				// LastResetValueTemplate: "",
-			}
-
-			if !msg.SeenBefore {
-				Cmd.Error = Cmd.Mqtt.PublishConfig(ec)
-				if Cmd.Error != nil {
-					LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-					break
-				}
-			}
-
-			Cmd.Error = Cmd.Mqtt.PublishValue(ec)
-			if Cmd.Error != nil {
-				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-				break
-			}
-			break
-		}
-
-
-		// Multiple values.
-		LogPrintDate("# Multiple Point:\n\t%s\n\tUnitValue: %s\n", msg.Point, msg.UnitValueMap)
-
+		c := ca.X32.GetBus(id)
+		name := fmt.Sprintf("Virtual Bus %.2d", id + 1)
+		topic := api.JoinStringsForId(name)
 		var entities []mmHa.EntityConfig
-		for i, u := range msg.UnitValueMap {
-			id := api.JoinStringsForId(i)
+		for _, r := range c {
 
 			haType := "sensor"
-			if msg.Point.IsSwitch() {
+			if r.Point.IsSwitch() {
 				haType = "binary"
 			}
 
 			ec := mmHa.EntityConfig {
-				Name:        fmt.Sprintf("%s %s", msg.Point.Name, i),
+				Name:        name + " " + r.Name,
 				SubName:     "",
-				ParentId:    msg.Point.ParentId,
-				ParentName:  msg.Point.ParentId,
-				UniqueId:    api.CleanString(fmt.Sprintf("%s_%s", msg.Point.Id, id)),
-				Units:       u.Unit,
-				ValueName:   id,
+				ParentId:    r.Point.ParentId,
+				ParentName:  r.Point.ParentId,
+				UniqueId:    mmHa.JoinStringsForId(topic, r.Point.Id),
+				Units:       r.Point.Unit,
+				ValueName:   r.Point.Id,
 				DeviceClass: "",
 				StateClass:  "measurement",
-				Value:       u.Value,
+				Value:       r.GetValueString(),
 				HaType:      haType,
 
-				StateTopic:    msg.Point.Name,
-				ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", id),
+				StateTopic:    topic,
+				ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
 
 				// Icon:                   "",
 				// LastReset:              "",
 				// LastResetValueTemplate: "",
 			}
+
 			entities = append(entities, ec)
 		}
 
-		if !msg.SeenBefore {
-			Cmd.Error = Cmd.Mqtt.PublishConfigs(entities)
-			if Cmd.Error != nil {
-				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-				break
+		Cmd.Error = Cmd.Mqtt.PublishConfigs(entities)
+		if Cmd.Error != nil {
+			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+			break
+		}
+
+		Cmd.Error = Cmd.Mqtt.SensorPublishValues(entities)
+		if Cmd.Error != nil {
+			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+			break
+		}
+	}
+}
+
+
+func (ca *CommandArgs) PublishAuxes() {
+	for range Only.Once {
+		for _, c := range ca.X32.AuxCount() {
+			ca.PublishAux(c)
+		}
+	}
+}
+
+func (ca *CommandArgs) PublishAux(id int) {
+	for range Only.Once {
+		LogPrintDate("PublishAux(%v)\n", id)
+
+		c := ca.X32.GetAux(id)
+		name := fmt.Sprintf("Virtual Aux %.2d", id + 1)
+		topic := api.JoinStringsForId(name)
+		var entities []mmHa.EntityConfig
+		for _, r := range c {
+
+			haType := "sensor"
+			if r.Point.IsSwitch() {
+				haType = "binary"
 			}
+
+			ec := mmHa.EntityConfig {
+				Name:        name + " " + r.Name,
+				SubName:     "",
+				ParentId:    r.Point.ParentId,
+				ParentName:  r.Point.ParentId,
+				UniqueId:    mmHa.JoinStringsForId(topic, r.Point.Id),
+				Units:       r.Point.Unit,
+				ValueName:   r.Point.Id,
+				DeviceClass: "",
+				StateClass:  "measurement",
+				Value:       r.GetValueString(),
+				HaType:      haType,
+
+				StateTopic:    topic,
+				ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
+
+				// Icon:                   "",
+				// LastReset:              "",
+				// LastResetValueTemplate: "",
+			}
+
+			entities = append(entities, ec)
+		}
+
+		Cmd.Error = Cmd.Mqtt.PublishConfigs(entities)
+		if Cmd.Error != nil {
+			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+			break
 		}
 
 		Cmd.Error = Cmd.Mqtt.SensorPublishValues(entities)

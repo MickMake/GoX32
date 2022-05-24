@@ -61,13 +61,13 @@ func GetStructKeys(ref interface{}, keys ...string) UnitValueMap {
 	ret := make(UnitValueMap)
 
 	for _, k := range apiReflect.GetStructKeys(ref, keys...) {
-		p := UnitValue { Value: k.Value, Unit: "" }
+		p := UnitValue { ValueString: k.Value, Unit: "" }
 		if k.Type.Name() == "UnitValue" {
 			// v = JsonToUnitValue(k.JsonValue).Value
 			// u = JsonToUnitValue(k.JsonValue).Unit
 			p = JsonToUnitValue(k.JsonValue)
 
-			p.Value, p.Unit = DivideByThousandIfRequired(p.Value, p.Unit)
+			p.ValueString, p.Unit = DivideByThousandIfRequired(p.ValueString, p.Unit)
 		}
 
 		k.JsonName = strings.TrimSuffix(k.JsonName, "_map")	// Bit of a hack, but hey... @TODO - Future self take note.

@@ -126,3 +126,8 @@ func (p *Point) IsSwitch() bool {
 }
 
 
+// type PointValue struct {
+// 	Point Point        `json:"point"`
+// 	Value UnitValueMap `json:"value"`
+// 	Error error        `json:"error"`
+// }

@@ -1117,7 +1117,15 @@
 		"4": "BLUE",
 		"5": "PINK",
 		"6": "CYAN",
-		"7": "WHITE"
+		"7": "WHITE",
+		"8": "BLACK (I)",
+		"9": "RED (I)",
+		"10": "GREEN (I)",
+		"11": "YELLOW (I)",
+		"12": "BLUE (I)",
+		"13": "PINK (I)",
+		"14": "CYAN (I)",
+		"15": "WHITE (I)"
 	  }
 	},
 	"insert-pos": {
