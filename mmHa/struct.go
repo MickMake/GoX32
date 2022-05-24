@@ -142,6 +142,23 @@ func (m *Mqtt) setUrl(req Mqtt) error {
 }
 
 
+func (m *Mqtt) Publish(config EntityConfig, Seen bool) error {
+	for range Only.Once {
+		if !Seen {
+			m.err = m.PublishConfig(config)
+			if m.err != nil {
+				break
+			}
+		}
+
+		m.err = m.PublishValue(config)
+		if m.err != nil {
+			break
+		}
+	}
+	return m.err
+}
+
 func (m *Mqtt) PublishConfig(config EntityConfig) error {
 	for range Only.Once {
 		switch {
@@ -357,7 +374,6 @@ func (config *EntityConfig) IsSensor() bool {
 
 		if SensorLabels.ValueExists(config.Units) {
 			ok = true
-			config.Units = ""
 			break
 		}
 
@@ -372,14 +388,8 @@ func (config *EntityConfig) IsBinarySensor() bool {
 	var ok bool
 
 	for range Only.Once {
-		// if BinarySensorLabels.ValueExists(config.Units) {
-		// 	ok = true
-		// 	// config.Units = ""
-		// 	break
-		// }
 		if BinarySensorLabels.ValueExists(config.HaType) {
 			ok = true
-			// config.Units = ""
 			break
 		}
 	}
@@ -391,10 +401,6 @@ func (config *EntityConfig) IsSwitch() bool {
 	var ok bool
 
 	for range Only.Once {
-		// if config.Units == LabelSwitch {
-		// 	ok = true
-		// 	break
-		// }
 		if config.HaType == LabelSwitch {
 			ok = true
 			break
@@ -408,10 +414,6 @@ func (config *EntityConfig) IsLight() bool {
 	var ok bool
 
 	for range Only.Once {
-		// if config.Units == "light" {
-		// 	ok = true
-		// 	break
-		// }
 		if config.HaType == "light" {
 			ok = true
 			break

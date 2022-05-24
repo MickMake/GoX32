@@ -3,7 +3,6 @@ package gosc
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"net"
 )
 
@@ -40,8 +39,8 @@ func (t *transport) Send(pack Package) error {
 		return err
 	}
 	_ = w.Flush()
-	fmt.Printf("X32 OSC: %v\n", buf.String())
-	fmt.Printf("X32 OSC: %v\n", buf.Bytes())
+	// fmt.Printf("X32 OSC: %v\n", buf.String())	// @TODO - DEBUG
+	// fmt.Printf("X32 OSC: %v\n", buf.Bytes())		// @TODO - DEBUG
 	_, err = t.conn.Write(buf.Bytes())
 	if err != nil {
 		return err

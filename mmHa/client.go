@@ -63,12 +63,12 @@ func (m *Mqtt) Connect() error {
 			},
 		}
 
-		m.err = m.Publish(JoinStringsForTopic(m.servicePrefix, "config"), 0, true, device.Json())
+		m.err = m.RawPublish(JoinStringsForTopic(m.servicePrefix, "config"), 0, true, device.Json())
 		if m.err != nil {
 			break
 		}
 
-		m.err = m.Publish(JoinStringsForTopic(m.servicePrefix, "state"), 0, true, "ON")
+		m.err = m.RawPublish(JoinStringsForTopic(m.servicePrefix, "state"), 0, true, "ON")
 		if m.err != nil {
 			break
 		}
@@ -219,7 +219,7 @@ func (m *Mqtt) onMessage(client mqtt.Client, message mqtt.Message) {
 }
 
 
-func (m *Mqtt) Subscribe(topic string) error {
+func (m *Mqtt) RawSubscribe(topic string) error {
 	for range Only.Once {
 		t := m.client.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
 			fmt.Printf("* [%s] %s\n", msg.Topic(), string(msg.Payload()))
@@ -232,7 +232,7 @@ func (m *Mqtt) Subscribe(topic string) error {
 	return m.err
 }
 
-func (m *Mqtt) Publish(topic string, qos byte, retained bool, payload interface{}) error {
+func (m *Mqtt) RawPublish(topic string, qos byte, retained bool, payload interface{}) error {
 	for range Only.Once {
 		t := m.client.Publish(topic, qos, retained, payload)
 		if !t.WaitTimeout(m.Timeout) {

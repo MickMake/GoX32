@@ -2,6 +2,7 @@ package mmHa
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/MickMake/GoX32/Only"
 )
 
@@ -16,31 +17,43 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 
 		device := m.Device
 		device.Name = JoinStrings(m.Device.Name, config.ParentId)
-		device.Connections = [][]string{
+		device.Connections = [][]string {
 			{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentId) },
 			{ JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
 		}
-		device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
-		if config.StateTopic == "" {
+		device.Identifiers = []string { JoinStringsForId(m.Device.Name, config.ParentId) }
+		if config.StateTopic != "" {
+			config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.StateTopic)
+			// config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
+		} else {
 			config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
 			// config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
 		}
+		uid := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
 
 		payload := Switch {
 			Device:                 device,
 			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.Name),
 			StateTopic:             JoinStringsForTopic(m.binarySensorPrefix, config.StateTopic, "state"),
-			CommandTopic:           JoinStringsForTopic(m.binarySensorPrefix, config.StateTopic, "cmd"),
+			// StateClass:             config.StateClass,
 			UniqueId:               config.StateTopic,
+			// UnitOfMeasurement:      config.Units,
+			// DeviceClass:            config.DeviceClass,
 			Qos:                    0,
 			Retain:                 true,
-
-			PayloadOn:              "true",
-			PayloadOff:             "false",
-			StateOn:                "true",
-			StateOff:               "false",
+			// ExpireAfter:            0,
+			// Encoding:               "utf-8",
+			// EnabledByDefault:       true,
+			// LastResetValueTemplate: config.LastResetValueTemplate,
+			// LastReset:              config.LastReset,
 			ValueTemplate:          config.ValueTemplate,
 			Icon:                   config.Icon,
+			PayloadOn:              "ON",
+			PayloadOff:             "OFF",
+
+			StateOn:                "ON",
+			StateOff:               "OFF",
+			CommandTopic:           JoinStringsForTopic(m.binarySensorPrefix, config.StateTopic, "cmd"),
 
 			// Availability:           &Availability {
 			// 	PayloadAvailable:    "",
@@ -51,7 +64,6 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 			// AvailabilityMode:       "",
 			// AvailabilityTemplate:   "",
 			// AvailabilityTopic:      "",
-			// CommandTopic:           "",
 			// JSONAttributesTemplate: "",
 			// JSONAttributesTopic:    "",
 			// Optimistic:             false,
@@ -59,7 +71,7 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 			// PayloadNotAvailable:    "",
 		}
 
-		ct := JoinStringsForTopic(m.binarySensorPrefix, config.StateTopic, "config")
+		ct := JoinStringsForTopic(m.switchPrefix, uid, "config")
 		t := m.client.Publish(ct, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -77,12 +89,17 @@ func (m *Mqtt) SwitchPublishValue(config EntityConfig) error {
 		}
 
 		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
-		payload := MqttState {
-			LastReset: m.GetLastReset(config.UniqueId),
-			Value:     config.Value,
-		}
+		cs := make(ValueMap)
+		cs["last_reset"] = m.GetLastReset(JoinStringsForId(config.ParentId, config.Name))
+		cs[config.ValueName] = config.Value
+
+		// payload := MqttState {
+		// 	LastReset: m.GetLastReset(config.UniqueId),
+		// 	Value:     config.Value,
+		// }
+
 		st = JoinStringsForTopic(m.binarySensorPrefix, st, "state")
-		t := m.client.Publish(st, 0, true, payload.Json())
+		t := m.client.Publish(st, 0, true, cs.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
 		}
@@ -91,57 +108,49 @@ func (m *Mqtt) SwitchPublishValue(config EntityConfig) error {
 	return m.err
 }
 
+func (m *Mqtt) SwitchPublishValues(configs []EntityConfig) error {
+	for range Only.Once {
+		if len(configs) == 0 {
+			break
+		}
 
-// func (m *Mqtt) PublishSwitchConfig(id string, name string, subName string, units string, valueName string, class string) error {
-// 	for range Only.Once {
-// 		id = JoinStringsForId(m.EntityPrefix, m.Device.Name, id)
-//
-// 		payload := Switch {
-// 			Device:                 m.Device,
-// 			Name:                   JoinStrings(m.Device.ViaDevice, name),
-// 			StateTopic:             JoinStringsForTopic(m.switchPrefix, id, "state"),
-// 			// StateClass:             "measurement",
-// 			// UniqueId:               id,
-// 			// UnitOfMeasurement:      units,
-// 			// DeviceClass:            class,
-// 			// Qos:                    0,
-// 			// ForceUpdate:            true,
-// 			// ExpireAfter:            0,
-// 			// Encoding:               "utf-8",
-// 			// EnabledByDefault:       true,
-// 			// LastResetValueTemplate: LastResetValueTemplate,
-// 			// LastReset:              LastReset,
-// 			// ValueTemplate:          "{{ value_json.value | float }}",
-// 			// LastReset: time.Now().Format("2006-01-02T00:00:00+00:00"),
-// 			// LastResetValueTemplate: "{{entity_id}}",
-// 			// LastResetValueTemplate: "{{ (as_datetime((value_json.last_reset | int | timestamp_utc)|string+'Z')).isoformat() }}",
-// 		}
-//
-// 		m.client.Publish(JoinStringsForTopic(m.switchPrefix, id, "config"), 0, true, payload.Json())
-// 	}
-// 	return m.err
-// }
-//
-// func (m *Mqtt) PublishSwitch(subtopic string, payload interface{}) error {
-// 	for range Only.Once {
-// 		t := m.client.Publish(JoinStringsForTopic(m.switchPrefix, subtopic), 0, true, payload)
-// 		if !t.WaitTimeout(m.Timeout) {
-// 			m.err = t.Error()
-// 		}
-// 	}
-// 	return m.err
-// }
-//
-// func (m *Mqtt) PublishSwitchState(topic string, payload interface{}) error {
-// 	for range Only.Once {
-// 		topic = JoinStringsForId(m.EntityPrefix, m.Device.Name, topic)
-// 		t := m.client.Publish(JoinStringsForTopic(m.switchPrefix, topic, "state"), 0, true, payload)
-// 		if !t.WaitTimeout(m.Timeout) {
-// 			m.err = t.Error()
-// 		}
-// 	}
-// 	return m.err
-// }
+		cs := make(map[string]Fields)
+		topic := ""
+		for i, config := range configs {
+			if !config.IsBinarySensor() {
+				continue
+			}
+
+			if config.StateTopic != "" {
+				config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.StateTopic)
+			} else {
+				config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+				// config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
+			}
+
+			if topic == "" {
+				topic = JoinStringsForTopic(m.switchPrefix, config.StateTopic, "state")
+			}
+
+			if config.ValueName == "" {
+				config.ValueName = fmt.Sprintf("value%d", i)
+			}
+			if _, ok := cs[config.StateTopic]; !ok {
+				cs[config.StateTopic] = make(Fields)
+			}
+			cs[config.StateTopic][config.ValueName] = config.Value
+		}
+
+		for _, c := range cs {
+			j, _ := json.Marshal(c)
+			t := m.client.Publish(topic, 0, true, string(j))
+			if !t.WaitTimeout(m.Timeout) {
+				m.err = t.Error()
+			}
+		}
+	}
+	return m.err
+}
 
 
 type Switch struct {

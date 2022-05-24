@@ -341,15 +341,7 @@ func X32MessageHandler(msg *Behringer.Message) {
 				// LastResetValueTemplate: "",
 			}
 
-			if !msg.SeenBefore {
-				Cmd.Error = Cmd.Mqtt.PublishConfig(ec)
-				if Cmd.Error != nil {
-					LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-					break
-				}
-			}
-
-			Cmd.Error = Cmd.Mqtt.PublishValue(ec)
+			Cmd.Error = Cmd.Mqtt.Publish(ec, msg.SeenBefore)
 			if Cmd.Error != nil {
 				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
 				break
@@ -537,19 +529,29 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 
 		// ca.Error = ca.X32.Emit("/-prefs/remote/ioenable", 4089)	//, 0, 0, 2)
 
-		ca.Error = ca.X32.Emit("/formatsubscribe", "hidden/solo", "/-stat/solosw/**")	//, int32(1), int32(80), int32(20))
+		// ca.Error = ca.X32.Emit("/formatsubscribe", "hidden/solo", "/-stat/solosw/**")	//, int32(1), int32(80), int32(20))
 
-		p1 := ca.X32.Points.Resolve("/ch/01/mix/on")
-		p2 := ca.X32.Points.Resolve("/-stat/solosw/01")
+		ca.Error = ca.X32.Set("/ch/01/mix/on", api.On)
+		ca.Error = ca.X32.Set("/-stat/solosw/01", api.On)
+		time.Sleep(time.Second * 1)
+		ca.Error = ca.X32.Set("/ch/01/mix/on", api.Off)
+		ca.Error = ca.X32.Set("/-stat/solosw/01", api.Off)
+		time.Sleep(time.Second * 1)
+		ca.Error = ca.X32.Set("/ch/01/mix/on", api.On)
+		ca.Error = ca.X32.Set("/-stat/solosw/01", api.On)
+		time.Sleep(time.Second * 1)
+		ca.Error = ca.X32.Set("/ch/01/mix/on", api.Off)
+		ca.Error = ca.X32.Set("/-stat/solosw/01", api.Off)
+		time.Sleep(time.Second * 1)
 
-		ca.Error = ca.X32.Emit(p1.EndPoint, p1.Convert.SetValue(api.On))
-		ca.Error = ca.X32.Emit(p2.EndPoint, p2.Convert.SetValue(api.On))
-		time.Sleep(time.Second * 2)
-
-		ca.Error = ca.X32.Emit(p1.EndPoint, p1.Convert.SetValue(api.Off))
-		ca.Error = ca.X32.Emit(p2.EndPoint, p2.Convert.SetValue(api.Off))
-		time.Sleep(time.Second * 2)
-		// /ch/08/mix/on
+		// p1 := ca.X32.Points.Resolve("/ch/01/mix/on")
+		// p2 := ca.X32.Points.Resolve("/-stat/solosw/01")
+		// ca.Error = ca.X32.Emit(p1.EndPoint, p1.Convert.SetValue(api.On))
+		// ca.Error = ca.X32.Emit(p2.EndPoint, p2.Convert.SetValue(api.On))
+		// time.Sleep(time.Second * 2)
+		// ca.Error = ca.X32.Emit(p1.EndPoint, p1.Convert.SetValue(api.Off))
+		// ca.Error = ca.X32.Emit(p2.EndPoint, p2.Convert.SetValue(api.Off))
+		// time.Sleep(time.Second * 2)
 
 		// ca.Error = ca.X32.Emit("/formatsubscribe",
 		// 	"hidden/names",
@@ -703,13 +705,7 @@ func (ca *CommandArgs) GetInitial() {
 		}
 
 		for _, entity := range entities {
-			Cmd.Error = Cmd.Mqtt.PublishConfig(entity)
-			if Cmd.Error != nil {
-				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
-				break
-			}
-
-			Cmd.Error = Cmd.Mqtt.PublishValue(entity)
+			Cmd.Error = Cmd.Mqtt.Publish(entity, false)
 			if Cmd.Error != nil {
 				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
 				break

@@ -15,19 +15,13 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 			break
 		}
 
-		// LastReset := m.GetLastReset(config.UniqueId)
-		// LastResetValueTemplate := ""
-		// if LastReset != "" {
-		// 	LastResetValueTemplate = "{{ value_json.last_reset | as_datetime() }}"
-		// }
-
 		device := m.Device
 		device.Name = JoinStrings(m.Device.Name, config.ParentId)
 		device.Connections = [][]string {
 			{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentId) },
 			{ JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
 		}
-		device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
+		device.Identifiers = []string { JoinStringsForId(m.Device.Name, config.ParentId) }
 		if config.StateTopic != "" {
 			config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentId, config.StateTopic)
 			// config.StateTopic = JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
