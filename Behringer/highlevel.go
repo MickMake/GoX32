@@ -75,17 +75,159 @@ func (x *X32) GetAllInfo() error {
 			break
 		}
 
-		x.Error = x.EmitNode()
-		if x.Error != nil {
-			break
-		}
+		// x.Error = x.EmitNode()
+		// if x.Error != nil {
+		// 	break
+		// }
 
-		x.Error = x.EmitId()
-		if x.Error != nil {
-			break
-		}
+		// x.Error = x.EmitId()
+		// if x.Error != nil {
+		// 	break
+		// }
 
-		x.GetDeskName()
+		// x.GetDeskName()
+
+		// var entities []mmHa.EntityConfig
+		//
+		// for _, c := range x.ChannelCount() {
+		// 	for _, r := range x.GetChannel(c) {
+		// 		haType := "sensor"
+		// 		if r.Point.IsSwitch() {
+		// 			haType = "binary"
+		// 		}
+		//
+		// 		entity := mmHa.EntityConfig {
+		// 			Name:        r.Point.Name,
+		// 			SubName:     "",
+		// 			ParentId:    r.Point.ParentId,
+		// 			ParentName:  r.Point.ParentId,
+		// 			UniqueId:    r.Point.Id,
+		// 			Units:       r.Point.Unit,
+		// 			ValueName:   r.Point.Id,
+		// 			DeviceClass: "",
+		// 			StateClass:  "measurement",
+		// 			Value:       r.GetValueString(),
+		// 			HaType:      haType,
+		//
+		// 			StateTopic:    r.Point.Name,
+		// 			// ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
+		//
+		// 			// Icon:                   "",
+		// 			// LastReset:              "",
+		// 			// LastResetValueTemplate: "",
+		// 		}
+		// 		entities = append(entities, entity)
+		// 	}
+		// }
+		//
+		// for _, c := range x.BusCount() {
+		// 	for _, r := range x.GetBus(c) {
+		// 		haType := "sensor"
+		// 		if r.Point.IsSwitch() {
+		// 			haType = "binary"
+		// 		}
+		//
+		// 		entity := mmHa.EntityConfig {
+		// 			Name:        r.Point.Name,
+		// 			SubName:     "",
+		// 			ParentId:    r.Point.ParentId,
+		// 			ParentName:  r.Point.ParentId,
+		// 			UniqueId:    r.Point.Id,
+		// 			Units:       r.Point.Unit,
+		// 			ValueName:   r.Point.Id,
+		// 			DeviceClass: "",
+		// 			StateClass:  "measurement",
+		// 			Value:       r.GetValueString(),
+		// 			HaType:      haType,
+		//
+		// 			StateTopic:    r.Point.Name,
+		// 			// ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
+		//
+		// 			// Icon:                   "",
+		// 			// LastReset:              "",
+		// 			// LastResetValueTemplate: "",
+		// 		}
+		// 		entities = append(entities, entity)
+		// 	}
+		// }
+		//
+		// for _, c := range x.MatrixCount() {
+		// 	for _, r := range x.GetMatrix(c) {
+		// 		haType := "sensor"
+		// 		if r.Point.IsSwitch() {
+		// 			haType = "binary"
+		// 		}
+		//
+		// 		entity := mmHa.EntityConfig {
+		// 			Name:        r.Point.Name,
+		// 			SubName:     "",
+		// 			ParentId:    r.Point.ParentId,
+		// 			ParentName:  r.Point.ParentId,
+		// 			UniqueId:    r.Point.Id,
+		// 			Units:       r.Point.Unit,
+		// 			ValueName:   r.Point.Id,
+		// 			DeviceClass: "",
+		// 			StateClass:  "measurement",
+		// 			Value:       r.GetValueString(),
+		// 			HaType:      haType,
+		//
+		// 			StateTopic:    r.Point.Name,
+		// 			// ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
+		//
+		// 			// Icon:                   "",
+		// 			// LastReset:              "",
+		// 			// LastResetValueTemplate: "",
+		// 		}
+		// 		entities = append(entities, entity)
+		// 	}
+		// }
+		//
+		// for _, c := range x.AuxCount() {
+		// 	for _, r := range x.GetAux(c) {
+		// 		haType := "sensor"
+		// 		if r.Point.IsSwitch() {
+		// 			haType = "binary"
+		// 		}
+		//
+		// 		entity := mmHa.EntityConfig {
+		// 			Name:        r.Point.Name,
+		// 			SubName:     "",
+		// 			ParentId:    r.Point.ParentId,
+		// 			ParentName:  r.Point.ParentId,
+		// 			UniqueId:    r.Point.Id,
+		// 			Units:       r.Point.Unit,
+		// 			ValueName:   r.Point.Id,
+		// 			DeviceClass: "",
+		// 			StateClass:  "measurement",
+		// 			Value:       r.GetValueString(),
+		// 			HaType:      haType,
+		//
+		// 			StateTopic:    r.Point.Name,
+		// 			// ValueTemplate: fmt.Sprintf("{{ value_json.%s }}", r.Point.Id),
+		//
+		// 			// Icon:                   "",
+		// 			// LastReset:              "",
+		// 			// LastResetValueTemplate: "",
+		// 		}
+		// 		entities = append(entities, entity)
+		// 	}
+		// }
+		//
+		// for _, entity := range entities {
+		// 	Cmd.Error = Cmd.Mqtt.PublishConfig(entity)
+		// 	if Cmd.Error != nil {
+		// 		LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+		// 		break
+		// 	}
+		//
+		// 	Cmd.Error = Cmd.Mqtt.PublishValue(entity)
+		// 	if Cmd.Error != nil {
+		// 		LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+		// 		break
+		// 	}
+		//
+		// 	time.Sleep(time.Millisecond * 10)
+		// }
 	}
 
 	return x.Error

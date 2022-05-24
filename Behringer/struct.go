@@ -450,11 +450,13 @@ func (x *X32) oscMessageHandler(msg *gosc.Message) {
 		m.Point = x.Points.Resolve(msg.Address)
 		if m.Point == nil {
 			x.Error = errors.New(fmt.Sprintf("Missing Point: %v data: %v\n", msg.Address, msg.Arguments))
+			fmt.Printf("%s", x.Error)
 			break
 		}
 
 		x.Error = m.Process()
 		if x.Error != nil {
+			fmt.Printf("%s", x.Error)
 			break
 		}
 

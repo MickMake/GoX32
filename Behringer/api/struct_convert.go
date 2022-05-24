@@ -174,6 +174,63 @@ func (c *ConvertStruct) GetValue(value any) string {
 	return ret
 }
 
+func (c *ConvertStruct) SetValue(value any) any {
+	var ret any
+
+	for range Only.Once {
+		switch {
+			case c.Alias != nil:
+				// Can't set an Alias.
+				break
+
+			case c.Increment != nil:
+				ret = c.Increment.Set(value)
+				// value = ToLinearDb(value, c.Range.InMin, c.Range.InMax, c.Range.OutMin, c.Range.OutMax, c.Range.Precision)
+				break
+
+			case c.Range != nil:
+				ret = c.Range.Set(value)
+				break
+
+			case c.Map != nil:
+				ret = c.Map.Set(value)
+				break
+
+			case c.BitMap != nil:
+				ret = c.BitMap.Set(value)
+				break
+
+			case c.Function != nil:
+				ret = c.Function.Set(value)
+				break
+
+			case c.Binary != nil:
+				ret = c.Binary.Set(value)
+				break
+
+			case c.String != nil:
+				ret = c.String.Set(value)
+				break
+
+			case c.Asset != nil:
+				ret = c.Asset.Set(value)
+				break
+
+			case c.FloatMap != nil:
+				ret = c.FloatMap.Set(value)
+				break
+
+			case c.Array != nil:
+				// Can't set an Array.
+
+			case c.Blob != nil:
+				// Can't set a Blob.
+		}
+	}
+
+	return ret
+}
+
 func (c *ConvertStruct) GetConvertType() string {
 	var ret string
 
@@ -237,6 +294,20 @@ func (c *ConvertIncrement) Convert(value any) string {
 		}
 
 		if ret == "" {
+			break
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertIncrement) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
 			break
 		}
 	}
@@ -317,6 +388,20 @@ func (c *ConvertRange) Convert(value any) string {
 	return ret
 }
 
+func (c *ConvertRange) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+	}
+
+	return ret
+}
+
 func (c *ConvertRange) Import() error {
 	var err error
 
@@ -352,6 +437,31 @@ func (c *ConvertMap) Convert(value any) string {
 
 		if v, ok := (*c)[ret]; ok {
 			ret = v
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertMap) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+
+		if len(*c) == 0 {
+			break
+		}
+
+		for k, v := range *c {
+			if ret == v {
+				ret = k
+				break
+			}
 		}
 	}
 
@@ -414,6 +524,20 @@ func (c *ConvertBitMap) Convert(value any, size uint32) string {
 		}
 
 		ret = strings.Join(elems, ", ")
+	}
+
+	return ret
+}
+
+func (c *ConvertBitMap) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
 	}
 
 	return ret
@@ -520,6 +644,20 @@ func ToLogFunc(value any, precision int) string {
 	return ret
 }
 
+func (c *ConvertFunction) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+	}
+
+	return ret
+}
+
 func (c *ConvertFunction) Import() error {
 	var err error
 
@@ -566,6 +704,26 @@ func (c *ConvertBinary) Convert(value any) string {
 		if ret == "1" {
 			ret = c.On
 			break
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertBinary) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		switch strings.ToUpper(fmt.Sprintf("%v", value)) {
+			case c.On:
+				ret = int32(1)
+
+			case c.Off:
+				ret = int32(0)
 		}
 	}
 
@@ -646,6 +804,20 @@ func (c *ConvertString) Convert(value any) string {
 	return ret
 }
 
+func (c *ConvertString) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+	}
+
+	return ret
+}
+
 func (c *ConvertString) Import() error {
 	var err error
 
@@ -676,6 +848,20 @@ func (c *ConvertAsset) Convert(value any) string {
 		}
 
 		if ret == "" {
+			break
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertAsset) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
 			break
 		}
 	}
@@ -720,6 +906,20 @@ func (c *ConvertArray) Convert(index int, value any) UnitValueMap {
 		// }
 
 		ret.Add(name, value, "")
+	}
+
+	return ret
+}
+
+func (c *ConvertArray) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
 	}
 
 	return ret
@@ -796,6 +996,20 @@ func (c *ConvertFloatMap) Convert(value any) string {
 	return ret
 }
 
+func (c *ConvertFloatMap) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+	}
+
+	return ret
+}
+
 func (c *ConvertFloatMap) Import() error {
 	var err error
 	// @TODO - Not yet tested.
@@ -851,6 +1065,20 @@ func (c *ConvertInteger) Convert(value any) string {
 		}
 
 		if ret == "" {
+			break
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertInteger) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
 			break
 		}
 	}
@@ -936,6 +1164,20 @@ func (c *ConvertBlob) Convert(value any) UnitValueMap {		// map[string]UnitValue
 			fmt.Printf("Remaining bytes[%d]: %s\n", len(remBytes) / 3, remBytes)
 			// ret["remaining_bytes"] = fmt.Sprintf("%s", remBytes)
 			ret.Add("remaining_bytes", remBytes, "")
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertBlob) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
 		}
 	}
 

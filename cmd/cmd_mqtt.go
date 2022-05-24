@@ -418,23 +418,8 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// fmt.Printf("\n%v\n", pm)
 		// ca.Error = ca.X32.AddMeters("/meters/11")
 
-		// /-show/showfile/scene/000/name
-		ca.Error = ca.X32.Emit("/-show/showfile/show/name")
-		ca.Error = ca.X32.Emit("/-prefs/lamp")
-		ca.Error = ca.X32.Emit("/-prefs/lampon")
-		ca.Error = ca.X32.Emit("/-prefs/lcdbright")
-		ca.Error = ca.X32.Emit("/-prefs/lcdcont")
-		ca.Error = ca.X32.Emit("/-prefs/rec_control")
-		ca.Error = ca.X32.Emit("/-prefs/lamp")
-		ca.Error = ca.X32.Emit("/-prefs/sceneadvance")
-		ca.Error = ca.X32.Emit("/-prefs/selfollowsbank")
-		ca.Error = ca.X32.Emit("/-prefs/show_control")
-		ca.Error = ca.X32.Emit("/-prefs/style")
-		ca.Error = ca.X32.Emit("/-prefs/viewrtn")
-		ca.Error = ca.X32.Emit("/-prefs/??????")
-		ca.Error = ca.X32.Emit("/-stat/geqpos")
-		ca.Error = ca.X32.Emit("/-stat/rtageqpost")
-
+		// ca.Error = ca.X32.GetAllInfo()
+		//
 		// sm := gosc.Message {
 		// 	Address:   "/node",
 		// 	Arguments: []any{"ch/01/config"},
@@ -448,9 +433,7 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		//
 		// m = ca.X32.Call("/node", "ch/01/config")
 		// fmt.Printf("FOO:\n%v\n", m)
-
-		ca.Error = ca.X32.GetAllInfo()
-
+		//
 		// x.Error = x.Emit("/formatsubscribe", "hidden/states", "/-stat/tape/state", "/-usb/path", "/-usb/title", "/-stat/tape/etime", "/-stat/tape/rtime", "/-stat/aes50/state", "/-stat/aes50/A", "/-stat/aes50/B", "/-show/prepos/current", "/-stat/usbmounted", "/-usb/dir/dirpos", "/-usb/dir/maxpos", "/-stat/xcardtype", "/-stat/xcardsync", "/-stat/rtasource", "/-stat/talk/A", "/-stat/talk/B", "/-stat/osc/on", "/-stat/keysolo", "/-stat/urec/state", "/-stat/urec/etime", "/-stat/urec/rtime", 0, 0, 4)
 		// x.Error = x.Emit("/formatsubscribe", "hidden/solo", "/-stat/solosw/**", 1, 80, 20)
 		// x.Error = x.Emit("/formatsubscribe", "hidden/prefs", "/-prefs/clockrate", "/-prefs/clocksource", "/-prefs/scene_advance", "/-prefs/safe_masterlevels", "/-prefs/clockmode", "/-prefs/show_control", "/-prefs/haflags", "/-prefs/hardmute", "/-prefs/dcamute", "/-prefs/invertmutes", "/-prefs/remote/ioenable", "/-prefs/rta/source", "/-prefs/rta/pos", "/-prefs/rta/det", 0, 0, 10)
@@ -482,7 +465,7 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// fmt.Printf("%v\n", foo)
 		// ca.Error = ca.X32.Call("/-show/showfile/show/return")
 		// fmt.Printf("%v\n", foo)
-
+		//
 		// m := x.Points["/meters/2"]
 		// foo := m.Convert.Blob.Get(data)
 		// fmt.Printf("FOO: %s\n", foo)
@@ -496,21 +479,20 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// hey := x.Emit("/meters/0", "")
 		// fmt.Printf("%v\n", hey)
 		// fmt.Println("")
-
-		foo2 := ca.X32.GetScene(0)
-		fmt.Printf("%s\n", foo2)
-		foo2 = ca.X32.GetScene(1)
-		fmt.Printf("%s\n", foo2)
-		foo2 = ca.X32.GetScene(2)
-		fmt.Printf("%s\n", foo2)
-
+		//
+		// foo2 := ca.X32.GetScene(0)
+		// fmt.Printf("%s\n", foo2)
+		// foo2 = ca.X32.GetScene(1)
+		// fmt.Printf("%s\n", foo2)
+		// foo2 = ca.X32.GetScene(2)
+		// fmt.Printf("%s\n", foo2)
+		//
 		// fmt.Println(ca.X32.Points.String())
-
+		//
 		// ca.Error = ca.X32.StartMeters("/meters/11")
 		// time.Sleep(time.Second * 60)
 		// ca.Error = ca.X32.StopMeters("/meters/11")
-
-
+		//
 		// fmt.Println("HEY1")
 		// time.Sleep(time.Second * 5)
 		// fmt.Println("HEY2")
@@ -521,9 +503,9 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// time.Sleep(time.Second * 5)
 		// fmt.Println("HEY4")
 		// ca.X32.Emit("/showdump")
-
+		//
 		// ca.PublishChannel(7)
-
+		//
 		// time.Sleep(time.Second * 5)
 		// ca.PublishChannels()
 		// time.Sleep(time.Second * 5)
@@ -533,95 +515,56 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// time.Sleep(time.Second * 5)
 		// ca.PublishAuxes()
 
-		ca.GetInitial()
+
+		// ca.GetInitial()
+		// ca.Error = ca.X32.Emit("/-show/showfile/show/name")
+		// ca.Error = ca.X32.Emit("/-prefs/lamp")
+		// ca.Error = ca.X32.Emit("/-prefs/lampon")
+		// ca.Error = ca.X32.Emit("/-prefs/lcdbright")
+		// ca.Error = ca.X32.Emit("/-prefs/lcdcont")
+		// ca.Error = ca.X32.Emit("/-prefs/rec_control")
+		// ca.Error = ca.X32.Emit("/-prefs/lamp")
+		// ca.Error = ca.X32.Emit("/-prefs/sceneadvance")
+		// ca.Error = ca.X32.Emit("/-prefs/selfollowsbank")
+		// ca.Error = ca.X32.Emit("/-prefs/show_control")
+		// ca.Error = ca.X32.Emit("/-prefs/style")
+		// ca.Error = ca.X32.Emit("/-prefs/viewrtn")
+		// ca.Error = ca.X32.Emit("/-prefs/??????")
+		// ca.Error = ca.X32.Emit("/-stat/geqpos")
+		// ca.Error = ca.X32.Emit("/-stat/rtageqpost")
+
+		// time.Sleep(time.Second * 10)
+
+		// ca.Error = ca.X32.Emit("/-prefs/remote/ioenable", 4089)	//, 0, 0, 2)
+
+		ca.Error = ca.X32.Emit("/formatsubscribe", "hidden/solo", "/-stat/solosw/**")	//, int32(1), int32(80), int32(20))
+
+		p1 := ca.X32.Points.Resolve("/ch/01/mix/on")
+		p2 := ca.X32.Points.Resolve("/-stat/solosw/01")
+
+		ca.Error = ca.X32.Emit(p1.EndPoint, p1.Convert.SetValue(api.On))
+		ca.Error = ca.X32.Emit(p2.EndPoint, p2.Convert.SetValue(api.On))
+		time.Sleep(time.Second * 2)
+
+		ca.Error = ca.X32.Emit(p1.EndPoint, p1.Convert.SetValue(api.Off))
+		ca.Error = ca.X32.Emit(p2.EndPoint, p2.Convert.SetValue(api.Off))
+		time.Sleep(time.Second * 2)
+		// /ch/08/mix/on
+
+		// ca.Error = ca.X32.Emit("/formatsubscribe",
+		// 	"hidden/names",
+		// 	"/ch/**/config/name",
+		// 	// "/bus/*/config/name",
+		// 	// "/ch/*/config/name",
+		// 	// "/dca/*/config/name",
+		// 	// "/fxrtn/*/config/name",
+		// 	// "/main/m/config/name",
+		// 	// "/main/st/config/name",
+		// 	// "/mtx/*/config/name",
+		// 	int32(1), int32(8), int32(4),
+		// )
 
 		time.Sleep(time.Hour * 24)
-
-		ca.PublishChannels()
-
-		// 	// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		// 	ep := Cmd.X32.QueryDevice(Cmd.Mqtt.PsId)
-		// 	if ep.IsError() {
-		// 		Cmd.Error = ep.GetError()
-		// 		break
-		// 	}
-		// 	data := ep.GetData()
-		//
-		// 	if newDay {
-		// 		LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.Entries))
-		// 		for _, o := range data.Order {
-		// 			r := data.Entries[o]
-		//
-		// 			fmt.Printf("C")
-		// 			re := mmHa.EntityConfig {
-		// 				Name:        r.Point.Id, // PointName,
-		// 				SubName:     "",
-		// 				ParentId:    r.EndPoint,
-		// 				ParentName:  "",
-		// 				UniqueId:    r.Point.Id,
-		// 				FullId:      r.Point.FullId,
-		// 				Units:       r.Point.Unit,
-		// 				ValueName:   r.Point.Name,
-		// 				DeviceClass: "",
-		// 				StateClass:  r.Point.Type,
-		// 				Value:       r.Value,
-		//
-		// 				// Icon:                   "",
-		// 				// ValueTemplate:          "",
-		// 				// LastReset:              "",
-		// 				// LastResetValueTemplate: "",
-		// 			}
-		//
-		// 			// if re.LastResetValueTemplate != "" {
-		// 			// 	fmt.Printf("HEY\n")
-		// 			// }
-		//
-		// 			Cmd.Error = Cmd.Mqtt.BinarySensorPublishConfig(re)
-		// 			if Cmd.Error != nil {
-		// 				break
-		// 			}
-		//
-		// 			Cmd.Error = Cmd.Mqtt.SensorPublishConfig(re)
-		// 			if Cmd.Error != nil {
-		// 				break
-		// 			}
-		// 		}
-		// 		fmt.Println()
-		// 	}
-		//
-		// 	LogPrintDate("Updating %d entries to HASSIO.\n", len(data.Entries))
-		// 	for _, o := range data.Order {
-		// 		r := data.Entries[o]
-		//
-		// 		fmt.Printf("U")
-		// 		re := mmHa.EntityConfig {
-		// 			Name:        r.Point.Id, // PointName,
-		// 			SubName:     "",
-		// 			ParentId:    r.EndPoint,
-		// 			ParentName:  "",
-		// 			UniqueId:    r.Point.Id,
-		// 			// UniqueId:    r.Id,
-		// 			FullId: r.Point.FullId,
-		// 			// FullName:    r.Point.Name,
-		// 			Units:       r.Point.Unit,
-		// 			ValueName:   r.Point.Name,
-		// 			// ValueName:   r.Id,
-		// 			DeviceClass: "",
-		// 			StateClass:  r.Point.Type,
-		// 			Value:       r.Value,
-		// 		}
-		//
-		// 		Cmd.Error = Cmd.Mqtt.BinarySensorPublishValue(re)
-		// 		if Cmd.Error != nil {
-		// 			break
-		// 		}
-		//
-		// 		Cmd.Error = Cmd.Mqtt.SensorPublishValue(re)
-		// 		if Cmd.Error != nil {
-		// 			break
-		// 		}
-		// 	}
-		// 	fmt.Println()
 	}
 
 	if Cmd.Error != nil {
@@ -774,7 +717,6 @@ func (ca *CommandArgs) GetInitial() {
 
 			time.Sleep(time.Millisecond * 10)
 		}
-		fmt.Sprintf("")
 	}
 }
 
