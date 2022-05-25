@@ -442,7 +442,38 @@ func (x *X32) SetMessageHandler(fn MessageHandlerFunc) error {
 
 func (x *X32) oscMessageHandler(msg *gosc.Message) {
 	for range Only.Once {
-		m := x.UpdateCache(&Message{ Message: msg })
+		// m := x.UpdateCache(&Message{ Message: msg })
+		// if x.Debug {
+		// 	fmt.Printf("# oscMessageHandler() - msg: %v\n", msg)
+		// }
+		//
+		// m.Point = x.Points.Resolve(msg.Address)
+		// if m.Point == nil {
+		// 	x.Error = errors.New(fmt.Sprintf("Missing Point: %v data: %v\n", msg.Address, msg.Arguments))
+		// 	fmt.Printf("%s", x.Error)
+		// 	break
+		// }
+		//
+		// x.Error = m.Process()
+		// if x.Error != nil {
+		// 	fmt.Printf("%s", x.Error)
+		// 	break
+		// }
+
+		m := x.Process(msg)
+
+		if x.messageHandler == nil {
+			break
+		}
+		x.messageHandler(m)
+	}
+}
+
+func (x *X32) Process(msg *gosc.Message) *Message {
+	var m *Message
+
+	for range Only.Once {
+		m = x.UpdateCache(&Message{ Message: msg })
 		if x.Debug {
 			fmt.Printf("# oscMessageHandler() - msg: %v\n", msg)
 		}
@@ -459,12 +490,9 @@ func (x *X32) oscMessageHandler(msg *gosc.Message) {
 			fmt.Printf("%s", x.Error)
 			break
 		}
-
-		if x.messageHandler == nil {
-			break
-		}
-		x.messageHandler(m)
 	}
+
+	return m
 }
 
 // func (x *X32) MultipleMessageHandler(msg *gosc.Message) {

@@ -1,8 +1,13 @@
 package mmHa
 
 const (
-	LabelSwitch       = "switch"
+	// LabelSwitch       = "switch"
+	// LabelSelect       = "select"
 	// LabelBinarySensor = "binary"
+
+	ConfigTopicSuffix = "config"
+	StateTopicSuffix = "state"
+	CmdTopicSuffix   = "set"
 )
 
 type Labels []string

@@ -7,7 +7,7 @@ import (
 )
 
 
-func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
+func (m *Mqtt) PublishSensorConfig(config EntityConfig) error {
 
 	for range Only.Once {
 		config.FixConfig()
@@ -23,48 +23,6 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 		// 		config.LastResetValueTemplate = "{{ value_json.last_reset | as_datetime() }}"
 		// 	}
 		// 	// LastResetValueTemplate = "{{ value_json.last_reset | int | timestamp_local | as_datetime }}"
-		// }
-
-		// switch config.Units {
-		// 	case "MW":
-		// 		fallthrough
-		// 	case "kW":
-		// 		fallthrough
-		// 	case "W":
-		// 		config.DeviceClass = "power"
-		//
-		// 	case "MWh":
-		// 		fallthrough
-		// 	case "kWh":
-		// 		fallthrough
-		// 	case "Wh":
-		// 		config.DeviceClass = "energy"
-		//
-		// 	case "kvar":
-		// 		config.DeviceClass = "reactive_power"
-		//
-		// 	case "Hz":
-		// 		config.DeviceClass = "frequency"
-		//
-		// 	case "V":
-		// 		config.DeviceClass = "voltage"
-		//
-		// 	case "A":
-		// 		config.DeviceClass = "current"
-		//
-		// 	case "℃":
-		// 		config.DeviceClass = "temperature"
-		// 		// point.Unit = "C"
-		//
-		// 	case "C":
-		// 		config.DeviceClass = "temperature"
-		// 		config.Units = "℃"
-		//
-		// 	case "%":
-		// 		config.DeviceClass = "battery"
-		//
-		// 	default:
-		// 		ValueTemplate = "{{ value_json.value }}"
 		// }
 
 		device := m.Device
@@ -85,40 +43,27 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 
 		payload := Sensor {
 			Device:                 device,
-			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.Name),
-			StateTopic:             JoinStringsForTopic(m.sensorPrefix, config.StateTopic, "state"),
-			StateClass:             config.StateClass,
-			UniqueId:               uid,
-			UnitOfMeasurement:      config.Units,
-			DeviceClass:            config.DeviceClass,
-			Qos:                    0,
-			ForceUpdate:            true,
-			ExpireAfter:            0,
-			Encoding:               "utf-8",
 			EnabledByDefault:       true,
-			LastResetValueTemplate: config.LastResetValueTemplate,
-			LastReset:              config.LastReset,
-			ValueTemplate:          config.ValueTemplate,
+			Encoding:               "utf-8",
+			EntityCategory:         "",
 			Icon:                   config.Icon,
+			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.Name),
+			// ObjectId:               config.UniqueId,
+			Qos:                    0,
+			StateTopic:             JoinStringsForTopic(m.sensorPrefix, config.StateTopic, StateTopicSuffix),
+			UniqueId:               uid,
 
-			// Availability:           &Availability {
-			// 	PayloadAvailable:    "",
-			// 	PayloadNotAvailable: "",
-			// 	Topic:               "",
-			// 	ValueTemplate:       "",
-			// },
-			// AvailabilityMode:       "",
-			// AvailabilityTemplate:   "",
-			// AvailabilityTopic:      "",
-			// EntityCategory:         "",
-			// JsonAttributesTemplate: "",
-			// JsonAttributesTopic:    "",
-			// ObjectId:               "",
-			// PayloadAvailable:       "",
-			// PayloadNotAvailable:    "",
+			DeviceClass:            config.DeviceClass,
+			ExpireAfter:            0,
+			ForceUpdate:            true,
+			LastResetValueTemplate: config.LastResetValueTemplate,
+			UnitOfMeasurement:      config.Units,
+			StateClass:             config.StateClass,
+			ValueTemplate:          config.ValueTemplate,
+			// LastReset:              config.LastReset,
 		}
 
-		ct := JoinStringsForTopic(m.sensorPrefix, uid, "config")
+		ct := JoinStringsForTopic(m.sensorPrefix, uid, ConfigTopicSuffix)
 		t := m.client.Publish(ct, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -128,7 +73,7 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 	return m.err
 }
 
-func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
+func (m *Mqtt) PublishSensorValue(config EntityConfig) error {
 
 	for range Only.Once {
 		if !config.IsSensor() {
@@ -140,12 +85,7 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 		cs["last_reset"] = m.GetLastReset(JoinStringsForId(config.ParentId, config.Name))
 		cs[config.ValueName] = config.Value
 
-		// payload := MqttState {
-		// 	LastReset: m.GetLastReset(JoinStringsForId(config.ParentId, config.Name)),
-		// 	Value:     config.Value,
-		// }
-
-		st = JoinStringsForTopic(m.sensorPrefix, st, "state")
+		st = JoinStringsForTopic(m.sensorPrefix, st, StateTopicSuffix)
 		t := m.client.Publish(st, 0, true, cs.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -155,7 +95,7 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 	return m.err
 }
 
-func (m *Mqtt) SensorPublishValues(configs []EntityConfig) error {
+func (m *Mqtt) PublishSensorValues(configs []EntityConfig) error {
 	for range Only.Once {
 		if len(configs) == 0 {
 			break
@@ -176,7 +116,7 @@ func (m *Mqtt) SensorPublishValues(configs []EntityConfig) error {
 			}
 
 			if topic == "" {
-				topic = JoinStringsForTopic(m.sensorPrefix, config.StateTopic, "state")
+				topic = JoinStringsForTopic(m.sensorPrefix, config.StateTopic, StateTopicSuffix)
 			}
 
 			if config.ValueName == "" {
@@ -205,38 +145,47 @@ func (m *Mqtt) SensorPublishValues(configs []EntityConfig) error {
 
 
 type Sensor struct {
-	Availability           *Availability `json:"availability,omitempty" required:"false"`
-	AvailabilityMode       string       `json:"availability_mode,omitempty" required:"false"`
-	AvailabilityTemplate   string       `json:"availability_template,omitempty" required:"false"`
-	AvailabilityTopic      string       `json:"availability_topic,omitempty" required:"false"`
-	Device                 Device       `json:"device,omitempty" required:"false"`
-	DeviceClass            string       `json:"device_class,omitempty" required:"false"`
-	EnabledByDefault       bool         `json:"enabled_by_default,omitempty" required:"false"`
-	Encoding               string       `json:"encoding,omitempty" required:"false"`
-	EntityCategory         string       `json:"entity_category,omitempty" required:"false"`
-	ExpireAfter            int          `json:"expire_after,omitempty" required:"false"`
-	ForceUpdate            bool         `json:"force_update,omitempty" required:"false"`
-	Icon                   string       `json:"icon,omitempty" required:"false"`
-	JsonAttributesTemplate string       `json:"json_attributes_template,omitempty" required:"false"`
-	JsonAttributesTopic    string       `json:"json_attributes_topic,omitempty" required:"false"`
-	LastResetValueTemplate string       `json:"last_reset_value_template,omitempty" required:"false"`
-	Name                   string       `json:"name,omitempty" required:"false"`
-	ObjectId               string       `json:"object_id,omitempty" required:"false"`
-	PayloadAvailable       string       `json:"payload_available,omitempty" required:"false"`
-	PayloadNotAvailable    string       `json:"payload_not_available,omitempty" required:"false"`
-	Qos                    int          `json:"qos,omitempty" required:"false"`
-	StateClass             string       `json:"state_class,omitempty" required:"false"`
-	StateTopic             string       `json:"state_topic" required:"true"`
-	UniqueId               string       `json:"unique_id,omitempty" required:"false"`
-	UnitOfMeasurement      string       `json:"unit_of_measurement,omitempty" required:"false"`
-	ValueTemplate          string       `json:"value_template,omitempty" required:"false"`
-	LastReset              string       `json:"last_reset,omitempty" required:"false"`
+	// Common fields.
+	Availability             *Availability `json:"availability,omitempty" required:"false"`
+	AvailabilityMode         string       `json:"availability_mode,omitempty" required:"false"`
+	AvailabilityTemplate     string       `json:"availability_template,omitempty" required:"false"`
+	AvailabilityTopic        string       `json:"availability_topic,omitempty" required:"false"`
+	Device                   Device       `json:"device,omitempty" required:"false"`
+	EnabledByDefault         bool         `json:"enabled_by_default,omitempty" required:"false"`
+	Encoding                 string       `json:"encoding,omitempty" required:"false"`
+	EntityCategory           string       `json:"entity_category,omitempty" required:"false"`
+	Icon                     string       `json:"icon,omitempty" required:"false"`
+	JsonAttributesTemplate   string       `json:"json_attributes_template,omitempty" required:"false"`
+	JsonAttributesTopic      string       `json:"json_attributes_topic,omitempty" required:"false"`
+	Name                     string       `json:"name,omitempty" required:"false"`
+	ObjectId                 string       `json:"object_id,omitempty" required:"false"`
+	PayloadAvailable         string       `json:"payload_available,omitempty" required:"false"`
+	PayloadNotAvailable      string       `json:"payload_not_available,omitempty" required:"false"`
+	Qos                      int          `json:"qos,omitempty" required:"false"`
+	StateTopic               string       `json:"state_topic" required:"true"`
+	UniqueId                 string       `json:"unique_id,omitempty" required:"false"`
+	ValueTemplate            string       `json:"value_template,omitempty" required:"false"`
 
-	// StateFunc func() string `json:"-"`
-	//
-	// UpdateInterval  float64 `json:"-"`
-	// ForceUpdateMQTT bool    `json:"-"`
+	// Less common fields.
+	//  CommandTemplate          string       `json:"command_template,omitempty" required:"false"`
+	//	CommandTopic             string       `json:"command_topic,omitempty" required:"true"`
+	DeviceClass              string       `json:"device_class,omitempty" required:"false"`
+	ExpireAfter              int          `json:"expire_after,omitempty" required:"false"`
+	ForceUpdate              bool         `json:"force_update,omitempty" required:"false"`
+	LastResetValueTemplate   string       `json:"last_reset_value_template,omitempty" required:"false"`
+	//	OffDelay                 int          `json:"off_delay,omitempty" required:"false"`
+	//  Options                  []string     `json:"options,omitempty" required:"true"`
+	//	Optimistic               bool         `json:"optimistic,omitempty" required:"false"`
+	//	PayloadOff               string       `json:"payload_off,omitempty" required:"false"`
+	//	PayloadOn                string       `json:"payload_on,omitempty" required:"false"`
+	//	Retain                   bool         `json:"retain,omitempty" required:"false"`
+	StateClass               string       `json:"state_class,omitempty" required:"false"`
+	//	StateOff                 string       `json:"state_off,omitempty" required:"false"`
+	//	StateOn                  string       `json:"state_on,omitempty" required:"false"`
+	UnitOfMeasurement        string       `json:"unit_of_measurement,omitempty" required:"false"`
+
 }
+
 func (c *Sensor) Json() string {
 	j, _ := json.Marshal(*c)
 	return string(j)

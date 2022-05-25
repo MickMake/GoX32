@@ -80,6 +80,7 @@ func writeArguments(w *bufio.Writer, arguments []any) error {
 
 	for _, a := range arguments {
 		typ := reflect.TypeOf(a)
+		// fmt.Printf("TYPE: %s\n", typ.Name())
 		if writer, ok := writerMap[typ]; ok {
 			tt, err := writer(bufWriter, a)
 			if err != nil {

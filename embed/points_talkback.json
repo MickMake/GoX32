@@ -24,15 +24,15 @@
 	  ]
 	},
 	"monitor-source-map": {
-	  "map": {
-		"0": "Off",
-		"1": "LR Bus",
-		"2": "LR+M/C",
-		"3": "LR PFL",
-		"4": "LR AFL",
-		"5": "Aux 5/6",
-		"6": "Aux 7/8"
-	  }
+	  "index": [
+		"Off",
+		"LR Bus",
+		"LR+M/C",
+		"LR PFL",
+		"LR AFL",
+		"Aux 5/6",
+		"Aux 7/8"
+	  ]
 	},
 	"monitor-source-trim": {
 	  "range": {
@@ -65,7 +65,7 @@
 	"/-stat/keysolo": { "endpoint": "/-stat/keysolo", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/-stat/solo": { "endpoint": "/-stat/solo", "convert": { "binary": { "type":"normal" } }, "info": "" },
 
-	"/-action/clearsolo": { "endpoint": "/-action/clearsolo", "convert": { "binary": { "type":"normal" } }, "info": "" },
+	"/-action/clearsolo": { "endpoint": "/-action/clearsolo", "convert": { "binary": { "type":"momentary" } }, "info": "" },
 
 	"/config/solo/busmode": { "endpoint": "/config/solo/busmode", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/config/solo/chmode": { "endpoint": "/config/solo/chmode", "convert": { "binary": { "type":"normal" } }, "info": "" },

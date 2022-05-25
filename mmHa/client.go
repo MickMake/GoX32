@@ -141,9 +141,27 @@ func (m *Mqtt) handlerOnConnect(_ mqtt.Client) {
 	if m.EntityPrefix == "" {
 		m.EntityPrefix = "x32"
 	}
+
 	topic := fmt.Sprintf("%s/set/#", m.EntityPrefix)
 	fmt.Printf("# connectHandler() - Topic: %s\n", topic)
 	m.client.Subscribe(topic, 0, m.onMessage)
+
+	// st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+	topic = JoinStringsForTopic(m.buttonPrefix, "+", CmdTopicSuffix)
+	m.client.Subscribe(topic, 0, m.onMessage)
+
+	// st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+	topic = JoinStringsForTopic(m.lightPrefix, "+", CmdTopicSuffix)
+	m.client.Subscribe(topic, 0, m.onMessage)
+
+	// st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+	topic = JoinStringsForTopic(m.selectPrefix, "+", CmdTopicSuffix)
+	m.client.Subscribe(topic, 0, m.onMessage)
+
+	// st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+	topic = JoinStringsForTopic(m.switchPrefix, "+", CmdTopicSuffix)
+	m.client.Subscribe(topic, 0, m.onMessage)
+
 }
 
 func (m *Mqtt) SetConnectionLostHandler(fn mqtt.ConnectionLostHandler) error {
@@ -179,6 +197,7 @@ func handlerMessage(_ mqtt.Client, message mqtt.Message) {
 	fmt.Printf("\t- %v\n", message.Retained())
 	fmt.Printf("\t- %s\n", string(message.Payload()))
 }
+
 func (m *Mqtt) onMessage(client mqtt.Client, message mqtt.Message) {
 	for range Only.Once {
 		if m.messageHandler == nil {

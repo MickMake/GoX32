@@ -7,7 +7,7 @@ import (
 )
 
 
-func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
+func (m *Mqtt) PublishBinaryConfig(config EntityConfig) error {
 
 	for range Only.Once {
 		config.FixConfig()
@@ -33,43 +33,25 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 
 		payload := BinarySensor {
 			Device:                 device,
-			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.Name),
-			StateTopic:             JoinStringsForTopic(m.binarySensorPrefix, config.StateTopic, "state"),
-			StateClass:             config.StateClass,
-			UniqueId:               uid,
-			UnitOfMeasurement:      config.Units,
-			DeviceClass:            config.DeviceClass,
-			Qos:                    0,
-			ForceUpdate:            true,
-			ExpireAfter:            0,
-			Encoding:               "utf-8",
 			EnabledByDefault:       true,
-			LastResetValueTemplate: config.LastResetValueTemplate,
-			// LastReset:              config.LastReset,
-			ValueTemplate:          config.ValueTemplate,
+			Encoding:               "utf-8",
+			EntityCategory:         "",
 			Icon:                   config.Icon,
+			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.Name),
+			// ObjectId:               config.UniqueId,
+			Qos:                    0,
+			StateTopic:             JoinStringsForTopic(m.binaryPrefix, config.StateTopic, StateTopicSuffix),
+			UniqueId:               uid,
+
+			DeviceClass:            config.DeviceClass,
+			ExpireAfter:            0,
+			ForceUpdate:            true,
 			PayloadOn:              "ON",
 			PayloadOff:             "OFF",
-
-			// Availability:           &Availability {
-			// 	PayloadAvailable:    "",
-			// 	PayloadNotAvailable: "",
-			// 	Topic:               "",
-			// 	ValueTemplate:       "",
-			// },
-			// AvailabilityMode:       "",
-			// AvailabilityTemplate:   "",
-			// AvailabilityTopic:      "",
-			// EntityCategory:         "",
-			// JsonAttributesTemplate: "",
-			// JsonAttributesTopic:    "",
-			// ObjectId:               "",
-			// PayloadAvailable:       "",
-			// PayloadNotAvailable:    "",
-			// OffDelay:               0,
+			ValueTemplate:          config.ValueTemplate,
 		}
 
-		ct := JoinStringsForTopic(m.binarySensorPrefix, uid, "config")
+		ct := JoinStringsForTopic(m.binaryPrefix, uid, ConfigTopicSuffix)
 		t := m.client.Publish(ct, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -79,7 +61,7 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 	return m.err
 }
 
-func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
+func (m *Mqtt) PublishBinaryValue(config EntityConfig) error {
 
 	for range Only.Once {
 		if !config.IsBinarySensor() {
@@ -91,12 +73,7 @@ func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 		cs["last_reset"] = m.GetLastReset(JoinStringsForId(config.ParentId, config.Name))
 		cs[config.ValueName] = config.Value
 
-		// payload := MqttState {
-		// 	LastReset: m.GetLastReset(config.UniqueId),
-		// 	Value:     config.Value,
-		// }
-
-		st = JoinStringsForTopic(m.binarySensorPrefix, st, "state")
+		st = JoinStringsForTopic(m.binaryPrefix, st, StateTopicSuffix)
 		t := m.client.Publish(st, 0, true, cs.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -106,7 +83,7 @@ func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 	return m.err
 }
 
-func (m *Mqtt) BinarySensorPublishValues(configs []EntityConfig) error {
+func (m *Mqtt) PublishBinaryValues(configs []EntityConfig) error {
 	for range Only.Once {
 		if len(configs) == 0 {
 			break
@@ -127,7 +104,7 @@ func (m *Mqtt) BinarySensorPublishValues(configs []EntityConfig) error {
 			}
 
 			if topic == "" {
-				topic = JoinStringsForTopic(m.binarySensorPrefix, config.StateTopic, "state")
+				topic = JoinStringsForTopic(m.binaryPrefix, config.StateTopic, StateTopicSuffix)
 			}
 
 			if config.ValueName == "" {
@@ -156,36 +133,47 @@ func (m *Mqtt) BinarySensorPublishValues(configs []EntityConfig) error {
 
 
 type BinarySensor struct {
-	Availability           *Availability `json:"availability,omitempty" required:"false"`
-	AvailabilityMode       string       `json:"availability_mode,omitempty" required:"false"`
-	AvailabilityTemplate   string       `json:"availability_template,omitempty" required:"false"`
-	AvailabilityTopic      string       `json:"availability_topic,omitempty" required:"false"`
-	Device                 Device       `json:"device,omitempty" required:"false"`
-	DeviceClass            string       `json:"device_class,omitempty" required:"false"`
-	EnabledByDefault       bool         `json:"enabled_by_default,omitempty" required:"false"`
-	Encoding               string       `json:"encoding,omitempty" required:"false"`
-	EntityCategory         string       `json:"entity_category,omitempty" required:"false"`
-	ExpireAfter            int          `json:"expire_after,omitempty" required:"false"`
-	ForceUpdate            bool         `json:"force_update,omitempty" required:"false"`
-	Icon                   string       `json:"icon,omitempty" required:"false"`
-	JsonAttributesTemplate string       `json:"json_attributes_template,omitempty" required:"false"`
-	JsonAttributesTopic    string       `json:"json_attributes_topic,omitempty" required:"false"`
-	LastResetValueTemplate string       `json:"last_reset_value_template,omitempty" required:"false"`
-	Name                   string       `json:"name,omitempty" required:"false"`
-	ObjectId               string       `json:"object_id,omitempty" required:"false"`
-	PayloadAvailable       string       `json:"payload_available,omitempty" required:"false"`
-	PayloadNotAvailable    string       `json:"payload_not_available,omitempty" required:"false"`
-	Qos                    int          `json:"qos,omitempty" required:"false"`
-	StateClass             string       `json:"state_class,omitempty" required:"false"`
-	StateTopic             string       `json:"state_topic" required:"true"`
-	UniqueId               string       `json:"unique_id,omitempty" required:"false"`
-	UnitOfMeasurement      string       `json:"unit_of_measurement,omitempty" required:"false"`
-	ValueTemplate          string       `json:"value_template,omitempty" required:"false"`
+	// Common fields.
+	Availability             *Availability `json:"availability,omitempty" required:"false"`
+	AvailabilityMode         string       `json:"availability_mode,omitempty" required:"false"`
+	AvailabilityTemplate     string       `json:"availability_template,omitempty" required:"false"`
+	AvailabilityTopic        string       `json:"availability_topic,omitempty" required:"false"`
+	Device                   Device       `json:"device,omitempty" required:"false"`
+	EnabledByDefault         bool         `json:"enabled_by_default,omitempty" required:"false"`
+	Encoding                 string       `json:"encoding,omitempty" required:"false"`
+	EntityCategory           string       `json:"entity_category,omitempty" required:"false"`
+	Icon                     string       `json:"icon,omitempty" required:"false"`
+	JsonAttributesTemplate   string       `json:"json_attributes_template,omitempty" required:"false"`
+	JsonAttributesTopic      string       `json:"json_attributes_topic,omitempty" required:"false"`
+	Name                     string       `json:"name,omitempty" required:"false"`
+	ObjectId                 string       `json:"object_id,omitempty" required:"false"`
+	PayloadAvailable         string       `json:"payload_available,omitempty" required:"false"`
+	PayloadNotAvailable      string       `json:"payload_not_available,omitempty" required:"false"`
+	Qos                      int          `json:"qos,omitempty" required:"false"`
+	StateTopic               string       `json:"state_topic" required:"true"`
+	UniqueId                 string       `json:"unique_id,omitempty" required:"false"`
+	ValueTemplate            string       `json:"value_template,omitempty" required:"false"`
 
-	OffDelay               int          `json:"off_delay,omitempty" required:"false"`
-	PayloadOff             string       `json:"pl_off,omitempty" required:"false"`
-	PayloadOn              string       `json:"pl_on,omitempty" required:"false"`
+	// Less common fields.
+	//  CommandTemplate          string       `json:"command_template,omitempty" required:"false"`
+	//	CommandTopic             string       `json:"command_topic,omitempty" required:"true"`
+	DeviceClass              string       `json:"device_class,omitempty" required:"false"`
+	ExpireAfter              int          `json:"expire_after,omitempty" required:"false"`
+	ForceUpdate              bool         `json:"force_update,omitempty" required:"false"`
+	//	LastResetValueTemplate string       `json:"last_reset_value_template,omitempty" required:"false"`
+	OffDelay                 int          `json:"off_delay,omitempty" required:"false"`
+	//  Options                  []string     `json:"options,omitempty" required:"true"`
+	//	Optimistic               bool         `json:"optimistic,omitempty" required:"false"`
+	PayloadOff               string       `json:"payload_off,omitempty" required:"false"`
+	PayloadOn                string       `json:"payload_on,omitempty" required:"false"`
+	//	Retain                   bool         `json:"retain,omitempty" required:"false"`
+	//	StateClass               string       `json:"state_class,omitempty" required:"false"`
+	//	StateOff                 string       `json:"state_off,omitempty" required:"false"`
+	//	StateOn                  string       `json:"state_on,omitempty" required:"false"`
+	//	UnitOfMeasurement        string       `json:"unit_of_measurement,omitempty" required:"false"`
+
 }
+
 func (c *BinarySensor) Json() string {
 	j, _ := json.Marshal(*c)
 	return string(j)

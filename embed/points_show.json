@@ -8,12 +8,12 @@
 	  }
 	},
 	"cue-miditype": {
-	  "map": {
-		"0": "none",
-		"1": "program",
-		"2": "control",
-		"3": "note"
-	  }
+	  "index": [
+		"none",
+		"program",
+		"control",
+		"note"
+	  ]
 	},
 	"scene-safes": {
 	  "bit_map": [

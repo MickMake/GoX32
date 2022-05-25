@@ -7,41 +7,41 @@
 	  }
 	},
 	"osc-type-map": {
-	  "map": {
-		"0": "Sine Wave",
-		"1": "Pink Noise",
-		"2": "White Noise"
-	  }
+	  "index": [
+		"Sine Wave",
+		"Pink Noise",
+		"White Noise"
+	  ]
 	},
 	"osc-dest-map": {
-	  "map": {
-		"0": "MixBus 1",
-		"1": "MixBus 2",
-		"2": "MixBus 3",
-		"3": "MixBus 4",
-		"4": "MixBus 5",
-		"5": "MixBus 6",
-		"6": "MixBus 7",
-		"7": "MixBus 8",
-		"8": "MixBus 9",
-		"9": "MixBus 10",
-		"10": "MixBus 11",
-		"11": "MixBus 12",
-		"12": "MixBus 13",
-		"13": "MixBus 14",
-		"14": "MixBus 15",
-		"15": "MixBus 16",
-		"16": "Main L",
-		"17": "Main R",
-		"18": "Main L+R",
-		"19": "Main M/C",
-		"20": "Matrix 1",
-		"21": "Matrix 2",
-		"22": "Matrix 3",
-		"23": "Matrix 4",
-		"24": "Matrix 5",
-		"25": "Matrix 6"
-	  }
+	  "index": [
+		"MixBus 1",
+		"MixBus 2",
+		"MixBus 3",
+		"MixBus 4",
+		"MixBus 5",
+		"MixBus 6",
+		"MixBus 7",
+		"MixBus 8",
+		"MixBus 9",
+		"MixBus 10",
+		"MixBus 11",
+		"MixBus 12",
+		"MixBus 13",
+		"MixBus 14",
+		"MixBus 15",
+		"MixBus 16",
+		"Main L",
+		"Main R",
+		"Main L+R",
+		"Main M/C",
+		"Matrix 1",
+		"Matrix 2",
+		"Matrix 3",
+		"Matrix 4",
+		"Matrix 5",
+		"Matrix 6"
+	  ]
 	}
   },
   "points": {

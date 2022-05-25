@@ -275,28 +275,6 @@ func (m *Message) Process() error {
 		for k, v := range m.UnitValueMap {
 			m.UnitValueMap[k] = v.UnitValueFix()
 		}
-
-		// keys := make([]string, 0, len(gv))
-		// for k := range gv {
-		// 	keys = append(keys, k)
-		// }
-		// sort.Strings(keys)
-		//
-		// for _, k := range keys {
-		// 	value := gv[k]
-		// 	value.UnitValueFix()
-		// 	vf, _ := strconv.ParseFloat(v2, 64)
-		// 	vi, _ := strconv.ParseInt(v2, 10, 64)
-		// 	vb = fmt.Sprintf("%t", )
-		//
-		// 	m.UnitValueMap[k] = api.UnitValue {
-		// 		Unit:        ret.Unit,
-		// 		ValueString: v2,
-		// 		ValueFloat:  vf,
-		// 		ValueInt:    vi,
-		// 		ValueBool:   vb,
-		// 	}
-		// }
 	}
 
 	return m.Error
@@ -325,42 +303,23 @@ func (m *Message) IsSwitch() bool {
 	return m.Point.IsSwitch()
 }
 
-// func (m *Message) GetValue() string {
-// 	var ret string
-// 	for range Only.Once {
-// 		for _, a := range m.Arguments {
-// 			ret += fmt.Sprintf("%v ", a)
-// 		}
-// 		ret = strings.TrimSpace(ret)
-// 	}
-// 	return ret
-// }
-//
-// func (m *Message) GetValueFloat() float64 {
-// 	var ret float64
-// 	for range Only.Once {
-// 		var err error
-// 		for _, a := range m.Arguments {
-// 			ret, err = strconv.ParseFloat(fmt.Sprintf("%v", a), 64)
-// 			if err == nil {
-// 				break
-// 			}
-// 		}
-// 	}
-// 	return ret
-// }
-//
-// func (m *Message) GetValueBool() bool {
-// 	var ok bool
-// 	for range Only.Once {
-// 		for _, a := range m.Arguments {
-// 			if a == "ON" {
-// 				ok = true
-// 			} else {
-// 				ok = false
-// 			}
-// 			break
-// 		}
-// 	}
-// 	return ok
-// }
+func (m *Message) IsMomentary() bool {
+	if m.Point == nil {
+		return false
+	}
+	return m.Point.IsMomentary()
+}
+
+func (m *Message) IsIndex() bool {
+	if m.Point == nil {
+		return false
+	}
+	return m.Point.IsIndex()
+}
+
+func (m *Message) GetIndexOptions() []string {
+	if m.Point == nil {
+		return []string{}
+	}
+	return m.Point.GetIndexOptions()
+}

@@ -13,25 +13,25 @@
 	  }
 	},
 	"tape-state": {
-	  "map": {
-		"0": "STOP",
-		"1": "PAUSE",
-		"2": "PLAY",
-		"3": "PAUSE RECORD",
-		"4": "RECORD",
-		"5": "FORWARD",
-		"6": "REWIND"
-	  }
+	  "index": [
+		"STOP",
+		"PAUSE",
+		"PLAY",
+		"PAUSE RECORD",
+		"RECORD",
+		"FORWARD",
+		"REWIND"
+	  ]
 	},
 	"usb-card": {
-	  "map": {
-		"0": "32 In / 32 Out",
-		"1": "16 In / 16 Out",
-		"2": "32 In / 8 Out",
-		"3": "8 In / 32 Out",
-		"4": "8 In / 8 Out",
-		"5": "2 In / 2 Out"
-	  }
+	  "index": [
+		"32 In / 32 Out",
+		"16 In / 16 Out",
+		"32 In / 8 Out",
+		"8 In / 32 Out",
+		"8 In / 8 Out",
+		"2 In / 2 Out"
+	  ]
 	}
   },
   "points_array_map": {

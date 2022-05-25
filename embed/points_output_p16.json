@@ -1,43 +1,43 @@
 {
   "aliases": {
 	"iq-speaker": {
-	  "map": {
-		"0": "none",
-		"1": "iQ8",
-		"2": "iQ10",
-		"3": "iQ12",
-		"4": "iQ15",
-		"5": "iQ15B",
-		"6": "iQ18B"
-	  }
+	  "index": [
+		"none",
+		"iQ8",
+		"iQ10",
+		"iQ12",
+		"iQ15",
+		"iQ15B",
+		"iQ18B"
+	  ]
 	},
 	"iq-group": {
-	  "map": {
-		"0": "OFF",
-		"1": "A",
-		"2": "B"
-	  }
+	  "index": [
+		"OFF",
+		"A",
+		"B"
+	  ]
 	},
 	"iq-eq": {
-	  "map": {
-		"0": "Linear",
-		"1": "Live",
-		"2": "Speech",
-		"3": "Playback",
-		"4": "User"
-	  }
+	  "index": [
+		"Linear",
+		"Live",
+		"Speech",
+		"Playback",
+		"User"
+	  ]
 	},
 	"iq-model": {
-	  "map": {
-		"0": "/ iQ8 / iQ10 / iQ12 / iQ15 / iQ15B / iQ18B /",
-		"1": "/ E8 / F10+ / E12 / JF59NT / E15X / ELX18P /",
-		"2": "/ F8+ / UPJ-1P / JF29NT / ELX115P / S15+ / PRX6118S /",
-		"3": "/ UPJunior / PS10-R2 / ELX112P / PRX615M / B-15DP / S18+ /",
-		"4": "/ PS8 / NuQ10-DP / PRX612M / F15+ / - / B-18DP /",
-		"5": "/ NuQ8-DP / - / F12+ / UPQ-1P / - / - /",
-		"6": "/ - / - / UPA-1P / PS15-R2 / - / - /",
-		"7": "/ - / - / NuQ12-DP / NuQ15-DP / - / - /"
-	  }
+	  "index": [
+		"/ iQ8 / iQ10 / iQ12 / iQ15 / iQ15B / iQ18B /",
+		"/ E8 / F10+ / E12 / JF59NT / E15X / ELX18P /",
+		"/ F8+ / UPJ-1P / JF29NT / ELX115P / S15+ / PRX6118S /",
+		"/ UPJunior / PS10-R2 / ELX112P / PRX615M / B-15DP / S18+ /",
+		"/ PS8 / NuQ10-DP / PRX612M / F15+ / - / B-18DP /",
+		"/ NuQ8-DP / - / F12+ / UPQ-1P / - / - /",
+		"/ - / - / UPA-1P / PS15-R2 / - / - /",
+		"/ - / - / NuQ12-DP / NuQ15-DP / - / - /"
+	  ]
 	}
   },
   "points_array_map": {

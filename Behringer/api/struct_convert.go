@@ -35,6 +35,7 @@ type ConvertStruct struct {
 	FloatMap  *ConvertFloatMap  `json:"float_map,omitempty"`
 	Integer   *ConvertInteger   `json:"integer,omitempty"`
 	Blob      *ConvertBlob      `json:"blob,omitempty"`
+	Index     *ConvertIndex     `json:"index,omitempty"`
 }
 
 // type ValuesMap UnitValueMap		// map[string]UnitValue	// string
@@ -78,6 +79,10 @@ func (c *ConvertStruct) GetValues(values ...any) UnitValueMap {
 
 				case c.Map != nil:
 					ret.Add(Single, c.Map.Convert(value), "")
+					break
+
+				case c.Index != nil:
+					ret.Add(Single, c.Index.Convert(value), "")
 					break
 
 				case c.BitMap != nil:
@@ -139,6 +144,10 @@ func (c *ConvertStruct) GetValue(value any) string {
 				ret = c.Map.Convert(value)
 				break
 
+			case c.Index != nil:
+				ret = c.Index.Convert(value)
+				break
+
 			case c.BitMap != nil:
 				ret = c.BitMap.Convert(value, 0)
 				break
@@ -194,6 +203,10 @@ func (c *ConvertStruct) SetValue(value any) any {
 
 			case c.Map != nil:
 				ret = c.Map.Set(value)
+				break
+
+			case c.Index != nil:
+				ret = c.Index.Set(value)
 				break
 
 			case c.BitMap != nil:
@@ -485,6 +498,113 @@ func (c *ConvertMap) Import() error {
 	return err
 }
 
+func (c *ConvertMap) GetOptions() []string {
+	var ret []string
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		ret = make([]string, len(*c))
+		for key, value := range *c {
+			i, err := strconv.ParseUint(key, 10, 64)
+			if err != nil {
+				continue
+			}
+			if i >= uint64(len(*c)) {
+				continue
+			}
+			ret[i] = value
+		}
+	}
+
+	return ret
+}
+
+
+type ConvertIndex []string
+func (c *ConvertIndex) Convert(value any) string {
+	var ret string
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+
+		if len(*c) == 0 {
+			break
+		}
+
+		iv, err := strconv.ParseUint(ret, 10, 32)
+		if err != nil {
+			break
+		}
+
+		ret = (*c)[iv]
+	}
+
+	return ret
+}
+
+func (c *ConvertIndex) Set(value any) any {
+	var ret any
+
+	for range Only.Once {
+		ret = fmt.Sprintf("%v", value)
+
+		if c == nil {
+			break
+		}
+
+		if len(*c) == 0 {
+			break
+		}
+
+		for k, v := range *c {
+			if ret == v {
+				ret = int32(k)
+				break
+			}
+		}
+	}
+
+	return ret
+}
+
+func (c *ConvertIndex) Import() error {
+	var err error
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		if len(*c) == 0 {
+			err = errors.New("empty map")
+			break
+		}
+	}
+
+	return err
+}
+
+func (c *ConvertIndex) GetOptions() []string {
+	var ret []string
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		ret = *c
+	}
+
+	return ret
+}
+
 
 type ConvertBitMap []string
 func (c *ConvertBitMap) Convert(value any, size uint32) string {
@@ -558,6 +678,22 @@ func (c *ConvertBitMap) Import() error {
 	}
 
 	return err
+}
+
+func (c *ConvertBitMap) GetOptions() []string {
+	var ret []string
+
+	for range Only.Once {
+		if c == nil {
+			break
+		}
+
+		for _, o := range *c {
+			ret = append(ret, o)
+		}
+	}
+
+	return ret
 }
 
 
@@ -681,6 +817,7 @@ type ConvertBinary struct {
 	Off      string `json:"off"`
 	Type     string `json:"type"`
 	IsSwitch bool   `json:"-"`
+	IsMomentary bool   `json:"-"`
 }
 func (c *ConvertBinary) Convert(value any) string {
 	var ret string
@@ -738,6 +875,10 @@ func (c *ConvertBinary) Import() error {
 			break
 		}
 
+		normal := Labels{"", "normal"}
+		inverted := Labels{"swap", "swapped", "invert", "inverted"}
+		oneshot := Labels{"oneshot", "momentary"}
+
 		switch {
 			case (c.On == "") && (c.Off != ""):
 				err = errors.New("missing On binary value")
@@ -747,31 +888,47 @@ func (c *ConvertBinary) Import() error {
 
 			case (c.On != "") && (c.Off == "") && (c.Type == ""):
 				fallthrough
-			case c.Type == "":
-				fallthrough
-			case c.Type == "normal":
+			case normal.ValueExists(c.Type):
+				// case c.Type == "":
+				// 	fallthrough
+				// case c.Type == "normal":
+				// 	fallthrough
 				c.On = On
 				c.Off = Off
 				// ret = &ConvertMap{ "0":Off, "1":On }
+				c.IsSwitch = true
 
-			case c.Type == "swap":
-				fallthrough
-			case c.Type == "swapped":
-				fallthrough
-			case c.Type == "invert":
-				fallthrough
-			case c.Type == "inverted":
+			case inverted.ValueExists(c.Type):
+				// case c.Type == "swap":
+				// 	fallthrough
+				// case c.Type == "swapped":
+				// 	fallthrough
+				// case c.Type == "invert":
+				// 	fallthrough
+				// case c.Type == "inverted":
 				c.On = Off
 				c.Off = On
 				// ret = &ConvertMap{ "0":On, "1":Off }
+				c.IsSwitch = true
+				c.IsMomentary = false
+
+			case oneshot.ValueExists(c.Type):
+			// case c.Type == "oneshot":
+			// 	fallthrough
+			// case c.Type == "momentary":
+				c.On = On
+				c.Off = Off
+				c.IsSwitch = false
+				c.IsMomentary = true
+
 		}
 
-		if (strings.ToUpper(c.On) == On) && (strings.ToUpper(c.Off) == Off) {
-			c.IsSwitch = true
-		}
-		if (strings.ToUpper(c.On) == Off) && (strings.ToUpper(c.Off) == On) {
-			c.IsSwitch = true
-		}
+		// if (strings.ToUpper(c.On) == On) && (strings.ToUpper(c.Off) == Off) {
+		// 	c.IsSwitch = true
+		// }
+		// if (strings.ToUpper(c.On) == Off) && (strings.ToUpper(c.Off) == On) {
+		// 	c.IsSwitch = true
+		// }
 	}
 
 	return err
@@ -1433,4 +1590,16 @@ func round(num float64) int {
 func toFixed(num float64, precision int) float64 {
 	output := math.Pow(10, float64(precision))
 	return float64(round(num * output)) / output
+}
+
+
+type Labels []string
+func (l *Labels) ValueExists(value string) bool {
+	var ok bool
+	for _, l := range *l {
+		if l == value {
+			ok = true
+		}
+	}
+	return ok
 }

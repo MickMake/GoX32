@@ -36,9 +36,11 @@ type Mqtt struct {
 
 	servicePrefix string
 	sensorPrefix string
+	binaryPrefix string
 	lightPrefix string
 	switchPrefix string
-	binarySensorPrefix string
+	selectPrefix string
+	buttonPrefix string
 
 	token    mqtt.Token
 	firstRun bool
@@ -57,10 +59,12 @@ func New(req Mqtt) *Mqtt {
 		ret.EntityPrefix = req.EntityPrefix
 
 		ret.servicePrefix = "homeassistant/sensor/" + req.ClientId
+		ret.binaryPrefix = "homeassistant/binary_sensor/" + req.ClientId
 		ret.sensorPrefix = "homeassistant/sensor/" + req.ClientId
 		ret.lightPrefix = "homeassistant/light/" + req.ClientId
 		ret.switchPrefix = "homeassistant/switch/" + req.ClientId
-		ret.binarySensorPrefix = "homeassistant/binary_sensor/" + req.ClientId
+		ret.selectPrefix = "homeassistant/select/" + req.ClientId
+		ret.buttonPrefix = "homeassistant/button/" + req.ClientId
 	}
 
 	return &ret
@@ -142,9 +146,9 @@ func (m *Mqtt) setUrl(req Mqtt) error {
 }
 
 
-func (m *Mqtt) Publish(config EntityConfig, Seen bool) error {
+func (m *Mqtt) Publish(config EntityConfig, UpdateConfig bool) error {
 	for range Only.Once {
-		if !Seen {
+		if UpdateConfig {
 			m.err = m.PublishConfig(config)
 			if m.err != nil {
 				break
@@ -163,19 +167,25 @@ func (m *Mqtt) PublishConfig(config EntityConfig) error {
 	for range Only.Once {
 		switch {
 			case config.IsSensor():
-				m.err = m.SensorPublishConfig(config)
+				m.err = m.PublishSensorConfig(config)
 
 			case config.IsBinarySensor():
-				m.err = m.BinarySensorPublishConfig(config)
+				m.err = m.PublishBinaryConfig(config)
 
 			case config.IsSwitch():
-				m.err = m.SwitchPublishConfig(config)
+				m.err = m.PublishSwitchConfig(config)
+
+			case config.IsSelect():
+				m.err = m.PublishSelectConfig(config)
 
 			case config.IsLight():
-				// m.err = m.LightsPublishConfig(config)
+				m.err = m.PublishLightConfig(config)
+
+			case config.IsButton():
+				m.err = m.PublishButtonConfig(config)
 
 			default:
-				m.err = m.SensorPublishConfig(config)
+				m.err = m.PublishSensorConfig(config)
 		}
 	}
 	return m.err
@@ -185,19 +195,25 @@ func (m *Mqtt) PublishValue(config EntityConfig) error {
 	for range Only.Once {
 		switch {
 			case config.IsSensor():
-				m.err = m.SensorPublishValue(config)
+				m.err = m.PublishSensorValue(config)
 
 			case config.IsBinarySensor():
-				m.err = m.BinarySensorPublishValue(config)
+				m.err = m.PublishBinaryValue(config)
 
 			case config.IsSwitch():
-				m.err = m.SwitchPublishValue(config)
+				m.err = m.PublishSwitchValue(config)
+
+			case config.IsSelect():
+				m.err = m.PublishSelectValue(config)
 
 			case config.IsLight():
-			// m.err = m.LightsPublishConfig(config)
+				m.err = m.PublishLightValue(config)
+
+			case config.IsButton():
+				m.err = m.PublishButtonValue(config)
 
 			default:
-				m.err = m.SensorPublishValue(config)
+				m.err = m.PublishSensorValue(config)
 		}
 	}
 	return m.err
@@ -205,22 +221,37 @@ func (m *Mqtt) PublishValue(config EntityConfig) error {
 
 func (m *Mqtt) PublishValues(config []EntityConfig) error {
 	for range Only.Once {
-		m.err = m.SensorPublishValues(config)
+		m.err = m.PublishSensorValues(config)
 		if m.err != nil {
 			break
 		}
 
-		m.err = m.BinarySensorPublishValues(config)
+		m.err = m.PublishBinaryValues(config)
 		if m.err != nil {
 			break
 		}
 
-		// m.err = m.SwitchPublishValues(config)
-		// if m.err != nil {
-		// 	break
-		// }
-		//
-		// m.err = m.LightsPublishValues(config)
+		m.err = m.PublishSwitchValues(config)
+		if m.err != nil {
+			break
+		}
+
+		m.err = m.PublishSensorValues(config)
+		if m.err != nil {
+			break
+		}
+
+		m.err = m.PublishLightValues(config)
+		if m.err != nil {
+			break
+		}
+
+		m.err = m.PublishButtonValues(config)
+		if m.err != nil {
+			break
+		}
+
+		// m.err = m.PublishSelectValues(config)
 		// if m.err != nil {
 		// 	break
 		// }
@@ -350,6 +381,7 @@ type EntityConfig struct {
 
 	Value         string
 	ValueTemplate string
+	Options       []string
 
 	LastReset              string
 	LastResetValueTemplate string
@@ -357,7 +389,7 @@ type EntityConfig struct {
 	HaType string
 }
 
-var SensorLabels = Labels{"int", "int32", "int64", "float", "float32", "float64", "sensor", "string"}
+var SensorLabels = Labels{"sensor", "int", "int32", "int64", "float", "float32", "float64", "string"}
 func (config *EntityConfig) IsSensor() bool {
 	var ok bool
 
@@ -369,6 +401,12 @@ func (config *EntityConfig) IsSensor() bool {
 			break
 		}
 		if config.IsLight() {
+			break
+		}
+		if config.IsButton() {
+			break
+		}
+		if config.IsSelect() {
 			break
 		}
 
@@ -383,12 +421,12 @@ func (config *EntityConfig) IsSensor() bool {
 	return ok
 }
 
-var BinarySensorLabels = Labels{"binary", "toggle", "state"}
+var BinaryLabels = Labels{"binary", "state"}
 func (config *EntityConfig) IsBinarySensor() bool {
 	var ok bool
 
 	for range Only.Once {
-		if BinarySensorLabels.ValueExists(config.HaType) {
+		if BinaryLabels.ValueExists(config.HaType) {
 			ok = true
 			break
 		}
@@ -397,11 +435,12 @@ func (config *EntityConfig) IsBinarySensor() bool {
 	return ok
 }
 
+var SwitchLabels = Labels{"switch", "toggle"}
 func (config *EntityConfig) IsSwitch() bool {
 	var ok bool
 
 	for range Only.Once {
-		if config.HaType == LabelSwitch {
+		if SwitchLabels.ValueExists(config.HaType) {
 			ok = true
 			break
 		}
@@ -410,11 +449,40 @@ func (config *EntityConfig) IsSwitch() bool {
 	return ok
 }
 
+var SelectLabels = Labels{"select", "array", "map"}
+func (config *EntityConfig) IsSelect() bool {
+	var ok bool
+
+	for range Only.Once {
+		if SelectLabels.ValueExists(config.HaType) {
+			ok = true
+			break
+		}
+	}
+
+	return ok
+}
+
+var LightLabels = Labels{"light"}
 func (config *EntityConfig) IsLight() bool {
 	var ok bool
 
 	for range Only.Once {
-		if config.HaType == "light" {
+		if LightLabels.ValueExists(config.HaType) {
+			ok = true
+			break
+		}
+	}
+
+	return ok
+}
+
+var ButtonLabels = Labels{"button"}
+func (config *EntityConfig) IsButton() bool {
+	var ok bool
+
+	for range Only.Once {
+		if ButtonLabels.ValueExists(config.HaType) {
 			ok = true
 			break
 		}
@@ -439,11 +507,6 @@ func (config *EntityConfig) FixConfig() {
 		// mdi:check-circle-outline | mdi:arrow-right-bold
 
 		switch config.Units {
-			case "light":
-				config.DeviceClass = SetDefault(config.DeviceClass, "")
-				config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", config.ValueName))
-
 			case "MW":
 				fallthrough
 			case "kW":
@@ -517,6 +580,33 @@ func (config *EntityConfig) FixConfig() {
 			default:
 				config.DeviceClass = SetDefault(config.DeviceClass, "")
 				config.Icon = SetDefault(config.Icon, "")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", config.ValueName))
+		}
+
+		switch {
+			case BinaryLabels.ValueExists(config.HaType):
+				config.DeviceClass = SetDefault(config.DeviceClass, "")
+				config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", config.ValueName))
+
+			case SwitchLabels.ValueExists(config.HaType):
+				config.DeviceClass = SetDefault(config.DeviceClass, "")
+				config.Icon = SetDefault(config.Icon, "mdi:toggle-switch-off-outline")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", config.ValueName))
+
+			case SelectLabels.ValueExists(config.HaType):
+				config.DeviceClass = SetDefault(config.DeviceClass, "")
+				config.Icon = SetDefault(config.Icon, "mdi:format-list-group")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", config.ValueName))
+
+			case LightLabels.ValueExists(config.HaType):
+				config.DeviceClass = SetDefault(config.DeviceClass, "")
+				config.Icon = SetDefault(config.Icon, "mdi:lightbulb")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", config.ValueName))
+
+			case ButtonLabels.ValueExists(config.HaType):
+				config.DeviceClass = SetDefault(config.DeviceClass, "")
+				config.Icon = SetDefault(config.Icon, "mdi:gesture-tap-button")
 				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", config.ValueName))
 		}
 

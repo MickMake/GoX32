@@ -11,8 +11,8 @@ import (
 	"github.com/MickMake/GoX32/mmHa"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/go-co-op/gocron"
+	"github.com/loffa/gosc"
 	"github.com/spf13/cobra"
-	"reflect"
 	"strings"
 	"time"
 )
@@ -249,7 +249,7 @@ func (ca *CommandArgs) MqttCron() error {
 			break
 		}
 
-		time.Sleep(time.Hour * 6)
+		time.Sleep(time.Hour * 24)
 
 		ca.Mqtt.LastRefresh = time.Now()
 	}
@@ -276,51 +276,58 @@ func MqttMessageHandler(_ mqtt.Client, message mqtt.Message) {
 		prefixParts := strings.Split(Cmd.Mqtt.EntityPrefix, "/")
 		LogPrintDate("MqttMessageHandler() - Topic: %v\n", prefixParts)
 
-		parts := strings.Split(message.Topic(), "/")
-		parts = parts[len(prefixParts)+1:]
-		res := make(mqttPayload, 0, 2)
-		Cmd.Error = json.Unmarshal(message.Payload(), &res)
+		data := make(map[string]string)
+
+		Cmd.Error = json.Unmarshal(message.Payload(), &data)
 		if Cmd.Error != nil {
 			LogPrintDate("MQTT: Invalid message payload: %s\n", Cmd.Error)
 			break
 		}
 
-		values := make([]any, 0, len(res))
-		for _, p := range res {
-			switch p.Type {
-				case reflect.TypeOf(float32(0)).String():
-					values = append(values, float32(p.Value.(float64)))
-				case reflect.TypeOf("").String():
-					values = append(values, p.Value.(string))
-			}
-		}
+		// values := make([]any, 0, len(res))
+		// for _, p := range res {
+		// 	switch p.Type {
+		// 		case reflect.TypeOf(float32(0)).String():
+		// 			values = append(values, float32(p.Value.(float64)))
+		// 		case reflect.TypeOf("").String():
+		// 			values = append(values, p.Value.(string))
+		// 	}
+		// }
 
-		address := "/" + strings.Join(parts, "/")
-		LogPrintDate("Address: %v\n", address)
-		Cmd.Error = Cmd.X32.Client.EmitMessage(address, values...)
-		if Cmd.Error != nil {
-			LogPrintDate("Could not send OSC message: %s\n", Cmd.Error)
-			break
+		for address, value := range data {
+			// address := "/" + strings.Join(parts, "/")
+			LogPrintDate("Update: %v -> %v\n", address, value)
+			Cmd.Error = Cmd.X32.Set(address, value)
+			if Cmd.Error != nil {
+				LogPrintDate("Could not send OSC message: %s\n", Cmd.Error)
+				break
+			}
+
+			m := Cmd.X32.Process(&gosc.Message {
+				Address:   address,
+				Arguments: []any{value},
+			})
+			X32MessageHandler(m)
 		}
 	}
 }
 
 func X32MessageHandler(msg *Behringer.Message) {
 	for range Only.Once {
-		// LogPrintDate("X32MessageHandler() - %v\t", msg.Address)
-		// point, unitValue, e2 := Cmd.X32.Process(msg.Address, msg.Arguments...)
-		// if e2 != nil {
-		// 	break
-		// }
-
 		// Single value.
 		if len(msg.UnitValueMap) == 1 {
 			LogPrintDate("# Single Point:\n\t%s\n\tUnitValue: %s (%v)\n", msg.Point, msg.UnitValueMap, msg.Arguments[0])
 
 			haType := "sensor"
 			if msg.IsSwitch() {
-				haType = "binary"
+				haType = "binary" // Will become a sensor and a toggle.
 			}
+			if msg.IsMomentary() {
+				haType = "binary"	// Will become a sensor and a toggle.
+			}
+			// if msg.IsMap() {
+			// 	haType = "select"
+			// }
 
 			ec := mmHa.EntityConfig {
 				Name:        msg.Point.Name,
@@ -341,11 +348,46 @@ func X32MessageHandler(msg *Behringer.Message) {
 				// LastResetValueTemplate: "",
 			}
 
-			Cmd.Error = Cmd.Mqtt.Publish(ec, msg.SeenBefore)
+			seen := msg.SeenBefore
+			Cmd.Error = Cmd.Mqtt.Publish(ec, !seen)
 			if Cmd.Error != nil {
 				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
 				break
 			}
+
+			if msg.IsSwitch() {
+				ec.HaType = "switch"
+				Cmd.Error = Cmd.Mqtt.Publish(ec, !seen)
+				if Cmd.Error != nil {
+					LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+					break
+				}
+				break
+			}
+
+			if msg.IsMomentary() {
+				ec.HaType = "button"
+				ec.Value = "ON"
+				Cmd.Error = Cmd.Mqtt.Publish(ec, !seen)
+				if Cmd.Error != nil {
+					LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+					break
+				}
+				break
+			}
+
+			if msg.IsIndex() {
+				ec.HaType = "select"
+				// ec.Value = "ON"
+				ec.Options = msg.GetIndexOptions()
+				Cmd.Error = Cmd.Mqtt.Publish(ec, !seen)
+				if Cmd.Error != nil {
+					LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
+					break
+				}
+				break
+			}
+
 			break
 		}
 
@@ -393,7 +435,7 @@ func X32MessageHandler(msg *Behringer.Message) {
 			}
 		}
 
-		Cmd.Error = Cmd.Mqtt.SensorPublishValues(entities)
+		Cmd.Error = Cmd.Mqtt.PublishSensorValues(entities)
 		if Cmd.Error != nil {
 			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
 			break
@@ -409,7 +451,7 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// pm, ca.Error = api.ImportPoints("points.json", ca.X32.Info.Model)
 		// fmt.Printf("\n%v\n", pm)
 		// ca.Error = ca.X32.AddMeters("/meters/11")
-
+		//
 		// ca.Error = ca.X32.GetAllInfo()
 		//
 		// sm := gosc.Message {
@@ -506,8 +548,7 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// ca.PublishBusses()
 		// time.Sleep(time.Second * 5)
 		// ca.PublishAuxes()
-
-
+		//
 		// ca.GetInitial()
 		// ca.Error = ca.X32.Emit("/-show/showfile/show/name")
 		// ca.Error = ca.X32.Emit("/-prefs/lamp")
@@ -524,26 +565,26 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// ca.Error = ca.X32.Emit("/-prefs/??????")
 		// ca.Error = ca.X32.Emit("/-stat/geqpos")
 		// ca.Error = ca.X32.Emit("/-stat/rtageqpost")
-
-		// time.Sleep(time.Second * 10)
-
-		// ca.Error = ca.X32.Emit("/-prefs/remote/ioenable", 4089)	//, 0, 0, 2)
-
+		//
+		// ca.Error = ca.X32.Emit("/-prefs/remote/ioenable", int32(4089))	//, 0, 0, 2)
+		//
 		// ca.Error = ca.X32.Emit("/formatsubscribe", "hidden/solo", "/-stat/solosw/**")	//, int32(1), int32(80), int32(20))
-
-		ca.Error = ca.X32.Set("/ch/01/mix/on", api.On)
-		ca.Error = ca.X32.Set("/-stat/solosw/01", api.On)
-		time.Sleep(time.Second * 1)
-		ca.Error = ca.X32.Set("/ch/01/mix/on", api.Off)
-		ca.Error = ca.X32.Set("/-stat/solosw/01", api.Off)
-		time.Sleep(time.Second * 1)
-		ca.Error = ca.X32.Set("/ch/01/mix/on", api.On)
-		ca.Error = ca.X32.Set("/-stat/solosw/01", api.On)
-		time.Sleep(time.Second * 1)
-		ca.Error = ca.X32.Set("/ch/01/mix/on", api.Off)
-		ca.Error = ca.X32.Set("/-stat/solosw/01", api.Off)
-		time.Sleep(time.Second * 1)
-
+		//
+		// ca.Error = ca.X32.Set("/ch/01/mix/on", api.Off)
+		// ca.Error = ca.X32.Set("/-stat/solosw/01", api.Off)
+		// time.Sleep(time.Second * 1)
+		// ca.Error = ca.X32.Set("/ch/01/mix/on", api.On)
+		// ca.Error = ca.X32.Set("/-stat/solosw/01", api.On)
+		// time.Sleep(time.Second * 1)
+		// ca.Error = ca.X32.Set("/ch/01/mix/on", api.Off)
+		// ca.Error = ca.X32.Set("/-stat/solosw/01", api.Off)
+		// time.Sleep(time.Second * 1)
+		// ca.Error = ca.X32.Set("/ch/01/mix/on", api.On)
+		// ca.Error = ca.X32.Set("/-stat/solosw/01", api.On)
+		// time.Sleep(time.Second * 1)
+		//
+		// ca.Error = ca.X32.Set("/-action/clearsolo", api.On)
+		//
 		// p1 := ca.X32.Points.Resolve("/ch/01/mix/on")
 		// p2 := ca.X32.Points.Resolve("/-stat/solosw/01")
 		// ca.Error = ca.X32.Emit(p1.EndPoint, p1.Convert.SetValue(api.On))
@@ -552,7 +593,7 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// ca.Error = ca.X32.Emit(p1.EndPoint, p1.Convert.SetValue(api.Off))
 		// ca.Error = ca.X32.Emit(p2.EndPoint, p2.Convert.SetValue(api.Off))
 		// time.Sleep(time.Second * 2)
-
+		//
 		// ca.Error = ca.X32.Emit("/formatsubscribe",
 		// 	"hidden/names",
 		// 	"/ch/**/config/name",
@@ -565,6 +606,28 @@ func (ca *CommandArgs) Update1(newDay bool) error {
 		// 	// "/mtx/*/config/name",
 		// 	int32(1), int32(8), int32(4),
 		// )
+		//
+		// ca.Error = ca.X32.Emit("/-stat/screen/screen", int32(1))
+		// time.Sleep(time.Second * 2)
+		// ca.Error = ca.X32.Emit("/-stat/screen/screen", int32(2))
+		// time.Sleep(time.Second * 2)
+		// ca.Error = ca.X32.Emit("/-stat/screen/screen", int32(0))
+		// time.Sleep(time.Second * 2)
+		//
+		// ca.Error = ca.X32.Emit("/-stat/screen/CHAN/page", int32(0))
+		// time.Sleep(time.Second * 2)
+		// ca.Error = ca.X32.Emit("/-stat/screen/CHAN/page", int32(1))
+		// time.Sleep(time.Second * 2)
+		// ca.Error = ca.X32.Emit("/-stat/screen/CHAN/page", int32(2))
+		// time.Sleep(time.Second * 2)
+		// ca.Error = ca.X32.Emit("/-stat/screen/CHAN/page", int32(3))
+		// time.Sleep(time.Second * 2)
+		// ca.Error = ca.X32.Emit("/-stat/screen/CHAN/page", int32(4))
+		// time.Sleep(time.Second * 2)
+		// ca.Error = ca.X32.Emit("/-stat/screen/CHAN/page", int32(5))
+		// time.Sleep(time.Second * 2)
+		// ca.Error = ca.X32.Emit("/-stat/screen/CHAN/page", int32(6))
+		// time.Sleep(time.Second * 2)
 
 		time.Sleep(time.Hour * 24)
 	}
@@ -705,7 +768,7 @@ func (ca *CommandArgs) GetInitial() {
 		}
 
 		for _, entity := range entities {
-			Cmd.Error = Cmd.Mqtt.Publish(entity, false)
+			Cmd.Error = Cmd.Mqtt.Publish(entity, true)
 			if Cmd.Error != nil {
 				LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
 				break
@@ -832,7 +895,7 @@ func (ca *CommandArgs) PublishMatrix(id int) {
 			break
 		}
 
-		Cmd.Error = Cmd.Mqtt.SensorPublishValues(entities)
+		Cmd.Error = Cmd.Mqtt.PublishSensorValues(entities)
 		if Cmd.Error != nil {
 			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
 			break
@@ -894,7 +957,7 @@ func (ca *CommandArgs) PublishBus(id int) {
 			break
 		}
 
-		Cmd.Error = Cmd.Mqtt.SensorPublishValues(entities)
+		Cmd.Error = Cmd.Mqtt.PublishSensorValues(entities)
 		if Cmd.Error != nil {
 			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
 			break
@@ -956,7 +1019,7 @@ func (ca *CommandArgs) PublishAux(id int) {
 			break
 		}
 
-		Cmd.Error = Cmd.Mqtt.SensorPublishValues(entities)
+		Cmd.Error = Cmd.Mqtt.PublishSensorValues(entities)
 		if Cmd.Error != nil {
 			LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)
 			break

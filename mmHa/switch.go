@@ -7,7 +7,7 @@ import (
 )
 
 
-func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
+func (m *Mqtt) PublishSwitchConfig(config EntityConfig) error {
 
 	for range Only.Once {
 		config.FixConfig()
@@ -33,42 +33,25 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 
 		payload := Switch {
 			Device:                 device,
-			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.Name),
-			StateTopic:             JoinStringsForTopic(m.binarySensorPrefix, config.StateTopic, "state"),
-			// StateClass:             config.StateClass,
-			UniqueId:               config.StateTopic,
-			// UnitOfMeasurement:      config.Units,
-			// DeviceClass:            config.DeviceClass,
-			Qos:                    0,
-			Retain:                 true,
-			// ExpireAfter:            0,
-			// Encoding:               "utf-8",
-			// EnabledByDefault:       true,
-			// LastResetValueTemplate: config.LastResetValueTemplate,
-			// LastReset:              config.LastReset,
-			ValueTemplate:          config.ValueTemplate,
+			EnabledByDefault:       true,
+			Encoding:               "utf-8",
+			EntityCategory:         "",
 			Icon:                   config.Icon,
-			PayloadOn:              "ON",
-			PayloadOff:             "OFF",
+			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.Name),
+			// ObjectId:               config.UniqueId,
+			Qos:                    0,
+			StateTopic:             JoinStringsForTopic(m.switchPrefix, config.StateTopic, StateTopicSuffix),
+			UniqueId:               config.StateTopic,
 
+			CommandTopic:           JoinStringsForTopic(m.switchPrefix, config.StateTopic, CmdTopicSuffix),
+			PayloadOn:              fmt.Sprintf(`{"%s":"ON"}`, config.Name),
+			PayloadOff:             fmt.Sprintf(`{"%s":"OFF"}`, config.Name),
+			Retain:                 true,
+			// StateOff:               fmt.Sprintf(`{"%s":"OFF"}`, config.Name),
+			// StateOn:                fmt.Sprintf(`{"%s":"ON"}`, config.Name),
 			StateOn:                "ON",
 			StateOff:               "OFF",
-			CommandTopic:           JoinStringsForTopic(m.binarySensorPrefix, config.StateTopic, "cmd"),
-
-			// Availability:           &Availability {
-			// 	PayloadAvailable:    "",
-			// 	PayloadNotAvailable: "",
-			// 	Topic:               "",
-			// 	ValueTemplate:       "",
-			// },
-			// AvailabilityMode:       "",
-			// AvailabilityTemplate:   "",
-			// AvailabilityTopic:      "",
-			// JSONAttributesTemplate: "",
-			// JSONAttributesTopic:    "",
-			// Optimistic:             false,
-			// PayloadAvailable:       "",
-			// PayloadNotAvailable:    "",
+			ValueTemplate:          config.ValueTemplate,
 		}
 
 		ct := JoinStringsForTopic(m.switchPrefix, uid, "config")
@@ -81,7 +64,7 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 	return m.err
 }
 
-func (m *Mqtt) SwitchPublishValue(config EntityConfig) error {
+func (m *Mqtt) PublishSwitchValue(config EntityConfig) error {
 
 	for range Only.Once {
 		if !config.IsSwitch() {
@@ -90,15 +73,10 @@ func (m *Mqtt) SwitchPublishValue(config EntityConfig) error {
 
 		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
 		cs := make(ValueMap)
-		cs["last_reset"] = m.GetLastReset(JoinStringsForId(config.ParentId, config.Name))
+		// cs["last_reset"] = m.GetLastReset(JoinStringsForId(config.ParentId, config.Name))
 		cs[config.ValueName] = config.Value
 
-		// payload := MqttState {
-		// 	LastReset: m.GetLastReset(config.UniqueId),
-		// 	Value:     config.Value,
-		// }
-
-		st = JoinStringsForTopic(m.binarySensorPrefix, st, "state")
+		st = JoinStringsForTopic(m.switchPrefix, st, StateTopicSuffix)
 		t := m.client.Publish(st, 0, true, cs.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -108,7 +86,7 @@ func (m *Mqtt) SwitchPublishValue(config EntityConfig) error {
 	return m.err
 }
 
-func (m *Mqtt) SwitchPublishValues(configs []EntityConfig) error {
+func (m *Mqtt) PublishSwitchValues(configs []EntityConfig) error {
 	for range Only.Once {
 		if len(configs) == 0 {
 			break
@@ -129,7 +107,7 @@ func (m *Mqtt) SwitchPublishValues(configs []EntityConfig) error {
 			}
 
 			if topic == "" {
-				topic = JoinStringsForTopic(m.switchPrefix, config.StateTopic, "state")
+				topic = JoinStringsForTopic(m.switchPrefix, config.StateTopic, StateTopicSuffix)
 			}
 
 			if config.ValueName == "" {
@@ -154,33 +132,45 @@ func (m *Mqtt) SwitchPublishValues(configs []EntityConfig) error {
 
 
 type Switch struct {
-	AvailabilityTopic      string `json:"avty_t,omitempty"`
-	CommandTopic           string `json:"cmd_t"`
-	Device                 Device `json:"dev,omitempty"`
-	Icon                   string `json:"ic,omitempty"`
-	JSONAttributesTemplate string `json:"json_attr_tpl,omitempty"`
-	JSONAttributesTopic    string `json:"json_attr_t,omitempty"`
-	Name                   string `json:"name,omitempty"`
-	Optimistic             bool   `json:"opt,omitempty"`
-	PayloadAvailable       string `json:"pl_avail,omitempty"`
-	PayloadNotAvailable    string `json:"pl_not_avail,omitempty"`
-	PayloadOff             string `json:"pl_off,omitempty"`
-	PayloadOn              string `json:"pl_on,omitempty"`
-	Qos                    int    `json:"qos,omitempty"`
-	Retain                 bool   `json:"ret,omitempty"`
-	StateOff               string `json:"stat_off,omitempty"`
-	StateOn                string `json:"stat_on,omitempty"`
-	StateTopic             string `json:"stat_t,omitempty"`
-	UniqueId               string `json:"uniq_id,omitempty"`
-	ValueTemplate          string `json:"val_tpl,omitempty"`
+	// Common fields.
+	Availability             *Availability `json:"availability,omitempty" required:"false"`
+	AvailabilityMode         string       `json:"availability_mode,omitempty" required:"false"`
+	AvailabilityTemplate     string       `json:"availability_template,omitempty" required:"false"`
+	AvailabilityTopic        string       `json:"availability_topic,omitempty" required:"false"`
+	Device                   Device       `json:"device,omitempty" required:"false"`
+	EnabledByDefault         bool         `json:"enabled_by_default,omitempty" required:"false"`
+	Encoding                 string       `json:"encoding,omitempty" required:"false"`
+	EntityCategory           string       `json:"entity_category,omitempty" required:"false"`
+	Icon                     string       `json:"icon,omitempty" required:"false"`
+	JsonAttributesTemplate   string       `json:"json_attributes_template,omitempty" required:"false"`
+	JsonAttributesTopic      string       `json:"json_attributes_topic,omitempty" required:"false"`
+	Name                     string       `json:"name,omitempty" required:"false"`
+	ObjectId                 string       `json:"object_id,omitempty" required:"false"`
+	PayloadAvailable         string       `json:"payload_available,omitempty" required:"false"`
+	PayloadNotAvailable      string       `json:"payload_not_available,omitempty" required:"false"`
+	Qos                      int          `json:"qos,omitempty" required:"false"`
+	StateTopic               string       `json:"state_topic" required:"false"`
+	UniqueId                 string       `json:"unique_id,omitempty" required:"false"`
+	ValueTemplate            string       `json:"value_template,omitempty" required:"false"`
 
-	// CommandFunc func(mqtt.Message, mqtt.Client) `json:"-"`
-	// StateFunc   func() string                   `json:"-"`
-	//
-	// UpdateInterval  float64 `json:"-"`
-	// ForceUpdateMQTT bool    `json:"-"`
-	//
-	// messageHandler mqtt.MessageHandler
+	// Less common fields.
+	//  CommandTemplate          string       `json:"command_template,omitempty" required:"false"`
+	CommandTopic             string       `json:"command_topic,omitempty" required:"true"`
+	DeviceClass              string       `json:"device_class,omitempty" required:"false"`
+	//	ExpireAfter              int          `json:"expire_after,omitempty" required:"false"`
+	//	ForceUpdate              bool         `json:"force_update,omitempty" required:"false"`
+	//	LastResetValueTemplate string       `json:"last_reset_value_template,omitempty" required:"false"`
+	//	OffDelay                 int          `json:"off_delay,omitempty" required:"false"`
+	//  Options                  []string     `json:"options,omitempty" required:"true"`
+	Optimistic               bool         `json:"optimistic,omitempty" required:"false"`
+	PayloadOff               string       `json:"payload_off,omitempty" required:"false"`
+	PayloadOn                string       `json:"payload_on,omitempty" required:"false"`
+	Retain                   bool         `json:"retain,omitempty" required:"false"`
+	//	StateClass               string       `json:"state_class,omitempty" required:"false"`
+	StateOff                 string       `json:"state_off,omitempty" required:"false"`
+	StateOn                  string       `json:"state_on,omitempty" required:"false"`
+	//	UnitOfMeasurement        string       `json:"unit_of_measurement,omitempty" required:"false"`
+
 }
 
 func (c *Switch) Json() string {

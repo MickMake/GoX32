@@ -121,13 +121,54 @@ func (p *Point) IsSwitch() bool {
 			ok = true
 			break
 		}
+		// if p.Convert.Binary.IsMomentary {
+		// 	ok = true
+		// 	break
+		// }
 	}
 	return ok
 }
 
+func (p *Point) IsMomentary() bool {
+	var ok bool
+	for range Only.Once {
+		if p.Convert.Binary == nil {
+			break
+		}
+		if p.Convert.Binary.IsMomentary {
+			ok = true
+			break
+		}
+	}
+	return ok
+}
 
-// type PointValue struct {
-// 	Point Point        `json:"point"`
-// 	Value UnitValueMap `json:"value"`
-// 	Error error        `json:"error"`
-// }
+func (p *Point) IsIndex() bool {
+	var ok bool
+	for range Only.Once {
+		if p.Convert.Index != nil {
+			ok = true
+			break
+		}
+	}
+	return ok
+}
+
+func (p *Point) GetIndexOptions() []string {
+	var ret []string
+	for range Only.Once {
+		if p.Convert.Index != nil {
+			ret = p.Convert.Index.GetOptions()
+			break
+		}
+		if p.Convert.Map != nil {
+			ret = p.Convert.Map.GetOptions()
+			break
+		}
+		if p.Convert.BitMap != nil {
+			ret = p.Convert.BitMap.GetOptions()
+			break
+		}
+	}
+	return ret
+}
