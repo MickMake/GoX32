@@ -45,29 +45,36 @@ func (c *Channel) Json() string {
 // 	return ret
 // }
 
+func (c *Channel) GetInfo(i int) map[string]string {
+	t := fmt.Sprintf("/ch/%.2d/", i)	// channels start from index 1
+	ret := map[string]string {
+		"Name":        t + "config/name",
+		"Colour":      t + "config/color",
+		"Source":      t + "config/source",
+		"Icon":        t + "config/icon",
+		"Preamp Trim": t + "preamp/trim",
+		"DCA Group": t + "grp/dca",
+		"Mute Group": t + "grp/mute",
+		"Gate On": t + "gate/on",
+		"Compression On": t + "dyn/on",
+		"EQ On": t + "eq/on",
+		// "": topic + "preamp/hpon",
+		// "": topic + "mix/01/level",
+		"Mix On":  t + "mix/on",
+		"Fader":   t + "mix/fader",
+		"Gain":    fmt.Sprintf("/headamp/%.3d/gain", i - 1), // headamps start from index 0
+		"Phantom On": fmt.Sprintf("/headamp/%.3d/phantom", i - 1),
+	}
+
+	return ret
+}
+
 func (x *X32) GetChannel(i int) MessageMap {
 	ret := make(MessageMap)
 
 	for range Only.Once {
-		t := fmt.Sprintf("/ch/%.2d/", i)	// channels start from index 1
-		topics := map[string]string {
-			"Name":        t + "config/name",
-			"Colour":      t + "config/color",
-			"Source":      t + "config/source",
-			"Icon":        t + "config/icon",
-			"Preamp Trim": t + "preamp/trim",
-			"DCA Group": t + "grp/dca",
-			"Mute Group": t + "grp/mute",
-			"Gate On": t + "gate/on",
-			"Compression On": t + "dyn/on",
-			"EQ On": t + "eq/on",
-			// "": topic + "preamp/hpon",
-			// "": topic + "mix/01/level",
-			"Mix On":  t + "mix/on",
-			"Fader":   t + "mix/fader",
-			"Gain":    fmt.Sprintf("/headamp/%.3d/gain", i - 1), // headamps start from index 0
-			"Phantom On": fmt.Sprintf("/headamp/%.3d/phantom", i - 1),
-		}
+		channel := Channel{}
+		topics := channel.GetInfo(i)
 
 		for name, topic := range topics {
 			msg := x.Call(topic)

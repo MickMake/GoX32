@@ -7,10 +7,7 @@
 	  }
 	},
 	"tape-autoplay": {
-	  "map": {
-		"0": "SINGLE",
-		"1": "FOLDER"
-	  }
+	  "binary": { "name_off": "SINGLE", "name_on": "FOLDER" }
 	},
 	"tape-state": {
 	  "index": [

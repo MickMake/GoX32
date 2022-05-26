@@ -118,6 +118,13 @@ func (pm *PointsMap) SortEndPoints() []string {
 	return ret
 }
 
+func (pm *PointsMap) Append(b PointsMap) *PointsMap {
+	for k, v := range b {
+		(*pm)[k] = v
+	}
+	return pm
+}
+
 
 // Points Discovered points from the API
 var Points = PointsMap {

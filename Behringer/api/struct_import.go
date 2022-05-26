@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"github.com/MickMake/GoX32/Behringer/api/output"
 	"github.com/MickMake/GoX32/Only"
-	"regexp"
-	"strings"
+	"time"
 )
 
 
@@ -29,18 +28,71 @@ func (a *Aliases) Get(selector *ConvertAlias) ConvertStruct {
 	return ConvertStruct{}
 }
 
+func (a *Aliases) Append(b Aliases) *Aliases {
+	for k, v := range b {
+		(*a)[k] = v
+	}
+	return a
+}
+
 
 type PointsMapFile struct {
-	Aliases   Aliases   `json:"aliases"`
-	PointsMap PointsMap `json:"points"`
+	Refresh Refresh `json:"refresh"`
+	Aliases Aliases `json:"aliases"`
+	PointsMap      PointsMap      `json:"points"`
 	PointsArrayMap PointsArrayMap `json:"points_array_map"`
 }
 
 type PointsArrayMap struct {
-	Min int `json:"min"`
-	Max int `json:"max"`
-	Increment int `json:"increment"`
+	Min       int       `json:"min"`
+	Max       int       `json:"max"`
+	Increment int       `json:"increment"`
 	PointsMap PointsMap `json:"points"`
+}
+
+type Refresh struct {
+	RefreshPointsArray RefreshPointsArray `json:"points_array_map"`
+	RefreshPoints      RefreshPoints      `json:"points"`
+	Delay              *int               `json:"delay"`
+	BatchLimit         *int               `json:"batch_limit"`
+}
+
+type RefreshPointsArray struct {
+	Delay     *int                    `json:"delay"`
+	Min       int                     `json:"min"`
+	Max       int                     `json:"max"`
+	Increment int                     `json:"increment"`
+	Points    map[string]RefreshPoint `json:"points"`
+}
+
+type RefreshPoints map[string]*RefreshPoint
+// type RefreshPointsMap map[string]int
+
+// type RefreshPointsMap []string
+// type RefreshPointsMap map[string]RefreshPoint
+
+type RefreshPoint struct {
+	Delay *int `json:"delay"`
+	When  time.Time `json:"-"`
+}
+
+func (rp *RefreshPoint) IsExpired() bool {
+	var yes bool
+
+	if rp.Delay == nil {
+		d := 60
+		rp.Delay = &d
+	}
+	then := rp.When.Add(time.Second * time.Duration(*rp.Delay))
+	if then.Before(time.Now()) {
+		yes = true
+	}
+
+	return yes
+}
+
+func (rp *RefreshPoint) Reset() {
+	rp.When = time.Now()
 }
 
 func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
@@ -68,6 +120,7 @@ func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
 				continue
 			}
 
+			// Generate points from a min and max.
 			for i := pmi.PointsArrayMap.Min; i <= pmi.PointsArrayMap.Max; i++ {
 				for n, p := range pmi.PointsArrayMap.PointsMap {
 					if n == "" {
@@ -295,66 +348,110 @@ func ImportPoints(parentId string, filenames ...string) (PointsMap, error) {
 	return pm.PointsMap, err
 }
 
-func (a *Aliases) Append(b Aliases) *Aliases {
-	for k, v := range b {
-		(*a)[k] = v
-	}
-	return a
-}
+const DefaultBatchLimit = 200
 
-func (pm *PointsMap) Append(b PointsMap) *PointsMap {
-	for k, v := range b {
-		(*pm)[k] = v
-	}
-	return pm
-}
-
-
-func (p *Point) CorrectUnit(unit string) *Point {
-	for range Only.Once {
-		if p == nil {
-			return nil
-		}
-		if p.Unit != "" {
-			break
-		}
-		p.Unit = unit
-	}
-	return p
-}
-
-func JoinStrings(args ...string) string {
-	return strings.TrimSpace(strings.Join(args, " "))
-}
-
-func JoinStringsForId(args ...string) string {
-	var ret string
+func ImportRefresh(filenames ...string) (RefreshPoints, int, error) {
+	pm := make(RefreshPoints)
+	batchLimit := DefaultBatchLimit
+	var err error
 
 	for range Only.Once {
-		var newargs []string
-		var re = regexp.MustCompile(`(/| |:|\.)+`)
-		var re2 = regexp.MustCompile(`^(-|_)+`)
-		var re3 = regexp.MustCompile(`(-|_)+$`)
+		for _, filename := range filenames {
+			var pmi PointsMapFile
+			err = output.FileRead(filename, &pmi)
+			if err != nil {
+				err = errors.New(fmt.Sprintf("Error reading points json file '%s': %s", filename, err))
+				break
+			}
 
-		for _, a := range args {
-			if a == "" {
+			// if strings.HasSuffix(filename, "points_refresh.json") {
+			// 	fmt.Sprintf("")
+			// }
+
+			if len(pmi.Refresh.RefreshPointsArray.Points) == 0 {
 				continue
 			}
 
-			a = strings.TrimSpace(a)
-			a = re.ReplaceAllString(a, `_`)
-			a = re2.ReplaceAllString(a, ``)
-			a = re3.ReplaceAllString(a, ``)
-			// a = strings.TrimPrefix(a, `-`)
-			// a = strings.TrimPrefix(a, `_`)
-			// a = strings.TrimSuffix(a, `-`)
-			// a = strings.TrimSuffix(a, `_`)
-			a = strings.ToLower(a)
-			newargs = append(newargs, a)
-		}
+			if pmi.Refresh.BatchLimit != nil {
+				batchLimit = *pmi.Refresh.BatchLimit
+			}
 
-		ret =  strings.Join(newargs, "-")
+			now := time.Now()
+
+			// Generate refresh points from an array map.
+			for i := pmi.Refresh.RefreshPointsArray.Min; i <= pmi.Refresh.RefreshPointsArray.Max; i++ {
+				for n, p := range pmi.Refresh.RefreshPointsArray.Points {
+					if n == "" {
+						continue
+					}
+
+					name := fmt.Sprintf(n, i)
+					delay := 0
+					switch {
+						case p.Delay != nil:
+							delay = *p.Delay
+						case pmi.Refresh.RefreshPointsArray.Delay != nil:
+							delay = *pmi.Refresh.RefreshPointsArray.Delay
+						case pmi.Refresh.Delay != nil:
+							delay = *pmi.Refresh.Delay
+						default:
+							delay = 60
+					}
+					pm[name] = &RefreshPoint { Delay: &delay, When: now.Add(- (time.Second * time.Duration(delay))) }
+
+					// if p.Delay != nil {
+					// 	pm[name] = RefreshPoint { Delay: p.Delay }
+					// }
+					// if pmi.Refresh.RefreshPointsArray.Delay != nil {
+					// 	pm[name] = RefreshPoint { Delay: pmi.Refresh.RefreshPointsArray.Delay }
+					// }
+					// if pmi.Refresh.Delay != nil {
+					// 	pm[name] = RefreshPoint { Delay: pmi.Refresh.Delay }
+					// }
+					// if pm[name].Delay == 0 {
+					// 	pm[name] = 60
+					// }
+					//
+					// pm[name] = RefreshPoint { Delay: &delay, When: now }
+				}
+			}
+
+			for name, p := range pmi.Refresh.RefreshPoints {
+				if name == "" {
+					continue
+				}
+
+				delay := 0
+				switch {
+					case p.Delay != nil:
+						delay = *p.Delay
+					case pmi.Refresh.RefreshPointsArray.Delay != nil:
+						delay = *pmi.Refresh.RefreshPointsArray.Delay
+					case pmi.Refresh.Delay != nil:
+						delay = *pmi.Refresh.Delay
+					default:
+						delay = 60
+				}
+				pm[name] = &RefreshPoint { Delay: &delay, When: now.Add(- (time.Second * time.Duration(delay))) }
+
+				// if pmi.Refresh.Delay != nil {
+				// 	pm[name] = *pmi.Refresh.Delay
+				// }
+				// if pmi.Refresh.RefreshPointsArray.Delay != nil {
+				// 	pm[name] = *pmi.Refresh.RefreshPointsArray.Delay
+				// }
+				// if p.Delay != nil {
+				// 	pm[name] = *p.Delay
+				// }
+				// if pm[name] == 0 {
+				// 	pm[name] = 60
+				// }
+			}
+		}
+		if err != nil {
+			break
+		}
 	}
 
-	return ret
+	return pm, batchLimit, err
 }

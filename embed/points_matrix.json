@@ -1,6 +1,72 @@
 {
   "aliases": {
   },
+  "refresh": {
+	"delay": 600,
+	"batch_limit": 200,
+	"points_array_map": {
+	  "delay": 600,
+	  "min": 1,
+	  "max": 2,
+	  "increment": 1,
+	  "points": {
+		"/mtx/%.2d/preamp/invert": {},
+		"/mtx/%.2d/config/color": {},
+		"/mtx/%.2d/config/icon": {},
+		"/mtx/%.2d/config/name": {},
+		"/mtx/%.2d/config/preamp/invert": {},
+		"/mtx/%.2d/dyn/attack": {},
+		"/mtx/%.2d/dyn/auto": {},
+		"/mtx/%.2d/dyn/det": {},
+		"/mtx/%.2d/dyn/env": {},
+		"/mtx/%.2d/dyn/filter/f": {},
+		"/mtx/%.2d/dyn/filter/on": {},
+		"/mtx/%.2d/dyn/filter/type": {},
+		"/mtx/%.2d/dyn/hold": {},
+		"/mtx/%.2d/dyn/keysrc": {},
+		"/mtx/%.2d/dyn/knee": {},
+		"/mtx/%.2d/dyn/mgain": {},
+		"/mtx/%.2d/dyn/mix": {},
+		"/mtx/%.2d/dyn/mode": {},
+		"/mtx/%.2d/dyn/on": {},
+		"/mtx/%.2d/dyn/pos": {},
+		"/mtx/%.2d/dyn/ratio": {},
+		"/mtx/%.2d/dyn/release": {},
+		"/mtx/%.2d/dyn/thr": {},
+		"/mtx/%.2d/eq/on": {},
+		"/mtx/%.2d/eq/1/f": {},
+		"/mtx/%.2d/eq/1/g": {},
+		"/mtx/%.2d/eq/1/q": {},
+		"/mtx/%.2d/eq/1/type": {},
+		"/mtx/%.2d/eq/2/f": {},
+		"/mtx/%.2d/eq/2/g": {},
+		"/mtx/%.2d/eq/2/q": {},
+		"/mtx/%.2d/eq/2/type": {},
+		"/mtx/%.2d/eq/3/f": {},
+		"/mtx/%.2d/eq/3/g": {},
+		"/mtx/%.2d/eq/3/q": {},
+		"/mtx/%.2d/eq/3/type": {},
+		"/mtx/%.2d/eq/4/f": {},
+		"/mtx/%.2d/eq/4/g": {},
+		"/mtx/%.2d/eq/4/q": {},
+		"/mtx/%.2d/eq/4/type": {},
+		"/mtx/%.2d/eq/5/f": {},
+		"/mtx/%.2d/eq/5/g": {},
+		"/mtx/%.2d/eq/5/q": {},
+		"/mtx/%.2d/eq/5/type": {},
+		"/mtx/%.2d/eq/6/f": {},
+		"/mtx/%.2d/eq/6/g": {},
+		"/mtx/%.2d/eq/6/q": {},
+		"/mtx/%.2d/eq/6/type": {},
+		"/mtx/%.2d/insert/on": {},
+		"/mtx/%.2d/insert/pos": {},
+		"/mtx/%.2d/insert/sel": {},
+		"/mtx/%.2d/mix/fader": {},
+		"/mtx/%.2d/mix/on": {}
+	  }
+	}
+  },
+
   "points_array_map": {
 	"min": 1,
 	"max": 6,
@@ -14,9 +80,9 @@
 	  "/mtx/%.2d/config/preamp/invert": { "endpoint": "/mtx/%.2d/config/preamp/invert", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	  
 	  "/mtx/%.2d/dyn/attack": { "endpoint": "/mtx/%.2d/dyn/attack", "unit": "mS", "convert": { "alias": "dyn-attack" }, "info": "" },
-	  "/mtx/%.2d/dyn/auto": { "endpoint": "/mtx/%.2d/dyn/auto", "convert": { "map": {  "0": "MANUAL", "1": "AUTO"  } }, "info": "" },
-	  "/mtx/%.2d/dyn/det": { "endpoint": "/mtx/%.2d/dyn/det", "convert": { "map": {  "0": "PEAK", "1": "RMS"  } }, "info": "" },
-	  "/mtx/%.2d/dyn/env": { "endpoint": "/mtx/%.2d/dyn/env", "convert": { "map": {  "0": "LINEAR", "1": "LOG"  } }, "info": "" },
+	  "/mtx/%.2d/dyn/auto": { "endpoint": "/mtx/%.2d/dyn/auto", "convert": { "binary": { "name_off": "MANUAL", "name_on": "AUTO" } }, "info": "" },
+	  "/mtx/%.2d/dyn/det": { "endpoint": "/mtx/%.2d/dyn/det", "convert": { "binary": { "name_off": "PEAK", "name_on": "RMS" } }, "info": "" },
+	  "/mtx/%.2d/dyn/env": { "endpoint": "/mtx/%.2d/dyn/env", "convert": { "binary": { "name_off": "LINEAR", "name_on": "LOG" } }, "info": "" },
 	  "/mtx/%.2d/dyn/filter/f": { "endpoint": "/mtx/%.2d/dyn/filter/f", "unit": "Hz", "convert": { "alias": "log-scale-201" }, "info": "" },
 	  "/mtx/%.2d/dyn/filter/on": { "endpoint": "/mtx/%.2d/dyn/filter/on", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	  "/mtx/%.2d/dyn/filter/type": { "endpoint": "/mtx/%.2d/dyn/filter/type", "convert": { "alias": "filter-type-map" }, "info": "" },
@@ -25,9 +91,9 @@
 	  "/mtx/%.2d/dyn/knee": { "endpoint": "/mtx/%.2d/dyn/knee", "convert": { "alias": "dyn-knee" }, "info": "" },
 	  "/mtx/%.2d/dyn/mgain": { "endpoint": "/mtx/%.2d/dyn/mgain", "unit": "dB", "convert": { "alias": "dyn-gain" }, "info": "" },
 	  "/mtx/%.2d/dyn/mix": { "endpoint": "/mtx/%.2d/dyn/mix", "unit": "%", "convert": { "alias": "dyn-mix" }, "info": "" },
-	  "/mtx/%.2d/dyn/mode": { "endpoint": "/mtx/%.2d/dyn/mode", "convert": { "map": {  "0": "COMP", "1": "EXP"  } }, "info": "" },
+	  "/mtx/%.2d/dyn/mode": { "endpoint": "/mtx/%.2d/dyn/mode", "convert": { "binary": { "name_off": "COMP", "name_on": "EXP" } }, "info": "" },
 	  "/mtx/%.2d/dyn/on": { "endpoint": "/mtx/%.2d/dyn/on", "convert": { "binary": { "type":"normal" } }, "info": "" },
-	  "/mtx/%.2d/dyn/pos": { "endpoint": "/mtx/%.2d/dyn/pos", "convert": { "map": {  "0": "NORMAL", "1": "SWAPPED"  } }, "info": "" },
+	  "/mtx/%.2d/dyn/pos": { "endpoint": "/mtx/%.2d/dyn/pos", "convert": { "binary": { "name_off": "NORMAL", "name_on": "SWAPPED" } }, "info": "" },
 	  "/mtx/%.2d/dyn/ratio": { "endpoint": "/mtx/%.2d/dyn/ratio", "convert": { "alias": "dyn-ratio" }, "info": "" },
 	  "/mtx/%.2d/dyn/release": { "endpoint": "/mtx/%.2d/dyn/release", "unit": "mS", "convert": { "alias": "log-scale-101-release" }, "info": "" },
 	  "/mtx/%.2d/dyn/thr": { "endpoint": "/mtx/%.2d/dyn/thr", "unit": "dB", "convert": { "alias": "dyn-threshold" }, "info": "" },
@@ -63,7 +129,7 @@
 	  "/mtx/%.2d/insert/sel": { "endpoint": "/mtx/%.2d/insert/sel",  "convert": { "alias": "insert-source-map" }, "info": "" },
 	  
 	  "/mtx/%.2d/mix/fader": { "endpoint": "/mtx/%.2d/mix/fader", "unit": "dB", "convert": { "function": "log" }, "info": "" },
-	  "/mtx/%.2d/mix/on": { "endpoint": "/mtx/%.2d/mix/on", "convert": { "binary": { "type": "invert" } }, "info": "" }
+	  "/mtx/%.2d/mix/on": { "endpoint": "/mtx/%.2d/mix/on", "convert": { "binary": { "type": "normal" } }, "info": "" }
 	}
   }
 }

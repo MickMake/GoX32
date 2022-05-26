@@ -111,6 +111,43 @@ func (p Point) IsTotal() bool {
 	return false
 }
 
+func (p *Point) IsBinaryMap() bool {
+	var ok bool
+	for range Only.Once {
+		if p.Convert.Binary == nil {
+			break
+		}
+		if (p.Convert.Binary.Off != Off) && (p.Convert.Binary.Off != On) {
+			ok = true
+			break
+		}
+		if (p.Convert.Binary.On != Off) && (p.Convert.Binary.On != On) {
+			ok = true
+			break
+		}
+		if p.Convert.Binary.NameOff != "" {
+			ok = true
+			break
+		}
+		if p.Convert.Binary.NameOn != "" {
+			ok = true
+			break
+		}
+	}
+	return ok
+}
+
+func (p *Point) IsBinary() bool {
+	var ok bool
+	for range Only.Once {
+		if p.Convert.Binary == nil {
+			break
+		}
+		ok = true
+	}
+	return ok
+}
+
 func (p *Point) IsSwitch() bool {
 	var ok bool
 	for range Only.Once {
@@ -121,10 +158,6 @@ func (p *Point) IsSwitch() bool {
 			ok = true
 			break
 		}
-		// if p.Convert.Binary.IsMomentary {
-		// 	ok = true
-		// 	break
-		// }
 	}
 	return ok
 }
@@ -169,6 +202,23 @@ func (p *Point) GetIndexOptions() []string {
 			ret = p.Convert.BitMap.GetOptions()
 			break
 		}
+		if p.Convert.Binary != nil {
+			ret = []string{ p.Convert.Binary.Off, p.Convert.Binary.On}
+			break
+		}
 	}
 	return ret
+}
+
+func (p *Point) CorrectUnit(unit string) *Point {
+	for range Only.Once {
+		if p == nil {
+			return nil
+		}
+		if p.Unit != "" {
+			break
+		}
+		p.Unit = unit
+	}
+	return p
 }

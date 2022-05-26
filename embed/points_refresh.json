@@ -1,0 +1,57 @@
+{
+  "refresh": {
+	"delay": 300,
+	"batch_limit": 200,
+	"points": {
+	  "/-show/prepos/current": { "delay": 600 },
+	  "/-show/showfile/show/buses": { },
+	  "/-show/showfile/show/chan16": { },
+	  "/-show/showfile/show/chan32": { },
+	  "/-show/showfile/show/console": { },
+	  "/-show/showfile/show/effects": { },
+	  "/-show/showfile/show/inputs": { },
+	  "/-show/showfile/show/lrmtxdca": { },
+	  "/-show/showfile/show/mxbuses": { },
+	  "/-show/showfile/show/mxsends": { },
+	  "/-show/showfile/show/name": { },
+	  "/-show/showfile/show/return": { }
+	},
+	"points2": {
+	  "/ch/%.2d/config/name": { "delay": 600 },
+	  "/ch/%.2d/config/color": { },
+	  "/ch/%.2d/config/source": { },
+	  "/ch/%.2d/config/icon": { },
+	  "/ch/%.2d/preamp/trim": { },
+	  "/ch/%.2d/grp/dca": { },
+	  "/ch/%.2d/grp/mute": { },
+	  "/ch/%.2d/gate/on": { },
+	  "/ch/%.2d/dyn/on": { },
+	  "/ch/%.2d/eq/on": { },
+	  "/ch/%.2d/preamp/hpon": { },
+	  "/ch/%.2d/mix/01/level": { },
+	  "/ch/%.2d/mix/on": { },
+	  "/ch/%.2d/mix/fader": { },
+
+	  "/ch/%.2d/delay/on": {},
+	  "/ch/%.2d/gate/filter/on": {},
+	  "/ch/%.2d/dyn/filter/on": {},
+	  "/ch/%.2d/insert/on": {},
+	  "/ch/%.2d/mix/01/on": {},
+	  "/ch/%.2d/mix/02/on": {},
+	  "/ch/%.2d/mix/03/on": {},
+	  "/ch/%.2d/mix/04/on": {},
+	  "/ch/%.2d/mix/05/on": {},
+	  "/ch/%.2d/mix/06/on": {},
+	  "/ch/%.2d/mix/07/on": {},
+	  "/ch/%.2d/mix/08/on": {},
+	  "/ch/%.2d/mix/09/on": {},
+	  "/ch/%.2d/mix/10/on": {},
+	  "/ch/%.2d/mix/11/on": {},
+	  "/ch/%.2d/mix/12/on": {},
+	  "/ch/%.2d/mix/13/on": {},
+	  "/ch/%.2d/mix/14/on": {},
+	  "/ch/%.2d/mix/15/on": {},
+	  "/ch/%.2d/mix/16/on": {}
+	}
+  }
+}

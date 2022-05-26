@@ -14,7 +14,6 @@ import (
 )
 
 
-
 func (x *X32) SetCacheDir(basedir string) error {
 	for range Only.Once {
 		x.cacheDir = filepath.Join(basedir)
@@ -120,7 +119,6 @@ func (x *X32) CacheWrite() error {
 	return x.Error
 }
 
-
 func (x *X32) UpdateCache(msg *Message) *Message {
 	for range Only.Once {
 		if x.cache == nil {
@@ -166,7 +164,6 @@ func (x *X32) UpdateCache(msg *Message) *Message {
 	return x.cache[msg.Address]
 }
 
-
 func (x *X32) MessageExists(address string) bool {
 	return x.cache.Exists(address)
 }
@@ -202,6 +199,8 @@ func (m *MessageMap) SeenBefore(address string) bool {
 	return ret.SeenBefore
 }
 
+
+type Messages []*Message
 
 type Message struct {
 	Name         string    `json:"name"`
@@ -264,7 +263,6 @@ func (m *Message) GetType() string {
 	return ret
 }
 
-
 func (m *Message) Process() error {
 	for range Only.Once {
 		if m.Point == nil {
@@ -294,6 +292,20 @@ func (m *Message) GetValueInt() int64 {
 
 func (m *Message) GetValueFloat() float64 {
 	return m.UnitValueMap.GetFirst().ValueFloat
+}
+
+func (m *Message) IsBinaryMap() bool {
+	if m.Point == nil {
+		return false
+	}
+	return m.Point.IsBinaryMap()
+}
+
+func (m *Message) IsBinary() bool {
+	if m.Point == nil {
+		return false
+	}
+	return m.Point.IsBinary()
 }
 
 func (m *Message) IsSwitch() bool {

@@ -2,6 +2,7 @@ package Behringer
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/MickMake/GoX32/Only"
 )
@@ -125,10 +126,16 @@ func (x *X32) Set(address string, value any) error {
 		}
 
 		point := x.Points.Resolve(address)
+		if point == nil {
+			x.Error = errors.New(fmt.Sprintf("point '%s' not found", address))
+			break
+		}
 		value = point.Convert.SetValue(value)
 
-		x.Error = x.Client.EmitMessage(address, value)
-		break
+		x.Error = x.Emit(address, value)
+		if x.Error != nil {
+			break
+		}
 	}
 
 	return x.Error

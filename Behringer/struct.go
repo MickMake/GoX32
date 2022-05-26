@@ -36,6 +36,11 @@ type X32 struct {
 	cacheDir string
 	cacheTimeout time.Duration
 	cacheLastWrite time.Time
+
+	autopoll api.RefreshPoints
+	autopollBatchCount int
+	// autopollIndex int
+	// autopollTime time.Time
 }
 
 type Info struct {
@@ -72,6 +77,7 @@ func CreateInfo(args []any) Info {
 	}
 	return ret
 }
+
 
 type ArgsX32 struct {
 	Host      string
@@ -120,6 +126,7 @@ func NewX32(args ArgsX32) *X32 {
 	return &x
 }
 
+
 func (x *X32) Connect() error {
 	for range Only.Once {
 		x.Error = x.CacheRead()
@@ -152,7 +159,14 @@ func (x *X32) Connect() error {
 		if x.Error != nil {
 			break
 		}
-		fmt.Println("Done")
+		fmt.Printf("Done. %d points found.\n", len(x.Points))
+
+		fmt.Printf("Importing refresh points...")
+		x.autopoll, x.autopollBatchCount, x.Error = api.ImportRefresh(files...)
+		if x.Error != nil {
+			break
+		}
+		fmt.Printf("Done. %d points found.\n", len(x.autopoll))
 
 		go x.XremoteSender()
 	}
@@ -176,22 +190,6 @@ func (x *X32) SetConfigDir(basedir string) error {
 	}
 
 	return x.Error
-}
-
-func AnyToStringArray(array ...any) []string {
-	var ret []string
-	for _, a := range array {
-		ret = append(ret, fmt.Sprintf("%v", a))
-	}
-	return ret
-}
-
-func StringArrayToAny(array ...string) []any {
-	var ret []any
-	for _, a := range array {
-		ret = append(ret, a)
-	}
-	return ret
 }
 
 func (x *X32) StartMeters(meters ...string) error {
@@ -272,11 +270,17 @@ func (x *X32) XremoteSender() {
 						break
 					}
 
-					if x.Debug { fmt.Printf("# CacheWrite()\n") }
-					x.Error = x.CacheWrite()
+					if x.Debug { fmt.Printf("# renewAutopoll()\n") }
+					x.Error = x.refreshAutopoll()
 					if x.Error != nil {
 						break
 					}
+
+					// if x.Debug { fmt.Printf("# CacheWrite()\n") }
+					// x.Error = x.CacheWrite()
+					// if x.Error != nil {
+					// 	break
+					// }
 			}
 		}
 	}
@@ -285,46 +289,6 @@ func (x *X32) XremoteSender() {
 		log.Println(x.Error)
 	}
 }
-
-// func (x *X32) Process(point string, value ...any) Message {		// (*api.Point, api.UnitValueMap, error) {
-// 	// var ret *api.Point
-// 	// values := make(api.UnitValueMap)
-// 	// var err error
-// 	var msg Message
-//
-// 	for range Only.Once {
-// 		msg.Point = x.Points.Resolve(point)
-// 		if msg.Point == nil {
-// 			msg.Error = errors.New(fmt.Sprintf("Missing Point: %v data: %v\n", point, value))
-// 			break
-// 		}
-//
-// 		// gv := msg.Point.Convert.GetValues(value...)
-// 		// keys := make([]string, 0, len(gv))
-// 		// for k := range gv {
-// 		// 	keys = append(keys, k)
-// 		// }
-// 		// sort.Strings(keys)
-// 		//
-// 		// for _, k := range keys {
-// 		// 	v2 := gv[k]
-// 		// 	vf, _ := strconv.ParseFloat(v2, 64)
-// 		// 	vi, _ := strconv.ParseInt(v2, 10, 64)
-// 		// 	vb = fmt.Sprintf("%t", )
-// 		//
-// 		// 	values[k] = api.UnitValue {
-// 		// 		Unit:        ret.Unit,
-// 		// 		ValueString: v2,
-// 		// 		ValueFloat:  vf,
-// 		// 		ValueInt:    vi,
-// 		// 		ValueBool:   vb,
-// 		// 	}
-// 		// }
-// 	}
-//
-// 	return msg
-// 	// return ret, values, err
-// }
 
 func (x *X32) Get(address string, wait bool) *Message {
 	var msg *Message
@@ -348,8 +312,53 @@ func (x *X32) Emit(address string, args ...any) error {
 		if x.Debug {
 			fmt.Printf("# Emit() - address: %v, args: %v\n", address, args)
 		}
+
+		args = FixAny(args...)
+
+		// for i := range args {
+		// 	// t := reflect.TypeOf(a)
+		// 	// n := t.Name()
+		// 	// fmt.Printf("TYPE: %s\n", n)
+		// 	// if tv, ok := typeMapper[t]; ok {
+		// 	// 	args[i] = (a)
+		// 	// }
+		//
+		// 	switch v := args[i].(type) {
+		// 		case int:
+		// 			args[i] = int32(v)
+		// 		case int8:
+		// 			args[i] = int32(v)
+		// 		case int16:
+		// 			args[i] = int32(v)
+		// 		case int32:
+		// 			args[i] = int32(v)
+		// 		case int64:
+		// 			args[i] = int32(v)
+		// 		case uint:
+		// 			args[i] = int32(v)
+		// 		case uint8:
+		// 			args[i] = int32(v)
+		// 		case uint16:
+		// 			args[i] = int32(v)
+		// 		case uint32:
+		// 			args[i] = int32(v)
+		// 		case uint64:
+		// 			args[i] = int32(v)
+		//
+		// 		case float32:
+		// 			args[i] = float32(v)
+		// 		case float64:
+		// 			args[i] = float32(v)
+		//
+		// 		case string:
+		// 			args[i] = string(v)
+		// 	}
+		// }
+
 		x.Error = x.Client.EmitMessage(address, args...)
-		break
+		if x.Error != nil {
+			break
+		}
 	}
 
 	return x.Error
@@ -370,6 +379,8 @@ func (x *X32) Call(address string, args ...any) *Message {
 		if x.Debug {
 			fmt.Printf("# Call() - msg: %v\n", msg)
 		}
+
+		args = FixAny(args...)
 
 		msg.Message, x.Error = x.Client.CallMessage(address, args...)
 		if x.Debug {
@@ -396,29 +407,6 @@ func (x *X32) Call(address string, args ...any) *Message {
 	return msg
 }
 
-// func (x *X32) CallProcess(address string, args ...any) *Message {	// (*api.Point, api.UnitValueMap, error) {
-// 	// var ret *api.Point
-// 	// values := make(api.UnitValueMap)
-// 	// var err error
-// 	var msg *Message
-//
-// 	for range Only.Once {
-// 		msg = x.Call(address, args...)
-// 		if msg.Error != nil {
-// 			x.Error = msg.Error
-// 			break
-// 		}
-//
-// 		x.Error = msg.Process()
-// 		if x.Error != nil {
-// 			break
-// 		}
-// 	}
-//
-// 	return msg
-// 	// return ret, values, err
-// }
-
 func (x *X32) GetTopic(msg *gosc.Message) string {
 	topic := fmt.Sprintf("%s%s", x.Prefix, msg.Address)
 	if x.Debug {
@@ -431,6 +419,60 @@ func (x *X32) ListEndpoints() error {
 	fmt.Printf("%v", x.Points)
 	return nil
 }
+
+// func (x *X32) AddToAutoPoll(address ...string) error {
+// 	for range Only.Once {
+// 		x.autopoll = append(x.autopoll, address...)
+// 	}
+// 	return x.Error
+// }
+
+func (x *X32) refreshAutopoll() error {
+	for range Only.Once {
+		// current := x.autopollIndex
+		// size := len(x.autopoll)
+		//
+		// for i := 0; i < 16; i++ {
+		// 	x.autopollIndex++
+		// 	if x.autopollIndex > len(x.autopoll) {
+		// 		x.autopollIndex = 0
+		// 	}
+		// 	fmt.Printf("Autopoll[%d]: %s\n", x.autopollIndex, x.autopoll[x.autopollIndex])
+		// 	x.Error = x.Client.EmitMessage(x.autopoll[x.autopollIndex])
+		// 	if x.Error != nil {
+		// 		break
+		// 	}
+		// }
+
+		batchLimit := 0
+		for endpoint, v := range x.autopoll {
+			if v.IsExpired() {
+				// fmt.Printf("# [%d]Renewing %s Last: %s\n", batchLimit, endpoint, v.When.Format("15:04:05"))
+				v.Reset()
+
+				// if x.Debug {
+				// 	fmt.Printf("# renewAutopoll() - %s\n", endpoint)
+				// }
+				x.Error = x.Client.EmitMessage(endpoint)
+				if x.Error != nil {
+					break
+				}
+				batchLimit++
+				if batchLimit > x.autopollBatchCount {
+					// fmt.Printf("# Reached batch limit.\n")
+					break
+				}
+			}
+		}
+
+		if batchLimit > 0 {
+			fmt.Printf("# Renewed %d endpoints\n", batchLimit)
+		}
+	}
+
+	return x.Error
+}
+
 
 type MessageHandlerFunc func(msg *Message)
 func (x *X32) SetMessageHandler(fn MessageHandlerFunc) error {
@@ -494,20 +536,6 @@ func (x *X32) Process(msg *gosc.Message) *Message {
 
 	return m
 }
-
-// func (x *X32) MultipleMessageHandler(msg *gosc.Message) {
-// 	for range Only.Once {
-// 		m := x.UpdateCache(msg)
-// 		if x.Debug {
-// 			fmt.Printf("# oscMessageHandler() - msg: %v\n", msg)
-// 		}
-//
-// 		m.Point, m.UnitValueMap, m.Error = x.Process(msg.Address, msg.Arguments...)
-// 		if m.Error != nil {
-// 			break
-// 		}
-// 	}
-// }
 
 func (x *X32) Output(endpoint api.EndPoint, table *output.Table, graphFilter string) error {
 	for range Only.Once {
@@ -575,3 +603,83 @@ func (x *X32) OutputTable(table *output.Table) error {
 
 	return x.Error
 }
+
+
+// var typeMapper = map[reflect.Type]reflect.Type {
+// 	reflect.TypeOf(int(0)):   int32(0),
+// 	reflect.TypeOf(int8(0)):   int32(0),
+// 	reflect.TypeOf(int16(0)):   int32(0),
+// 	reflect.TypeOf(int32(0)):   int32(0),
+// 	reflect.TypeOf(int64(0)):   int32(0),
+// 	reflect.TypeOf(uint(0)):   int32(0),
+// 	reflect.TypeOf(uint8(0)):   int32(0),
+// 	reflect.TypeOf(uint16(0)):   int32(0),
+// 	reflect.TypeOf(uint32(0)):   int32(0),
+// 	reflect.TypeOf(uint64(0)):   int32(0),
+// 	reflect.TypeOf(byte(0)):   int32(0),
+//
+// 	reflect.TypeOf(float32(0)): float32(0),
+// 	reflect.TypeOf(float64(0)): float32(0),
+//
+// 	reflect.TypeOf(""):         "",
+// }
+
+func AnyToStringArray(array ...any) []string {
+	var ret []string
+	for _, a := range array {
+		ret = append(ret, fmt.Sprintf("%v", a))
+	}
+	return ret
+}
+
+func StringArrayToAny(array ...string) []any {
+	var ret []any
+	for _, a := range array {
+		ret = append(ret, a)
+	}
+	return ret
+}
+
+func FixAny(args ...any) []any {
+	for i := range args {
+		// t := reflect.TypeOf(a)
+		// n := t.Name()
+		// fmt.Printf("TYPE: %s\n", n)
+		// if tv, ok := typeMapper[t]; ok {
+		// 	args[i] = (a)
+		// }
+
+		switch v := args[i].(type) {
+			case int:
+				args[i] = int32(v)
+			case int8:
+				args[i] = int32(v)
+			case int16:
+				args[i] = int32(v)
+			case int32:
+				args[i] = int32(v)
+			case int64:
+				args[i] = int32(v)
+			case uint:
+				args[i] = int32(v)
+			case uint8:
+				args[i] = int32(v)
+			case uint16:
+				args[i] = int32(v)
+			case uint32:
+				args[i] = int32(v)
+			case uint64:
+				args[i] = int32(v)
+
+			case float32:
+				args[i] = float32(v)
+			case float64:
+				args[i] = float32(v)
+
+			case string:
+				args[i] = string(v)
+		}
+	}
+	return args
+}
+

@@ -93,7 +93,7 @@
 	"/config/linkcfg/hadly": { "endpoint": "/config/linkcfg/hadly", "convert": { "binary": { "type":"normal" } }, "info": "Sets Delay + HA link" },
 
 	"/config/mono/link": { "endpoint": "/config/mono/link", "convert": { "binary": { "type":"normal" } }, "info": "Sets M/C Depends on Main L/R" },
-	"/config/mono/mode": { "endpoint": "/config/mono/mode", "convert": { "map": { "0":"L/R Mono", "1":"LCR Enable"} }, "info": "Mono Mode" },
+	"/config/mono/mode": { "endpoint": "/config/mono/mode", "convert": { "binary": { "name_off": "L/R Mono", "name_on": "LCR Enable" } }, "info": "Mono Mode" },
 
 	"/config/routing/AES50A/1-8": { "endpoint": "/config/routing/AES50A/1-8", "convert": { "alias": "router-map" }, "info": "" },
 	"/config/routing/AES50A/9-16": { "endpoint": "/config/routing/AES50A/9-16", "convert": { "alias": "router-map" }, "info": "" },

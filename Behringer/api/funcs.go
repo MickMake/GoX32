@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoX32/Only"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -96,4 +97,40 @@ func CheckString(name string, rc string) error {
 		}
 	}
 	return err
+}
+
+func JoinStrings(args ...string) string {
+	return strings.TrimSpace(strings.Join(args, " "))
+}
+
+func JoinStringsForId(args ...string) string {
+	var ret string
+
+	for range Only.Once {
+		var newargs []string
+		var re = regexp.MustCompile(`(/| |:|\.)+`)
+		var re2 = regexp.MustCompile(`^(-|_)+`)
+		var re3 = regexp.MustCompile(`(-|_)+$`)
+
+		for _, a := range args {
+			if a == "" {
+				continue
+			}
+
+			a = strings.TrimSpace(a)
+			a = re.ReplaceAllString(a, `_`)
+			a = re2.ReplaceAllString(a, ``)
+			a = re3.ReplaceAllString(a, ``)
+			// a = strings.TrimPrefix(a, `-`)
+			// a = strings.TrimPrefix(a, `_`)
+			// a = strings.TrimSuffix(a, `-`)
+			// a = strings.TrimSuffix(a, `_`)
+			a = strings.ToLower(a)
+			newargs = append(newargs, a)
+		}
+
+		ret =  strings.Join(newargs, "-")
+	}
+
+	return ret
 }

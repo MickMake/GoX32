@@ -1,2 +1,0 @@
-	"/-stat/chfaderbank": { "endpoint": "/-stat/chfaderbank", "convert": { "map": { "0":"CH 1-16", "1":"CH 17-32", "2":"Aux in / USB / FX returns", "3":"Bus masters" } } },
-

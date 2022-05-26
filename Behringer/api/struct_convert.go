@@ -813,11 +813,13 @@ func (c *ConvertFunction) Import() error {
 
 
 type ConvertBinary struct {
-	On       string `json:"on"`
-	Off      string `json:"off"`
-	Type     string `json:"type"`
-	IsSwitch bool   `json:"-"`
+	On          string `json:"on"`
+	Off         string `json:"off"`
+	Type        string `json:"type"`
+	IsSwitch    bool   `json:"-"`
 	IsMomentary bool   `json:"-"`
+	NameOn      string `json:"name_on"`
+	NameOff     string `json:"name_off"`
 }
 func (c *ConvertBinary) Convert(value any) string {
 	var ret string
@@ -838,7 +840,17 @@ func (c *ConvertBinary) Convert(value any) string {
 			break
 		}
 
+		if ret == "OFF" {
+			ret = c.Off
+			break
+		}
+
 		if ret == "1" {
+			ret = c.On
+			break
+		}
+
+		if ret == "ON" {
 			ret = c.On
 			break
 		}
@@ -921,6 +933,9 @@ func (c *ConvertBinary) Import() error {
 				c.IsSwitch = false
 				c.IsMomentary = true
 
+			default:
+				c.IsSwitch = true
+				c.IsMomentary = false
 		}
 
 		// if (strings.ToUpper(c.On) == On) && (strings.ToUpper(c.Off) == Off) {
@@ -1125,9 +1140,9 @@ func (c *ConvertFloatMap) Convert(value any) string {
 			break
 		}
 
-		if len(c.Map) == 0 {
-			break
-		}
+		// if len(c.Map) == 0 {
+		// 	break
+		// }
 
 		if ret == "" {
 			// value = array.FloatValues[0]
@@ -1144,7 +1159,7 @@ func (c *ConvertFloatMap) Convert(value any) string {
 		}
 
 		ret = strconv.FormatFloat(fv, 'f', c.Precision, 32)
-		if v, ok := c.Map[ret]; ok {
+		if v, ok := c.Values[ret]; ok {
 			ret = v
 			break
 		}

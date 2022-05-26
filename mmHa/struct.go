@@ -47,6 +47,9 @@ type Mqtt struct {
 	err      error
 }
 
+type Fields map[string]string
+
+
 func New(req Mqtt) *Mqtt {
 	var ret Mqtt
 
@@ -144,7 +147,6 @@ func (m *Mqtt) setUrl(req Mqtt) error {
 
 	return m.err
 }
-
 
 func (m *Mqtt) Publish(config EntityConfig, UpdateConfig bool) error {
 	for range Only.Once {
@@ -259,8 +261,6 @@ func (m *Mqtt) PublishValues(config []EntityConfig) error {
 	return m.err
 }
 
-
-type Fields map[string]string
 func (m *Mqtt) PublishConfigs(configs []EntityConfig) error {
 	for range Only.Once {
 		for _, config := range configs {
@@ -272,7 +272,6 @@ func (m *Mqtt) PublishConfigs(configs []EntityConfig) error {
 	}
 	return m.err
 }
-
 
 func (m *Mqtt) SetDeviceConfig(swname string, id string, name string, model string, vendor string, area string) error {
 	for range Only.Once {
@@ -305,7 +304,6 @@ type MqttState struct {
 	LastReset string `json:"last_reset,omitempty"`
 	Value string `json:"value"`
 }
-
 func (mq *MqttState) Json() string {
 	var ret string
 	for range Only.Once {
@@ -491,7 +489,6 @@ func (config *EntityConfig) IsButton() bool {
 	return ok
 }
 
-
 func (config *EntityConfig) FixConfig() {
 
 	for range Only.Once {
@@ -573,7 +570,7 @@ func (config *EntityConfig) FixConfig() {
 				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
 			case "mS":
-				config.DeviceClass = SetDefault(config.DeviceClass, "time")
+				config.DeviceClass = SetDefault(config.DeviceClass, "")	// "time")
 				config.Icon = SetDefault(config.Icon, "mdi:clock")
 				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
 
@@ -651,103 +648,3 @@ func SetDefault(value string, def string) string {
 	}
 	return value
 }
-
-// func (m *Mqtt) PublishState(Type string, subtopic string, payload interface{}) error {
-// 	for range Only.Once {
-// 		// topic = JoinStringsForId(m.EntityPrefix, m.Device.Name, topic)
-// 		// topic = JoinStringsForTopic(m.sensorPrefix, topic, "state")
-// 		// st := JoinStringsForTopic(m.sensorPrefix, JoinStringsForId(m.EntityPrefix, m.Device.FullName, strings.ReplaceAll(subName, "/", ".")), "state")
-// 		topic := ""
-// 		switch Type {
-// 			case "sensor":
-// 				topic = JoinStringsForTopic(m.sensorPrefix, subtopic, "state")
-// 			case "binary_sensor":
-// 				topic = JoinStringsForTopic(m.binarySensorPrefix, subtopic, "state")
-// 			case "lights":
-// 				topic = JoinStringsForTopic(m.lightPrefix, subtopic, "state")
-// 			case "switch":
-// 				topic = JoinStringsForTopic(m.switchPrefix, subtopic, "state")
-// 			default:
-// 				topic = JoinStringsForTopic(m.sensorPrefix, subtopic, "state")
-// 		}
-//
-// 		t := m.client.Publish(topic, 0, true, payload)
-// 		if !t.WaitTimeout(m.Timeout) {
-// 			m.err = t.Error()
-// 		}
-// 	}
-// 	return m.err
-// }
-//
-// func (m *Mqtt) PublishValue(Type string, subtopic string, value string) error {
-// 	for range Only.Once {
-// 		topic := ""
-// 		switch Type {
-// 			case "sensor":
-// 				topic = JoinStringsForTopic(m.sensorPrefix, subtopic, "state")
-// 				// state := MqttState {
-// 				// 	LastReset: "", // m.GetLastReset(point.PointId),
-// 				// 	Value:     value,
-// 				// }
-// 				// value = state.Json()
-//
-// 			case "binary_sensor":
-// 				topic = JoinStringsForTopic(m.binarySensorPrefix, subtopic, "state")
-// 				// state := MqttState {
-// 				// 	LastReset: "", // m.GetLastReset(point.PointId),
-// 				// 	Value:     value,
-// 				// }
-// 				// value = state.Json()
-//
-// 			case "lights":
-// 				topic = JoinStringsForTopic(m.lightPrefix, subtopic, "state")
-// 				// state := MqttState {
-// 				// 	LastReset: "", // m.GetLastReset(point.PointId),
-// 				// 	Value:     value,
-// 				// }
-// 				// value = state.Json()
-//
-// 			case "switch":
-// 				topic = JoinStringsForTopic(m.switchPrefix, subtopic, "state")
-// 				// state := MqttState {
-// 				// 	LastReset: "", // m.GetLastReset(point.PointId),
-// 				// 	Value:     value,
-// 				// }
-// 				// value = state.Json()
-//
-// 			default:
-// 				topic = JoinStringsForTopic(m.sensorPrefix, subtopic, "state")
-// 		}
-//
-// 		// t = JoinStringsForId(m.EntityPrefix, m.Device.Name, t)
-// 		// st := JoinStringsForTopic(m.sensorPrefix, JoinStringsForId(m.EntityPrefix, m.Device.FullName, strings.ReplaceAll(subName, "/", ".")), "state")
-// 		// payload := MqttState {
-// 		// 	LastReset: "", // m.GetLastReset(point.PointId),
-// 		// 	Value:     value,
-// 		// }
-// 		// m.client.Publish(JoinStringsForTopic(m.sensorPrefix, t, "state"), 0, true, payload.Json())
-// 		t := m.client.Publish(topic, 0, true, value)
-// 		if !t.WaitTimeout(m.Timeout) {
-// 			m.err = t.Error()
-// 		}
-// 	}
-//
-// 	return m.err
-// }
-//
-// func (m *Mqtt) PublishValue(t string, topic string, value string) error {
-// 	switch t {
-// 		case "sensor":
-// 			m.err = m.PublishSensorValue(topic, value)
-// 		case "binary_sensor":
-// 			m.err = m.PublishBinarySensorState(topic, value)
-// 		case "lights":
-// 			m.err = m.PublishLightState(topic, value)
-// 		case "switch":
-// 			m.err = m.PublishSwitchState(topic, value)
-// 		default:
-// 			m.err = m.PublishSensorState(topic, value)
-// 	}
-//
-// 	return m.err
-// }

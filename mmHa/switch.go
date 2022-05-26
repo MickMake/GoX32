@@ -31,6 +31,10 @@ func (m *Mqtt) PublishSwitchConfig(config EntityConfig) error {
 		}
 		uid := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
 
+		if len(config.Options) == 0 {
+			config.Options = []string{ "OFF", "ON" }
+		}
+
 		payload := Switch {
 			Device:                 device,
 			EnabledByDefault:       true,
@@ -44,13 +48,13 @@ func (m *Mqtt) PublishSwitchConfig(config EntityConfig) error {
 			UniqueId:               config.StateTopic,
 
 			CommandTopic:           JoinStringsForTopic(m.switchPrefix, config.StateTopic, CmdTopicSuffix),
-			PayloadOn:              fmt.Sprintf(`{"%s":"ON"}`, config.Name),
-			PayloadOff:             fmt.Sprintf(`{"%s":"OFF"}`, config.Name),
+			PayloadOn:              fmt.Sprintf(`{"%s":"%s"}`, config.Name, config.Options[1]),
+			PayloadOff:             fmt.Sprintf(`{"%s":"%s"}`, config.Name, config.Options[0]),
 			Retain:                 true,
 			// StateOff:               fmt.Sprintf(`{"%s":"OFF"}`, config.Name),
 			// StateOn:                fmt.Sprintf(`{"%s":"ON"}`, config.Name),
-			StateOn:                "ON",
-			StateOff:               "OFF",
+			StateOn:                config.Options[1],
+			StateOff:               config.Options[0],
 			ValueTemplate:          config.ValueTemplate,
 		}
 
