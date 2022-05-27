@@ -538,11 +538,14 @@ func (c *ConvertIndex) Convert(value any) string {
 			break
 		}
 
-		iv, err := strconv.ParseUint(ret, 10, 32)
+		iv, err := strconv.ParseInt(ret, 10, 32)
 		if err != nil {
 			break
 		}
 
+		if iv >= int64(len(*c)) {
+			break
+		}
 		ret = (*c)[iv]
 	}
 
@@ -818,8 +821,7 @@ type ConvertBinary struct {
 	Type        string `json:"type"`
 	IsSwitch    bool   `json:"-"`
 	IsMomentary bool   `json:"-"`
-	NameOn      string `json:"name_on"`
-	NameOff     string `json:"name_off"`
+	IsInverted  bool   `json:"-"`
 }
 func (c *ConvertBinary) Convert(value any) string {
 	var ret string
@@ -831,28 +833,35 @@ func (c *ConvertBinary) Convert(value any) string {
 			break
 		}
 
-		if ret == "" {
+		if c.IsInverted {
+			switch ret {
+				case "":
+					fallthrough
+				case Off:
+					fallthrough
+				case "0":
+					ret = c.On
+
+				case On:
+					fallthrough
+				case "1":
+					ret = c.Off
+			}
 			break
 		}
 
-		if ret == "0" {
-			ret = c.Off
-			break
-		}
+		switch ret {
+			case "":
+				fallthrough
+			case Off:
+				fallthrough
+			case "0":
+				ret = c.Off
 
-		if ret == "OFF" {
-			ret = c.Off
-			break
-		}
-
-		if ret == "1" {
-			ret = c.On
-			break
-		}
-
-		if ret == "ON" {
-			ret = c.On
-			break
+			case On:
+				fallthrough
+			case "1":
+				ret = c.On
 		}
 	}
 
@@ -869,10 +878,18 @@ func (c *ConvertBinary) Set(value any) any {
 
 		switch strings.ToUpper(fmt.Sprintf("%v", value)) {
 			case c.On:
-				ret = int32(1)
+				if c.IsInverted {
+					ret = int32(0)
+				} else {
+					ret = int32(1)
+				}
 
 			case c.Off:
-				ret = int32(0)
+				if c.IsInverted {
+					ret = int32(1)
+				} else {
+					ret = int32(0)
+				}
 		}
 	}
 
@@ -901,39 +918,30 @@ func (c *ConvertBinary) Import() error {
 			case (c.On != "") && (c.Off == "") && (c.Type == ""):
 				fallthrough
 			case normal.ValueExists(c.Type):
-				// case c.Type == "":
-				// 	fallthrough
-				// case c.Type == "normal":
-				// 	fallthrough
 				c.On = On
 				c.Off = Off
-				// ret = &ConvertMap{ "0":Off, "1":On }
+				c.IsInverted = false
 				c.IsSwitch = true
+				c.IsMomentary = false
 
 			case inverted.ValueExists(c.Type):
-				// case c.Type == "swap":
-				// 	fallthrough
-				// case c.Type == "swapped":
-				// 	fallthrough
-				// case c.Type == "invert":
-				// 	fallthrough
-				// case c.Type == "inverted":
 				c.On = Off
 				c.Off = On
-				// ret = &ConvertMap{ "0":On, "1":Off }
+				c.IsInverted = true
 				c.IsSwitch = true
 				c.IsMomentary = false
 
 			case oneshot.ValueExists(c.Type):
-			// case c.Type == "oneshot":
-			// 	fallthrough
-			// case c.Type == "momentary":
 				c.On = On
 				c.Off = Off
+				c.IsInverted = false
 				c.IsSwitch = false
 				c.IsMomentary = true
 
 			default:
+				c.On = On
+				c.Off = Off
+				c.IsInverted = false
 				c.IsSwitch = true
 				c.IsMomentary = false
 		}

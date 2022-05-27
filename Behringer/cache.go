@@ -213,6 +213,7 @@ type Message struct {
 	*gosc.Message          `json:"Message"`
 
 	UnitValueMap api.UnitValueMap
+	X32Value     any
 	Point        *api.Point
 }
 
@@ -269,6 +270,7 @@ func (m *Message) Process() error {
 			m.Error = errors.New(fmt.Sprintf("Missing Point: %v data: %v\n", m.Address, m.Arguments))
 			break
 		}
+
 		m.UnitValueMap = m.Point.Convert.GetValues(m.Arguments...)
 		for k, v := range m.UnitValueMap {
 			m.UnitValueMap[k] = v.UnitValueFix()

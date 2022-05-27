@@ -290,7 +290,7 @@ func MqttMessageHandler(_ mqtt.Client, message mqtt.Message) {
 			msg := Cmd.X32.Process(&gosc.Message {
 				Address:   address,
 				Arguments: []any{value},
-			})
+			}, true)
 
 			Cmd.Error = Cmd.X32.Set(address, msg.GetValueString())
 			if Cmd.Error != nil {
@@ -330,7 +330,7 @@ func X32MessageHandler(msg *Behringer.Message) {
 				ParentName:  msg.Point.ParentId,
 				UniqueId:    api.CleanString(msg.Point.Id),
 				Units:       msg.Point.Unit, // msg.GetType(),
-				ValueName:   msg.Point.Id,
+				ValueName:   api.CleanString(msg.Point.Id),
 				DeviceClass: "",
 				StateClass:  "measurement",
 				Value:       msg.UnitValueMap.GetFirst().ValueString,
@@ -372,7 +372,7 @@ func X32MessageHandler(msg *Behringer.Message) {
 				case msg.IsSwitch():
 					// Entity is a binary switch.
 					entity.HaType = "switch"
-					// entity.Options = msg.GetIndexOptions()
+					entity.Options = msg.GetIndexOptions()
 					Cmd.Error = Cmd.Mqtt.Publish(entity, !seen)
 					if Cmd.Error != nil {
 						LogPrintDate("MQTT: Could not publish: %s\n", Cmd.Error)

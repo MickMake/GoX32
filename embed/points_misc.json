@@ -256,7 +256,7 @@
 	  ]
 	},
 	"rec-control": {
-	  "binary": { "name_off": "USB 2-Track", "name_on": "Live 32-Track" }
+	  "binary": { "off": "USB 2-Track", "on": "Live 32-Track" }
 	},
 	"prefs-rta-source": {
 	  "index": [
@@ -346,14 +346,14 @@
 	},
 	"clock-rate": {
 	  "binary": {
-		"name_off": "48",
-		"name_on": "44.1"
+		"off": "48",
+		"on": "44.1"
 	  }
 	},
 	"clock-mode": {
 	  "binary": {
-		"name_off": "24 hour",
-		"name_on": "12 hour"
+		"off": "24 hour",
+		"on": "12 hour"
 	  }
 	},
 	"remote-protocol": {
@@ -712,10 +712,10 @@
 	"/-prefs/style": { "endpoint": "/-prefs/style", "convert": { "string": { "size":0 } }, "info": "" },
 	"/-prefs/viewrtn": { "endpoint": "/-prefs/viewrtn", "convert": { "binary": { "type":"normal" } }, "info": "" },
 
-	"/-prefs/card/ADATwc": { "endpoint": "/-prefs/card/ADATwc", "convert": { "binary": {"name_off":"IN", "name_on":"OUT" } }, "info": "" },
+	"/-prefs/card/ADATwc": { "endpoint": "/-prefs/card/ADATwc", "convert": { "binary": {"off":"IN", "on":"OUT" } }, "info": "" },
 	"/-prefs/card/ADATsync": { "endpoint": "/-prefs/card/ADATsync", "convert": { "index": [ "WC", "ADAT1", "ADAT2", "ADAT3", "ADAT4"  ] }, "info": "" },
 	"/-prefs/card/MADIin": { "endpoint": "/-prefs/card/MADIin", "convert": { "index": [ "1-32", "9-40", "17-48", "25-56", "33-64"  ] }, "info": "" },
-	"/-prefs/card/MADImode": { "endpoint": "/-prefs/card/MADImode", "convert": { "binary": {"name_off":"56", "name_on":"64" } }, "info": "" },
+	"/-prefs/card/MADImode": { "endpoint": "/-prefs/card/MADImode", "convert": { "binary": {"off":"56", "on":"64" } }, "info": "" },
 	"/-prefs/card/MADIout": { "endpoint": "/-prefs/card/MADIout", "convert": { "index": [ "1-32", "9-40", "17-48", "25-56", "33-64"  ] }, "info": "" },
 	"/-prefs/card/MADIsrc": { "endpoint": "/-prefs/card/MADIsrc", "convert": { "index": [ "OFF", "OPT", "COAX", "BOTH"  ] }, "info": "" },
 	"/-prefs/card/UFifc": { "endpoint": "/-prefs/card/UFifc", "convert": { "index": [ "FW", "USB", "?"  ] }, "info": "" },
@@ -742,7 +742,7 @@
 
 	"/-prefs/rta/autogain": { "endpoint": "/-prefs/rta/autogain", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/-prefs/rta/decay": { "endpoint": "/-prefs/rta/decay", "unit": "mS", "convert": { "alias": "log-scale-19" }, "info": "" },
-	"/-prefs/rta/det": { "endpoint": "/-prefs/rta/det", "convert": { "binary": { "name_off": "RMS", "name_on": "PEAK" } }, "info": "" },
+	"/-prefs/rta/det": { "endpoint": "/-prefs/rta/det", "convert": { "binary": { "off": "RMS", "on": "PEAK" } }, "info": "" },
 	"/-prefs/rta/gain": { "endpoint": "/-prefs/rta/gain", "unit": "dB", "convert": { "alias": "rta-gain" }, "info": "" },
 	"/-prefs/rta/mode": { "endpoint": "/-prefs/rta/mode", "convert": { "alias": "eq-display-mode" }, "info": "" },
 	"/-prefs/rta/option": { "endpoint": "/-prefs/rta/option", "convert": { "bit_map": [ "OFF", "Pre EQ", "Spectrograph", "Use RTA source", "Post GEQ", "Spectrograph", "Solo Priority" ] }, "info": "" },
@@ -760,7 +760,7 @@
 	"/-stat/sendsonfader": { "endpoint": "/-stat/sendsonfader", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/-stat/userbank": { "endpoint": "/-stat/userbank", "convert": { "index": [  "A", "B", "C"  ] }, "info": "" },
 	"/-stat/autosave": { "endpoint": "/-stat/autosave", "convert": { "binary": { "type":"normal" } }, "info": "" },
-	"/-stat/remote": { "endpoint": "/-stat/remote", "convert": { "binary": { "name_off": "Audio Console mode", "name_on": "DAW mode" } }, "info": "" },
+	"/-stat/remote": { "endpoint": "/-stat/remote", "convert": { "binary": { "off": "Audio Console mode", "on": "DAW mode" } }, "info": "" },
 	"/-stat/geqonfdr": { "endpoint": "/-stat/geqonfdr", "convert": { "binary": { "type":"normal" } }, "info": "" },
 	"/-stat/rtaeqpost": { "endpoint": "/-stat/rtaeqpost", "convert": { "alias": "insert-pos" }, "info": "" },
 	"/-stat/rtaeqpre": { "endpoint": "/-stat/rtaeqpre", "convert": { "binary": { "type":"normal" } }, "info": "" },

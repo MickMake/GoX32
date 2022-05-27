@@ -1,7 +1,7 @@
 {
   "aliases": {
 	"osc-sel-map": {
-	  "binary": { "name_off": "F1", "name_on": "F2" }
+	  "binary": { "off": "F1", "on": "F2" }
 	},
 	"osc-type-map": {
 	  "index": [

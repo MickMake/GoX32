@@ -502,7 +502,7 @@ func (x *X32) oscMessageHandler(msg *gosc.Message) {
 		// 	break
 		// }
 
-		m := x.Process(msg)
+		m := x.Process(msg, false)
 
 		if x.messageHandler == nil {
 			break
@@ -511,7 +511,7 @@ func (x *X32) oscMessageHandler(msg *gosc.Message) {
 	}
 }
 
-func (x *X32) Process(msg *gosc.Message) *Message {
+func (x *X32) Process(msg *gosc.Message, toX32 bool) *Message {
 	var m *Message
 
 	for range Only.Once {
@@ -527,9 +527,16 @@ func (x *X32) Process(msg *gosc.Message) *Message {
 			break
 		}
 
+		if toX32 {
+			x.Error = m.Process()
+			if x.Error != nil {
+				break
+			}
+			break
+		}
+
 		x.Error = m.Process()
 		if x.Error != nil {
-			fmt.Printf("%s", x.Error)
 			break
 		}
 	}

@@ -18,16 +18,22 @@ func CleanString(s string) string {
 		if ('a' <= b && b <= 'z') ||
 			('A' <= b && b <= 'Z') ||
 			('0' <= b && b <= '9') ||
-			(b == '-') ||
+			// (b == '-') ||
 			(b == '_') ||
 			(b == '.') ||
 			b == ' ' {
 			result.WriteByte(b)
 		}
+		if b == '-' {
+			result.WriteByte('_')
+		}
 	}
 
+	// ret = result.String()
+	//
 	// dupes := regexp.MustCompile(`\s+`)
 	// ret = dupes.ReplaceAllString(result.String(), )
+
 	return result.String()
 }
 

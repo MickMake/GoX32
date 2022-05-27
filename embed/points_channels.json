@@ -159,7 +159,7 @@
       "/ch/%.2d/automix/weight": { "endpoint": "/ch/%.2d/automix/weight", "unit": "dB", "convert": { "alias": "automix-weight" }, "info": "" },
       "/ch/%.2d/config/name": { "endpoint": "/ch/%.2d/config/name", "convert": { "string": { "size": 12 } }, "info": "" },
       "/ch/%.2d/config/icon": { "endpoint": "/ch/%.2d/config/icon", "convert": { "asset": { "icon": true } }, "info": "" },
-      "/ch/%.2d/config/color": { "endpoint": "/ch/%.2d/config/color", "unit": "colour-states", "convert": { "alias": "colour-map" }, "info": "" },
+      "/ch/%.2d/config/color": { "endpoint": "/ch/%.2d/config/color", "convert": { "alias": "colour-map" }, "info": "" },
       "/ch/%.2d/config/source": { "endpoint": "/ch/%.2d/config/source", "convert": { "alias": "source-map" }, "info": "" },
       "/ch/%.2d/delay/on": { "endpoint": "/ch/%.2d/delay/on", "convert": { "binary": { "type":"normal" } }, "info": "" },
       "/ch/%.2d/delay/time": { "endpoint": "/ch/%.2d/delay/time", "unit": "mS", "convert": { "alias": "time-range" }, "info": "" },
@@ -222,7 +222,7 @@
       "/ch/%.2d/eq/4/q": { "endpoint": "/ch/%.2d/eq/4/q", "unit": "Hz", "convert": { "alias": "log-scale-72" }, "info": "" },
       "/ch/%.2d/eq/4/type": { "endpoint": "/ch/%.2d/eq/4/type", "convert": { "alias": "eq-type-map" }, "info": "" },
   
-      "/ch/%.2d/mix/on": { "endpoint": "/ch/%.2d/mix/on", "convert": { "binary": { "type": "normal" } }, "info": "" },
+      "/ch/%.2d/mix/on": { "endpoint": "/ch/%.2d/mix/on", "convert": { "binary": { "type": "inverted" } }, "info": "" },
       "/ch/%.2d/mix/fader": { "endpoint": "/ch/%.2d/mix/fader", "unit": "dB", "convert": { "function": "log" }, "info": "" },
       "/ch/%.2d/mix/st": { "endpoint": "/ch/%.2d/mix/st", "convert": { "alias": "mix-st" }, "info": "" },
       "/ch/%.2d/mix/pan": { "endpoint": "/ch/%.2d/mix/pan", "unit": "%", "convert": { "alias": "pan-range" }, "info": "" },

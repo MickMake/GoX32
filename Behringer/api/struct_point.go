@@ -125,14 +125,6 @@ func (p *Point) IsBinaryMap() bool {
 			ok = true
 			break
 		}
-		if p.Convert.Binary.NameOff != "" {
-			ok = true
-			break
-		}
-		if p.Convert.Binary.NameOn != "" {
-			ok = true
-			break
-		}
 	}
 	return ok
 }
